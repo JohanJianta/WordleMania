@@ -1,0 +1,308 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    background-color: #eaeaea;
+}
+
+.top-section-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    height: calc(100vh/2 + 50px);
+}
+
+.player {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 480px;
+    height: 352px;
+    border-radius: 20px;
+    border: 5px solid rgba(0, 0, 0, 0.748);
+    background-color: #B7C4CF;
+
+    .player-container {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-evenly;
+        width: calc(100% - 80px);
+        height: 100%;
+        margin: 40px;
+        gap: 10px;
+
+        .first-info {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .profile {
+                width: 120px;
+                height: 100px;
+                background-color: #794B4B;
+            }
+
+            .level {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 200px;
+                height: 25px;
+                font-weight: 500;
+                background-color: #80D173;
+                border: 1px solid black;
+            }
+        }
+
+        .second-info {
+            width: 100%;
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            align-items: left;
+            gap: 10px;
+
+            .group-info {
+                display: flex;
+                flex-flow: row nowrap;
+            }
+
+            .group-info p {
+                font-size: 20px;
+            }
+
+            .info-title {
+                margin-right: 15px;
+            }
+        }
+
+        #player-nickname {
+            font-size: 30px;
+            font-weight: 900;
+        }
+    }
+}
+
+.button-container {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 15px;
+
+    .play-btn {
+        font-family: 'Comic Neue';
+        font-size: 25px;
+        font-weight: 700;
+        border: 5px solid #23272b85;
+        color: white;
+        border-radius: 15px;
+        width: 292px;
+        height: 77px;
+    }
+
+    #stranger-btn {
+        background-color: #20D25F;
+    }
+
+    #room-btn {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        background-color: #0AC6C6;
+
+        .create-room-logo {
+            width: 46px;
+            height: 46px;
+            background-image: url("../picture/login.png");
+        }
+    }
+}
+
+.leaderboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 482px;
+    height: 370px;
+    background-image: url("../picture/Group\ 58.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .leaderboard-container {
+        display: flex;
+        flex-flow: column nowrap;
+        width: 453px;
+        height: 264px;
+        border: 1px solid black;
+        margin-top: 55px;
+        border-radius: 20px;
+
+        .leaderboard-info {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            gap: 40px;
+            height: 88px;
+            border: 1px solid black;
+            padding: 0 35px;
+            background-color: #AEDA97;
+        }
+
+        .leaderboard-info p {
+            font-family: 'Catamaran', sans-serif;
+            ;
+            font-size: 35px;
+            font-weight: 500;
+        }
+
+        .leaderboard-info .leaderboard-number {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .leaderboard-info .leaderboard-score {
+            font-size: 20px;
+        }
+
+        .leaderboard-name {
+            width: 180px;
+        }
+
+        #info-1 {
+            color: rgb(220, 0, 0);
+        }
+
+        #info-2 {
+            color: rgb(150, 19, 150);
+            background-color: #EBDED8;
+        }
+
+        #info-3 {
+            color: rgb(71, 71, 218);
+        }
+    }
+}
+
+.friend-section {
+    width: 100%;
+    padding: 0 45px;
+    height: calc(100vh - (100vh/2 + 50px) - 80px);
+    background-color: #F6F1E9;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.friend-title {
+    display: flex;
+    align-items: center;
+    height: 25%;
+    font-size: large;
+}
+
+.friend-list-container {
+    width: calc(100% - 90px);
+    height: 100%;
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: auto;
+}
+
+.friend-container {
+    min-width: 300px;
+    height: 160px;
+    background-color: #F47C7C;
+    border-radius: 15px;
+
+    .friend-profile {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        width: calc(100% - 40px);
+        height: calc(100% - 40px);
+        margin: 20px;
+
+        .first-info {
+            width: 100%;
+            display: flex;
+            align-items: center;
+
+            .profile {
+                width: 70px;
+                height: 60px;
+                background-color: #794B4B;
+            }
+
+            .level {
+                margin-left: 30px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 120px;
+                height: 15px;
+                font-weight: 500;
+                background-color: #80D173;
+                border: 1px solid black;
+            }
+
+            .level p {
+                font-size: 10px;
+            }
+        }
+
+        .second-info {
+            width: 100%;
+            display: flex;
+            flex-flow: column wrap;
+            gap: 10px;
+
+            .second-info-left {
+                height: 100%;
+                display: flex;
+                flex-flow: column nowrap;
+                gap: 10px;
+            }
+
+            .second-info-right {
+                height: 100%;
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .second-info-right img {
+                height: 40px;
+                align-self: flex-end;
+                justify-items: flex-end;
+            }
+
+            .group-info {
+                display: flex;
+                flex-flow: row nowrap;
+            }
+
+            .group-info p {
+                font-size: 16px;
+            }
+
+            #friend-nickname {
+                font-size: 20px;
+                font-weight: 700;
+            }
+        }
+    }
+}

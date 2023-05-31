@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #B77272;
+  width: 100%;
+}
+
+.inputKode {
+
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 10px;
+  width: 200px;
+  position: absolute;
+  right: 0;
+}
+
+.inputKode input {
+
+  border: 1.5px solid black;
+  border-radius: 15px;
+  height: 20px;
+  background-color: transparent;
+  text-align: center;
+
+}
+
+.topnav p {
+  text-align: center;
+
+}
+
+.judul {
+  text-align: center;
+
+}
+
+.history {
+  margin-top: -40px;
+  padding-left: 10%;
+  position: absolute;
+  left: 0;
+
+}
+
+.historyBtn:hover {
+  background-color: grey;
+}
+
+.player {
+  width: 350px;
+  height: 250px;
+  background-color: #B7C4CF;
+  margin-left: 4%;
+  margin-top: 2%;
+}
+
+.player .profile {
+  width: 90px;
+  height: 70px;
+  background-color: #794B4B;
+  margin-left: 2%;
+  margin-top: 2%;
+  position: absolute;
+}
+
+.player .level {
+  width: 120px;
+  height: 18px;
+  background-color: #80D173;
+  border: 1px solid black;
+  margin-left: 13%;
+  margin-top: 4%;
+  position: absolute;
+}
+
+.player .level p {
+  margin-left: 20%;
+  margin-top: 0%;
+}
+
+.player .nickname p {
+  font-size: large;
+  margin-left: 2%;
+  margin-top: 8%;
+  position: absolute;
+
+}
+
+.stranger {
+  background-color: #20D25F;
+  border: 2px solid #23272B;
+  width: 180px;
+  height: 40px;
+  margin-left: 42%;
+  margin-top: -12%;
+  position: absolute;
+
+  border-radius: 10px;
+
+}
+
+
+.create {
+  background-color: #0AC6C6;
+  border: 2px solid #23272B;
+  width: 180px;
+  height: 40px;
+  margin-left: 42%;
+  margin-top: -7%;
+  border-radius: 10px;
+  position: absolute;
+
+}
+
+
+
+.leaderboard {
+  margin-left: 67%;
+  margin-top: -21%;
+}
+
+.leaderboard img {
+  width: 350px;
+}
+
+.friendlist {
+  width: 100%;
+  height: 217.5px;
+  background-color: #F6F1E9;
+}
+
+.friendlist p {
+  margin-left: 3%;
+  /* margin-top: 2%; */
+  font-size: large;
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styleLogin.css">
+    <title>Login</title>
+</head>
+
+<body>
+    <div class="topNav">
+        <p class="title">Wordle Mania</p>
+        <div>
+            <button id="btn-login" onclick="showLogin()">Login</button>
+            <button id="btn-signUp" onclick="showSignUp()">Sign Up</button>
+        </div>
+    </div>
+
+    <div class="flex-center-row">
+        <div class="notif-container flex-center-row">
+            <p class="title" id="notif-title"></p>
+            <p id="notif-desc"></p>
+        </div>
+    </div>
+
+    <!-- Login Pop Up -->
+    <div class="popUp-disabled" id="login">
+        <div class="popUp-bg">
+            <div class="popUp-container">
+
+                <button class="close-btn alignEnd" onclick="hideLogin()">X</button>
+                <h2 class="alignCenter">Login</h2>
+
+                <form onsubmit="event.preventDefault(); login();">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" placeholder="masukkan email" id="loginEmail" required>
+
+                    <label for="loginPass">Password:</label>
+                    <input type="password" placeholder="masukkan password" id="loginPass" style="margin-bottom: 10px;"
+                        required>
+
+                    <div class="forgot">
+                        <a href="#">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+
+                <p class="alignCenter">Don't have an account? <a class="changePopUp" onclick="loginToSignUp()">Sign
+                        Up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign Up Pop Up -->
+    <div class="popUp-disabled" id="signUp">
+        <div class="popUp-bg">
+            <div class="popUp-container">
+                <button class="close-btn alignEnd" onclick="hideSignUp()">X</button>
+                <h2 class="alignCenter">Sign Up</h2>
+                <form onsubmit="event.preventDefault(); signUp();">
+                    <label for="signUpName">Username:</label>
+                    <input type="text" placeholder="masukkan username" id="signUpName" maxlength="50" required />
+                    <label for="signUpEmail">Email:</label>
+                    <input type="email" placeholder="masukkan email" id="signUpEmail" required />
+                    <label for="signUpPass">Password:</label>
+                    <input type="password" placeholder="masukkan password" id="signUpPass" minlength="8" required />
+                    <button type="submit" class="btn">Create Account</button>
+                </form>
+                <p class="alignCenter">Already have an account? <a class="changePopUp"
+                        onclick="signUpToLogin()">Login</a> </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script src="js/loginSignUp.js"></script>
+</body>
+
+</html>
