@@ -1,12 +1,25 @@
 import { WORDS_5 } from "./words-5.js";
 import { WORDS_6 } from "./words-6.js";
+import { WORDS_7 } from "./words-7.js";
+import { WORDS_8 } from "./words-8.js";
+import { WORDS_9 } from "./words-9.js";
+import { WORDS_10 } from "./words-10.js";
 
 const NUMBER_OF_GUESSES = 8;
-const WORD_LENGTH = 6;
+const WORD_LENGTH = 10;
+const ARRAYS = {
+  WORDS_5,
+  WORDS_6,
+  WORDS_7,
+  WORDS_8,
+  WORDS_9,
+  WORDS_10
+};
+
 let guessesRemaining = NUMBER_OF_GUESSES;
 let currentGuess = [];
 let nextLetter = 0;
-let rightGuessString = `WORDS_${WORD_LENGTH}`[Math.floor(Math.random() * `WORDS_${WORD_LENGTH}`.length)];
+let rightGuessString = ARRAYS[`WORDS_${WORD_LENGTH}`][Math.floor(Math.random() * ARRAYS[`WORDS_${WORD_LENGTH}`].length)];
 
 console.log(rightGuessString);
 
@@ -30,14 +43,14 @@ function initBoard() {
 function shadeKeyBoard(letter, color) {
   for (const elem of document.getElementsByClassName("keyboard-button")) {
     if (elem.textContent === letter) {
-      let oldColor = elem.style.backgroundColor;
-      if (oldColor === "green") {
+      let oldColor = getComputedStyle(elem).backgroundColor;
+      if (oldColor === "rgb(60, 226, 77)") {
         return;
       }
-
-      if (oldColor === "yellow" && color !== "green") {
-        return;
-      }
+      
+      // if (oldColor === "rgb(226, 167, 20)" && color !== "rgb(60, 226, 77)") {
+      //   return;
+      // }
 
       elem.style.backgroundColor = color;
       break;
@@ -68,32 +81,27 @@ function checkGuess() {
     return;
   }
 
-  if (!`WORDS_${WORD_LENGTH}`.includes(guessString)) {
-    toastr.error("Word not in list!");
-    return;
-  }
+  // if (!ARRAYS[`WORDS_${WORD_LENGTH}`].includes(guessString)) {
+  //   toastr.error("Word not in list!");
+  //   return;
+  // }
 
-  var letterColor = ["gray", "gray", "gray", "gray", "gray"];
+  var letterColor = [];
 
   //check green
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (rightGuess[i] == currentGuess[i]) {
-      letterColor[i] = "green";
+      letterColor[i] = "#3CE24D"; //dark green color
       rightGuess[i] = "#";
     }
   }
 
   //check yellow
-  //checking guess letters
   for (let i = 0; i < WORD_LENGTH; i++) {
-    if (letterColor[i] == "green") continue;
+    if (letterColor[i] == "#3CE24D") continue;
 
-    //checking right letters
-    for (let j = 0; j < WORD_LENGTH; j++) {
-      if (rightGuess[j] == currentGuess[i]) {
-        letterColor[i] = "yellow";
-        rightGuess[j] = "#";
-      }
+    if (rightGuess.includes(currentGuess[i])) {
+      letterColor[i] = "#e2a714"; // yellow gold color
     }
   }
 
@@ -161,26 +169,17 @@ const animateCSS = (element, animation, prefix = "animate__") =>
   });
 
 document.addEventListener("keyup", (e) => {
-  if (guessesRemaining === 0) {
-    return;
-  }
-
   let pressedKey = String(e.key);
-  if (pressedKey === "Backspace" && nextLetter !== 0) {
+  if (guessesRemaining === 0 || document.activeElement === document.getElementById("message")) {
+    return;
+  } else if (pressedKey === "Backspace" && nextLetter !== 0) {
     deleteLetter();
-    return;
-  }
-
-  if (pressedKey === "Enter") {
+  } else if (pressedKey === "Enter") {
     checkGuess();
-    return;
-  }
-
-  let found = pressedKey.match(/[a-z]/gi);
-  if (!found || found.length > 1) {
-    return;
-  } else {
+  } else if (pressedKey.match(/[a-z]/gi) && pressedKey.match(/[a-z]/gi).length == 1) {
     insertLetter(pressedKey);
+  } else {
+    return;
   }
 });
 
@@ -190,6 +189,7 @@ document.getElementById("keyboard-cont").addEventListener("click", (e) => {
   if (!target.classList.contains("keyboard-button")) {
     return;
   }
+  
   let key = target.textContent;
 
   if (key === "Del") {
