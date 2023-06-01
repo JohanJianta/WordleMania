@@ -1,135 +1,651 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
 
-body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* set overflow hidden dalam warpper, klo langsung ke body tdk berfungsi di HP */
+.body-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  font-family: 'Inter', sans-serif;
 }
 
 .topnav {
-    display: flex;
-    overflow: hidden;
-    background-color: #B77272;
-    width: 100%;
-    align-items: center;
-    justify-content: space-around;
+  position: relative;
+  display: flex;
+  margin: 10px;
+  width: calc(100% - 20px);
+  align-items: center;
+  justify-content: space-between;
 }
 
-.roomCode {
-    right: 0;
+.roomCode p {
+  font-size: 30px;
 }
 
-.history {
-    left: 0;
-
+#giveUp-btn {
+  width: 130px;
+  height: 60px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: red;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+  background: #e62222;
 }
 
-.historyBtn:hover {
-    background-color: grey;
+#giveUp-btn,
+button span {
+  transition: 200ms;
+}
+
+#giveUp-btn .text {
+  font-size: 16px;
+  transform: translateX(15px);
+  color: white;
+  font-weight: bold;
+}
+
+#giveUp-btn .icon {
+  position: absolute;
+  border-left: 1px solid #c41b1b;
+  transform: translateX(90px);
+  height: 30px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#giveUp-btn img {
+  width: 25px;
+  fill: #eee;
+}
+
+#giveUp-btn:hover {
+  background: #ff3636;
+}
+
+#giveUp-btn:hover .text {
+  color: transparent;
+}
+
+#giveUp-btn:hover .icon {
+  width: 110px;
+  border-left: none;
+  transform: translateX(15px);
+}
+
+#giveUp-btn:focus {
+  outline: none;
+}
+
+#giveUp-btn:active .icon img {
+  transform: scale(0.8);
+}
+
+.main-section {
+  position: relative;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+/* Player Display */
+
+.player-container {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  gap: 1%;
 }
 
 .player {
-    margin-top: 2%;
-    margin-left: 4%;
-    display: flex;
-    width: 23%;
-    height: 130px;
-    background-color: #D9D9D9;
-    flex-direction: column;
-    align-items: baseline;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-flow: row wrap;
+  gap: 10px;
+  width: 23%;
+  max-width: 250px;
+  height: 130px;
+  border-radius: 5px;
+  background-color: #D9D9D9;
 }
 
-.player .profile {
-    margin-left: 7%;
-    margin-top: 7%;
-    background-color: #794B4B;
-    width: 60px;
-    height: 50px;
+.player i {
+  font-size: 30px;
+  width: 40px;
 }
 
-
-.invite {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 4%;
-    margin-top: 3%;
-    width: 23%;
-    height: 130px;
-    background-color: #D9D9D9;
-    
+.player p {
+  font-size: 16px;
 }
 
-.invite i {
-    /* width: 100%; */
-    font-size: 30px;
-    color: black;
-    text-align: center;
+.side-panel-container {
+  z-index: 10;
+  position: relative;
+  width: 40px;
+  height: 40px;
 }
 
-.invite p {
-    font-size: 20px;
-    margin-left: 4%;
+/* Chat Panel */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.hidden {
+  display: none;
+}
+
+.clearfix:after {
+  content: "";
+  clear: both;
+}
+
+.form-control {
+  width: 100%;
+  min-height: 38px;
+  font-size: 15px;
+  border: 1px solid #c8c8c8;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+input {
+  padding-left: 10px;
+  outline: none;
+}
+
+#message {
+  border-radius: 5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 1.7em;
+}
+
+button {
+  border: none;
+  line-height: 100%;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+button.primary {
+  background-color: #25be38;
+  font-size: 16px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
+  color: #fff;
+  border-radius: 5px;
+}
+
+.chat-container {
+  display: flex;
+  flex-flow: column nowrap;
+  background-color: #009578;
+  box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
+  height: 100%;
+  width: 100%;
+}
+
+.chat-container ul {
+  list-style-type: none;
+  background-color: #70c6b5;
+  margin: 0;
+  overflow: auto;
+  overflow-y: scroll;
+  padding: 0 20px 0px 20px;
+  height: calc(100% - 100px);
+}
+
+.chat-container #messageForm {
+  padding: 20px;
+}
+
+.chat-container ul li {
+  line-height: 1.5rem;
+  padding: 10px 20px;
+  margin: 0;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.chat-container ul li p {
+  margin: 0;
+}
+
+.chat-container .event-message {
+  width: 100%;
+  text-align: center;
+  clear: both;
+}
+
+.chat-container .event-message p {
+  color: #777;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+
+.chat-container .chat-message {
+  padding-left: 68px;
+  position: relative;
+}
+
+.chat-container .chat-message i {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  left: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 18px;
+  line-height: 42px;
+  color: #fff;
+  text-align: center;
+  border-radius: 50%;
+  font-style: normal;
+  text-transform: uppercase;
+}
+
+.chat-container .chat-message span {
+  color: #333;
+  font-weight: 600;
+}
+
+.chat-container .chat-message p {
+  color: #43464b;
+}
+
+#messageForm .input-group input {
+  float: left;
+  width: calc(100% - 85px);
+}
+
+#messageForm .input-group button {
+  float: left;
+  width: 80px;
+  height: 38px;
+  margin-left: 5px;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  border-bottom: 5px solid #ececec;
+}
+
+.chat-header h2 {
+  margin: 0;
+  font-weight: 700;
+}
+
+.connecting {
+  background-color: #70c6b5;
+  padding-top: 5px;
+  text-align: center;
+  color: #454545;
+  top: 65px;
+  width: 100%;
+}
+
+#chat-panel {
+  position: absolute;
+  width: 400px;
+  height: 100vh;
+  background-color: black;
+  top: -10px;
+  right: -410px;
+  transition: .4s;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+}
+
+#chat-panel.active {
+  right: -10px;
+}
+
+#side-panel-toggle.move {
+  right: 390px;
+}
+
+#side-panel-toggle {
+  position: absolute;
+  right: -10px;
+  transition: .4s;
+  background-color: #009578;
+  border-radius: 10px 0 0 10px;
+  padding: 0.9rem 0.9rem;
+}
+
+#side-panel-toggle:hover {
+  background-color: #007960;
+}
+
+#side-panel-toggle img {
+  width: 25px;
+}
+
+@media screen and (max-width: 480px) {
+
+  .chat-header {
+    height: 57px;
+  }
+
+  .chat-header h2 {
+    font-size: 1.3rem;
+  }
+
+  #chat-panel {
+    width: 300px;
+    right: -310px;
+  }
+
+  #side-panel-toggle {
+    border-radius: 5px 0 0 5px;
+    padding: 0.4rem 0.6rem;
+  }
+
+  #side-panel-toggle.move {
+    right: 290px;
+  }
+
 }
 
 /* Game Board  */
 
 #game-board {
-    margin-top: -25%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-  }
-  
+  margin: 30px 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.letter-box {
+  /* color: whitesmoke; */
+  border: 2px solid gray;
+  border-radius: 3px;
+  margin: 3px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  height: 2rem;
+  width: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+.filled-box {
+  border: 2px solid black;
+}
+
+.letter-row {
+  display: flex;
+}
+
+#keyboard-cont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#keyboard-cont div {
+  display: flex;
+}
+
+.second-row {
+  margin: 0.5rem 0;
+}
+
+.keyboard-button {
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.5rem;
+  margin: 0 5px;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+@media screen and (max-width: 480px) and (max-height: 740px) {
   .letter-box {
-    border: 2px solid gray;
-    border-radius: 3px;
+    /* color: whitesmoke; */
+    font-weight: 500;
+    font-size: 1.2rem;
+    height: 1.6rem;
+    width: 1.6rem;
     margin: 2px;
-    font-size: 2rem;
-    font-weight: 700;
-    height: 2rem;
-    width: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-transform: uppercase;
-  }
-  
-  .filled-box {
-    border: 2px solid black;
-  }
-  
-  .letter-row {
-    display: flex;
   }
 
-  #keyboard-cont {
-    margin: 1rem 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  #keyboard-cont div {
-    display: flex;
-  }
-  
-  .second-row {
-    margin: 0.5rem 0;
-  }
-  
   .keyboard-button {
     font-size: 1rem;
-    font-weight: 700;
-    padding: 0.5rem;
     margin: 0 2px;
-    cursor: pointer;
-    text-transform: uppercase;
+  }
+}
+
+@media screen and (max-width: 750px) and (max-height: 1000px) {
+  .roomCode p {
+    font-size: 20px;
   }
 
-  .chat {
-    margin-top: -20%;
-    width: 10%;
-    height: 30px;
-    border-radius: 20px;
-    background-color: #B77272;
+  #giveUp-btn {
+    width: 100px;
+    height: 40px;
+    border-radius: 5px;
   }
+
+  #giveUp-btn .text {
+    font-size: 12px;
+    transform: translateX(15px);
+  }
+
+  #giveUp-btn .icon {
+    transform: translateX(65px);
+    height: 30px;
+    width: 40px;
+  }
+
+  #giveUp-btn img {
+    width: 25px;
+  }
+
+  #giveUp-btn:hover .icon {
+    width: 110px;
+    transform: translateX(0);
+  }
+}
+
+@media screen and (min-height: 740px) {
+  .player-container {
+    flex-flow: row wrap;
+    gap: 15px;
+  }
+
+  .player {
+    min-width: 170px;
+  }
+}
+
+@media screen and (min-width: 751px) {
+  .side-panel-container {
+    width: 130px;
+  }
+
+  #chat-panel {
+    top: -20px;
+  }
+
+  .keyboard-button {
+    min-width: 50px;
+    min-height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .letter-box {
+    font-weight: 600;
+    font-size: 3rem;
+    height: 3rem;
+    width: 3rem;
+    margin: 4px;
+  }
+
+  #side-panel-toggle {
+    top: -10px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+
+  .player-container {
+    margin-top: 10px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: space-between;
+    width: 90%;
+    column-gap: 400px;
+    row-gap: 30px;
+  }
+
+  .game-display {
+    position: absolute;
+    top: 0;
+    left: calc(50vw - 250px);
+  }
+}
+
+@media screen and (min-width: 1000px) and (max-height: 700px) {
+
+  #game-board {
+    margin: 0 0 30px 0;
+  }
+
+  .letter-box {
+    font-weight: 600;
+    font-size: 1.8rem;
+    height: 2.2rem;
+    width: 2.2rem;
+    margin: 2px;
+  }
+
+  .keyboard-button {
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 1rem;
+  }
+
+  #chat-panel {
+    top: -10px;
+  }
+}
+
+@media screen and (min-width: 1200px) and (min-height: 700px) {
+  .player-container {
+    margin-top: 30px;
+    row-gap: 50px;
+  }
+
+  .player {
+    max-width: 300px;
+    height: 150px;
+  }
+
+  .player p {
+    font-size: 24px;
+  }
+
+  .game-display {
+    left: calc(50vw - 325px);
+  }
+
+  .keyboard-button {
+    min-width: 55px;
+    min-height: 55px;
+    font-size: 1.2rem;
+  }
+
+  .letter-box {
+    font-weight: 600;
+    font-size: 2.5rem;
+    height: 2.8rem;
+    width: 2.8rem;
+    margin: 4px;
+  }
+}
+
+.button-container {
+  display: flex;
+  align-items: flex-end;
+  margin-top: 15vh;
+  width: 90%;
+  height: 136px;
+}
+
+.button-container #giveUp-btn {
+  display: none;
+}
+
+/* Media query for smaller screens */
+@media screen and (min-width: 1000px) {
+
+  /* Hide the button in the topNav div */
+  .topnav #giveUp-btn {
+    display: none;
+  }
+
+  /* Show the button in the buttonContainer div */
+  .button-container #giveUp-btn {
+    display: flex;
+  }
+
+  .topnav {
+    border-bottom: 1px solid black;
+  }
+
+  .topnav #game-title {
+    display: block;
+  }
+
+  .side-panel-container {
+    width: 187px;
+  }
+}
+
+@media screen and (max-width: 999px) {
+
+  /* Hide the button in the topNav div */
+  .topnav #giveUp-btn {
+    display: flex;
+  }
+
+  /* Show the button in the buttonContainer div */
+  .button-container #giveUp-btn {
+    display: none;
+  }
+
+  .topnav #game-title {
+    display: none;
+  }
+}

@@ -5,44 +5,40 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styleHome.css">
+    <link rel="stylesheet" href="css/main.css">
     <title>Document</title>
 </head>
 
 <body>
-    <div class="friend-list-container">
-        <div class="friend-container">
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
-            <div class="friend-profile"></div>
+
+    <button id="side-panel-toggle" type="button" onclick="showChat()">
+        <img src="picture/chat.png" alt="">
+    </button>
+
+    <div id="chat-panel">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>Chat Box</h2>
+            </div>
+            <div class="connecting">Connecting...</div>
+            <ul id="messageArea">
+
+            </ul>
+            <form id="messageForm" onsubmit="event.preventDefault(); sendChat();">
+                <div class="form-group">
+                    <div class="input-group clearfix">
+                        <input type="text" id="message" placeholder="Type a message..." autocomplete="off"
+                            class="form-control" />
+                        <button type="submit" class="primary">Send</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>

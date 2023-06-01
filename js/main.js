@@ -1,15 +1,9 @@
 'use strict';
 
-const usernamePage = document.querySelector('#username-page');
-const mainPage = document.querySelector('#main-page');
-const usernameForm = document.querySelector('#usernameForm');
 const messageForm = document.querySelector('#messageForm');
 const gameForm = document.querySelector('#gameForm');
 const messageInput = document.querySelector('#message');
 const messageArea = document.querySelector('#messageArea');
-const triesDisplay = document.querySelector('#triesDisplay');
-const resultDisplay = document.querySelector('#resultDisplay');
-const wordInput = document.querySelector('#word');
 const connectingElement = document.querySelector('.connecting');
 
 var stompClient = null;
@@ -34,12 +28,10 @@ function onKeywordReceived(payload) {
 }
 
 function connect(event) {
-    username = document.querySelector('#name').value.trim();
+    username = "Johan";
 
     if (username) {
-        usernamePage.classList.add('hidden');
-        mainPage.classList.remove('hidden');
-        mainPage.classList.add('main-page');
+        // mainPage.classList.add('main-page');
 
         var socket = new SockJS('http://localhost:8080/play');
         stompClient = Stomp.over(socket);
@@ -77,7 +69,8 @@ function onDisconnect() {
 }
 
 
-function sendChat(event) {
+function sendChat() {
+    // event.preventDefault();
     var messageContent = messageInput.value.trim();
     if (messageContent && stompClient) {
         var chatMessage = {
@@ -89,7 +82,6 @@ function sendChat(event) {
         stompClient.send("/app/chat.send", {}, JSON.stringify(chatMessage));
         messageInput.value = '';
     }
-    event.preventDefault();
 }
 
 
@@ -209,6 +201,10 @@ function showResult(validWord) {    // display result
     resultDisplay.innerHTML += para;
 }
 
-usernameForm.addEventListener('submit', connect, true)
-messageForm.addEventListener('submit', sendChat, true)
+function showChat() {
+    document.getElementById("chat-panel").classList.toggle('active');
+    document.getElementById("side-panel-toggle").classList.toggle('move');
+}
+
+connect();
 gameForm.addEventListener('submit', checkWord, true)
