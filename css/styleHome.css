@@ -39,7 +39,7 @@ body {
         flex-flow: column nowrap;
         justify-content: space-evenly;
         width: calc(100% - 80px);
-        height: 100%;
+        height: 80%;
         margin: 40px;
         gap: 10px;
 
@@ -70,10 +70,8 @@ body {
         .second-info {
             width: 100%;
             display: flex;
-            flex-flow: column nowrap;
-            justify-content: center;
-            align-items: left;
-            gap: 10px;
+            flex-direction: column;
+            height: 100%;
 
             .group-info {
                 display: flex;
@@ -133,15 +131,15 @@ body {
 }
 
 .leaderboard {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: -2%;
-    width: 30%;
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* margin-top: -2%; */
+    width: 35%;
     height: 295px;
     background-image: url("../picture/Group\ 58.svg");
-    background-repeat: no-repeat;
-    background-size: cover;
+    /* background-repeat: no-repeat; */
+    /* background-size: cover; */
 
     .leaderboard-container {
         display: flex;
