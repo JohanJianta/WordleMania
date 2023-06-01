@@ -13,12 +13,13 @@ body {
     background-color: #eaeaea;
 }
 
+
 .top-section-container {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-around;
     align-items: center;
-    height: calc(100vh/2 + 50px);
+    height: 70%;
 }
 
 .player {
@@ -27,8 +28,8 @@ body {
     justify-content: center;
     align-items: center;
     gap: 20px;
-    width: 480px;
-    height: 352px;
+    width: 28%;
+    height: 200px;
     border-radius: 20px;
     border: 5px solid rgba(0, 0, 0, 0.748);
     background-color: #B7C4CF;
@@ -49,8 +50,8 @@ body {
             align-items: center;
 
             .profile {
-                width: 120px;
-                height: 100px;
+                width: 20%;
+                height: 80px;
                 background-color: #794B4B;
             }
 
@@ -80,7 +81,7 @@ body {
             }
 
             .group-info p {
-                font-size: 20px;
+                font-size: 14px;
             }
 
             .info-title {
@@ -89,7 +90,7 @@ body {
         }
 
         #player-nickname {
-            font-size: 30px;
+            font-size: 20px;
             font-weight: 900;
         }
     }
@@ -102,13 +103,13 @@ body {
 
     .play-btn {
         font-family: 'Comic Neue';
-        font-size: 25px;
+        font-size: 20px;
         font-weight: 700;
-        border: 5px solid #23272b85;
+        border: 3px solid #23272b85;
         color: white;
         border-radius: 15px;
-        width: 292px;
-        height: 77px;
+        width: 100%;
+        height: 40px;
     }
 
     #stranger-btn {
@@ -124,8 +125,8 @@ body {
         background-color: #0AC6C6;
 
         .create-room-logo {
-            width: 46px;
-            height: 46px;
+            width: 100%;
+            height: 50px;
             background-image: url("../picture/login.png");
         }
     }
@@ -135,8 +136,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 482px;
-    height: 370px;
+    margin-top: -2%;
+    width: 30%;
+    height: 295px;
     background-image: url("../picture/Group\ 58.svg");
     background-repeat: no-repeat;
     background-size: cover;
@@ -144,8 +146,8 @@ body {
     .leaderboard-container {
         display: flex;
         flex-flow: column nowrap;
-        width: 453px;
-        height: 264px;
+        width: 100%;
+        height: 170px;
         border: 1px solid black;
         margin-top: 55px;
         border-radius: 20px;
