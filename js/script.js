@@ -6,7 +6,7 @@ import { WORDS_9 } from "./words-9.js";
 import { WORDS_10 } from "./words-10.js";
 
 const NUMBER_OF_GUESSES = 8;
-const WORD_LENGTH = 10;
+const WORD_LENGTH = 5;
 const ARRAYS = {
   WORDS_5,
   WORDS_6,
