@@ -8,9 +8,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/styleHome.css">
     <link rel="stylesheet" href="css/styleLogin.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.js"
-        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-    <script src="js/loginSignUp.js"></script>
     <title>Home</title>
 
 </head>
@@ -139,10 +136,10 @@
             </div>
 
             <div class="kolom2">
-                <button class="btnstranger"><span></span>
+                <button class="btnstranger" onclick="searchRandomRoom()"><span></span>
                     <p data-start="good luck!" data-text="start!" data-title="play with stranger"></p>
                 </button>
-                <button class="btnroom" onclick="window.location.href='Room.html'">
+                <button class="btnroom" onclick="createRoom()">
                     <div class="svg-wrapper-1">
                         <div class="svg-wrapper">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -314,14 +311,15 @@
             <p><b>Friend List</b></p>
         </div>
         <div class="friend-list-container">
-   
-  
+
+
         </div>
     </div>
 
     <!-- Navbar JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"
         integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="js/loginSignUp.js"></script>
 
 </body>

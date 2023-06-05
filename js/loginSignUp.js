@@ -274,7 +274,7 @@ function searchRandomRoom() {
         url: `${URL}:8080/Game`,
         dataType: 'json',
         success: function (result) {
-
+            
             $.ajax({
                 type: "POST",
                 url: `${URL}:8080/Game/Player`,
@@ -286,7 +286,7 @@ function searchRandomRoom() {
                     window.location.assign(`${URL}:5500/Room.html`);
                 },
                 error: function (jqXHR) {
-                    toastr.error("Something went wrong when trying join the game. Please try again.");
+                    toastr.error("Something went wrong when joining the game. Please try again.");
                 }
             });
 

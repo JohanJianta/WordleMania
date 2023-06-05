@@ -1,3 +1,5 @@
+'use strict';
+
 const URL = "http://192.168.1.3";
 
 var NUMBER_OF_GUESSES;
@@ -16,7 +18,7 @@ let roomId;
 window.onload = () => {
   gameCode = sessionStorage.getItem("gameCode");
   $("#game-code").text(gameCode);
-
+  
   connect();
 }
 
