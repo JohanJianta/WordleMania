@@ -275,20 +275,20 @@ function searchRandomRoom() {
         dataType: 'json',
         success: function (result) {
             
-            $.ajax({
-                type: "POST",
-                url: `${URL}:8080/Game/Player`,
-                data: JSON.stringify({ gameId: result.payload, playerId: sessionStorage.getItem("idGuest") }),
-                dataType: 'json',
-                contentType: 'application/json',
-                success: function () {
+            // $.ajax({
+            //     type: "POST",
+            //     url: `${URL}:8080/Game/Player`,
+            //     data: JSON.stringify({ gameId: result.payload, playerId: sessionStorage.getItem("idGuest") }),
+            //     dataType: 'json',
+            //     contentType: 'application/json',
+            //     success: function () {
                     sessionStorage.setItem("gameCode", result.payload);
                     window.location.assign(`${URL}:5500/Room.html`);
-                },
-                error: function (jqXHR) {
-                    toastr.error("Something went wrong when joining the game. Please try again.");
-                }
-            });
+            //     },
+            //     error: function (jqXHR) {
+            //         toastr.error("Something went wrong when joining the game. Please try again.");
+            //     }
+            // });
 
         },
         error: function (jqXHR) {
@@ -307,20 +307,20 @@ function createRoom() {
             contentType: 'application/json',
             success: function (result) {
 
-                $.ajax({
-                    type: "POST",
-                    url: `${URL}:8080/Game/Player`,
-                    data: JSON.stringify({ gameId: result.payload, playerId: sessionStorage.getItem("idGuest") }),
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    success: function () {
+                // $.ajax({
+                //     type: "POST",
+                //     url: `${URL}:8080/Game/Player`,
+                //     data: JSON.stringify({ gameId: result.payload, playerId: sessionStorage.getItem("idGuest") }),
+                //     dataType: 'json',
+                //     contentType: 'application/json',
+                //     success: function () {
                         sessionStorage.setItem("gameCode", result.payload);
                         window.location.assign(`${URL}:5500/Room.html`);
-                    },
-                    error: function (jqXHR) {
-                        toastr.error("Something went wrong when joining the game. Please try again.");
-                    }
-                });
+                //     },
+                //     error: function (jqXHR) {
+                //         toastr.error("Something went wrong when joining the game. Please try again.");
+                //     }
+                // });
 
             },
             error: function (jqXHR) {

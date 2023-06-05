@@ -18,12 +18,25 @@ let roomId;
 window.onload = () => {
   gameCode = sessionStorage.getItem("gameCode");
   $("#game-code").text(gameCode);
-  
-  connect();
+
+  $.ajax({
+    type: "POST",
+    url: `${URL}:8080/Game/Player`,
+    data: JSON.stringify({ gameId: gameCode, playerId: sessionStorage.getItem("idGuest") }),
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function () {
+
+      connect();
+
+    },
+    error: function (jqXHR) {
+      toastr.error("Something went wrong when joining the game. Please try again.");
+    }
+  });
 }
 
 function loadRoomData() {
-  removeDivElements();
   $.ajax({
     type: "GET",
     url: `${URL}:8080/Game/Data/${gameCode}`,
@@ -39,14 +52,18 @@ function loadRoomData() {
         }
       }
 
-      gameCode = room.gameCode;
-      roomId = room.roomId;
-      NUMBER_OF_GUESSES = room.guessesTry;
-      guessesRemaining = room.guessesTry;
-      rightGuessString = room.word.toLowerCase();
-      WORD_LENGTH = room.word.length;
+      if (roomId != room.roomId || NUMBER_OF_GUESSES != room.guessesTry || rightGuessString != room.word.toLowerCase()) {
+        gameCode = room.gameCode;
+        roomId = room.roomId;
+        NUMBER_OF_GUESSES = room.guessesTry;
+        guessesRemaining = room.guessesTry;
+        rightGuessString = room.word.toLowerCase();
+        WORD_LENGTH = room.word.length;
 
-      initBoard();
+        removeDivElements();
+        initBoard();
+      }
+
     },
     error: function (_jqXHR) {
       console.log("Can't load player. Please re-join the room")
@@ -271,38 +288,6 @@ const colors = [
   '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
 
-function connect() {
-  // gameCode = JSON.parse(sessionStorage.getItem("gameCode")).payload.id;
-  username = sessionStorage.getItem('username');
-
-  if (username && gameCode) {
-    var socket = new SockJS(`${URL}:8080/play`);
-    stompClient = Stomp.over(socket);
-
-    stompClient.connect({}, onConnected, onError);
-    window.addEventListener('beforeunload', onDisconnect);
-  }
-}
-
-
-function onConnected() {
-  // Subscribe to the Public Topic
-  stompClient.subscribe(`/room/${gameCode}/chatroom`, onMessageReceived);
-  // stompClient.subscribe(`/room/${gameCode}/setting`, onSettingReceived);
-  stompClient.subscribe(`/room/${gameCode}/answer`, onWordReceived);
-
-  // Tell your username to the server
-  stompClient.send("/app/chat.register", {}, JSON.stringify({ sender: username, type: 'JOIN', gameCode: gameCode }))
-  // stompClient.send("/app/game.keyword", {}, JSON.stringify({ gameCode: gameCode, requestedLength: WORD_LENGTH }))
-
-  connectingElement.classList.add('hidden');
-}
-
-function onError(_error) {
-  connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
-  connectingElement.style.color = 'red';
-}
-
 function onDisconnect() {
   $.ajax({
     type: "PUT",
@@ -321,6 +306,37 @@ function onDisconnect() {
       console.log("Something went wrong when trying to leave the game");
     }
   });
+}
+
+function connect() {
+  // gameCode = JSON.parse(sessionStorage.getItem("gameCode")).payload.id;
+  username = sessionStorage.getItem('username');
+
+  if (username && gameCode) {
+    var socket = new SockJS(`${URL}:8080/play`);
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, onConnected, onError);
+    window.addEventListener('beforeunload', onDisconnect);
+  }
+}
+
+function onConnected() {
+  // Subscribe to the Public Topic
+  stompClient.subscribe(`/room/${gameCode}/chatroom`, onMessageReceived);
+  // stompClient.subscribe(`/room/${gameCode}/setting`, onSettingReceived);
+  stompClient.subscribe(`/room/${gameCode}/answer`, onWordReceived);
+
+  // Tell your username to the server
+  stompClient.send("/app/chat.register", {}, JSON.stringify({ sender: username, type: 'JOIN', gameCode: gameCode }))
+  // stompClient.send("/app/game.keyword", {}, JSON.stringify({ gameCode: gameCode, requestedLength: WORD_LENGTH }))
+
+  connectingElement.classList.add('hidden');
+}
+
+function onError(_error) {
+  connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
+  connectingElement.style.color = 'red';
 }
 
 $("#messageForm").submit(sendChat);
@@ -350,13 +366,14 @@ function onMessageReceived(payload) {
     messageElement.classList.add('event-message');
     message.content = message.sender + ' joined!';
     loadRoomData();
-    toastr.info(`${message.sender} has joined the room`);
+    toastr.success(`${message.sender} has joined the room`);
   } else if (message.type === 'LEAVE') {
+    console.log("im here")
     $(`#invite-icon-${message.content}`).removeClass("hidden");
     $(`#player-name-${message.content}`).text("Invite");
     messageElement.classList.add('event-message');
     message.content = message.sender + ' left!';
-    toastr.info(`${message.sender} has leaved the room`);
+    toastr.error(`${message.sender} has leaved the room`);
   } else {
     messageElement.classList.add('chat-message');
 
