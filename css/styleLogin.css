@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -45,14 +45,44 @@ input {
 
 /* font animation  */
 .title {
-    display: flex;
+    /* display: flex;
     justify-content: center;
     align-items: center;
     font-size: 20px;
-    font-weight: 900;
+    font-weight: 900; */
+
+    position: relative;
+  -webkit-box-reflect: below -20px linear-gradient(transparent, rgba(0,0,0,.2));
+  font-size: 20px;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  width: 30%;
+  
 }
 
-ul {
+.title span {
+    font-family: 'Alfa Slab One', cursive;
+    position: relative;
+    display: inline-block;
+    color: #fff;
+    text-transform: uppercase;
+    animation: waviy 1s infinite;
+    animation-delay: calc(.1s * var(--i));
+    
+  }
+  @keyframes waviy {
+    0%,40%,100% {
+      transform: translateY(0)
+    }
+    20% {
+      transform: translateY(-20px)
+    }
+  }
+
+/* ul {
     position: relative;
     display: flex;
 }
@@ -105,7 +135,7 @@ input[type="checkbox"]:checked~div {
     100% {
         filter: hue-rotate(360deg);
     }
-}
+} */
 
 /* Navbar */
 

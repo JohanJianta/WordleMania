@@ -58,9 +58,106 @@ body {
     justify-content: center;
 }
 
-.kolom3 img {
-    width: 70%;
+.kolom3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.leaderboard {
+    /* width: 190px; */
+  /* height: 254px; */
+  margin-top: 10px;
+  width: 370px;
+  height: 244px;
+  background: #07182E;
+  position: relative;
+  display: flex;
+  place-content: center;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.leaderboard2 {
+  width: 370px;
+  height: 244px;
+  background: transparent;
+  display: flex;
+  border-radius: 20px;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.judulleaderboard {
+    color: white;
+    z-index: 3;
+    text-align: center;
+    margin-top: 5px;
+    border-bottom: 2px solid white;
+    width: 95%;
+    font-size: 20px;
+    
+}
+
+.rank1 {
+    width: 95%;
+    color: white;
+    display: flex;
+    flex-flow: row nowrap;
+    margin-top: 5px;
+    z-index: 3;
+    justify-content: space-around;
+}
+
+.rank2 {
+    width: 95%;
+    color: white;
+    display: flex;
+    flex-flow: row nowrap;
+    margin-top: 5px;
+    z-index: 3;
+    justify-content: space-around;
+}
+
+.rank3 {
+    width: 95%;
+    color: white;
+    display: flex;
+    flex-flow: row nowrap;
+    margin-top: 5px;
+    z-index: 3;
+    justify-content: space-around;
+}
+
+.leaderboard::before {
+    content: '';
+    position: absolute;
+    width: 235px;
+    background-image: linear-gradient(180deg, rgb(0, 183, 255), rgb(255, 48, 255));
+    height: 150%;
+    animation: rotBGimg 3s linear infinite;
+    transition: all 0.2s linear;
+  }
+  
+  @keyframes rotBGimg {
+    from {
+      transform: rotate(0deg);
+    }
+  
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .leaderboard::after {
+    content: '';
+    position: absolute;
+    background: #07182E;
+    ;
+    inset: 5px;
+    border-radius: 15px;
+  }  
 
 .player {
     margin-top: 5%;
