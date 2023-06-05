@@ -57,44 +57,15 @@ body {
 }
 
 .player {
-
     margin-top: 5%;
     display: flex;
     background-color: transparent;
+    border: 2px solid aqua;
     flex-flow: column nowrap;
     width: 80%;
     height: 100%;
-    position: relative;
 
 }
-
-.player::before {
-    content: '';
-    position: absolute;
-    width: 80%;
-    background-image: linear-gradient(180deg, rgb(0, 183, 255), rgb(255, 48, 255));
-    height: 100%;
-    animation: rotBGimg 3s linear infinite;
-    transition: all 0.2s linear;
-  }
-
-  @keyframes rotBGimg {
-    from {
-      transform: rotate(0deg);
-    }
-  
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  .player::after {
-    content: '';
-    position: absolute;
-    background: #07182E;
-    inset: 5px;
-    border-radius: 15px;
-  }  
 
 .infoatas {
     width: 100%;
@@ -126,15 +97,233 @@ body {
     height: 20px;
 }
 
+
 .btnstranger {
     width: 50%;
     height: 20%;
+    margin-top: -3%;
+  background-color:#245791;
+  margin: 20px;
+  color: #6ea0b4;
+  position: relative;
+  overflow: hidden;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  
 }
 
+.btnstranger:before, .btnstranger:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: #44d8a4;
+    transition: all 0.3s cubic-bezier(0.35, 0.1, 0.25, 1);
+  }
+
+  .btnstranger:before {
+    right: 0;
+    top: 0;
+    transition: all 0.5s cubic-bezier(0.35, 0.1, 0.25, 1);
+  }
+
+  .btnstranger:after {
+    left: 0;
+    bottom: 0;
+  }
+
+  .btnstranger span {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+
+  .btnstranger span:before, .btnstranger span:after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 0;
+    background-color: #44d8a4;
+    transition: all 0.3s cubic-bezier(0.35, 0.1, 0.25, 1);
+  }
+
+  .btnstranger span:before {
+    right: 0;
+    top: 0;
+    transition: all 0.5s cubic-bezier(0.35, 0.1, 0.25, 1);
+  }
+
+  .btnstranger span:after {
+    left: 0;
+    bottom: 0;
+  }
+
+  .btnstranger p {
+    padding: 0;
+    margin: 0;
+    transition: all 0.4s cubic-bezier(0.35, 0.1, 0.25, 1);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  .btnstranger p:before, .btnstranger p:after {
+    position: absolute;
+    width: 100%;
+    transition: all 0.4s cubic-bezier(0.35, 0.1, 0.25, 1);
+    z-index: 1;
+    left: 0;
+  }
+  .btnstranger p:before {
+    content: attr(data-title);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .btnstranger p:after {
+    content: attr(data-text);
+    top: 150%;
+    color: #44d8a4;
+  } 
+
+  .btnstranger:hover:before, .btnstranger:hover:after {
+    width: 100%;
+  }
+
+  .btnstranger:hover span {
+    z-index: 1;
+  }
+
+  .btnstranger:hover span:before, .btnstranger:hover span:after {
+    height: 100%;
+  }
+
+  .btnstranger:hover p:before {
+    top: -50%;
+    transform: rotate(5deg);
+  }
+
+  .btnstranger:hover p:after {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .btnstranger.start {
+    background-color: #44d8a4;
+    box-shadow: 0px 5px 10px -10px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .btnstranger.start p:before {
+    top: -50%;
+    transform: rotate(5deg);
+  }
+
+  .btnstranger.start p:after {
+    color: white;
+    transition: all 0s ease;
+    content: attr(data-start);
+    top: 50%;
+    transform: translateY(-50%);
+    animation: start 0.3s ease;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes start {
+    from {
+      top: -50%;
+    }
+  }
+
+  .btnstranger.start:hover:before, .btnstranger.start:hover:after {
+    display: none;
+  }
+
+  .btnstranger.start:hover span {
+    display: none;
+  }
+
+  .btnstranger:active {
+    outline: none;
+    border: none;
+  }
+
+  .btnstranger:focus {
+    outline: 0;
+  }
+
 .btnroom {
+     display: flex;
+    justify-content: center;
+    align-items: center;
     height: 20%;
     width: 50%;
+    /* margin-top: 3%; */
+    /* background-color: #212121; */
+    /* border-radius: 20px; */
+    /* border: 1.5px solid white; */
+    /* font-size: 15px;  */
+
+    /* width: 10em; */
+  position: relative;
+  /* height: 3.5em; */
+  border: 3px ridge #149CEA;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  transition: 1s;
+  border-radius: 0.3em;
+  font-size: 16px;
+  font-weight: bold;
 }
+
+.btnroom::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 3%;
+    width: 95%;
+    height: 40%;
+    background-color: #212121;
+    transition: 0.5s;
+    transform-origin: center;
+  }
+
+  .btnroom::before {
+    content: "";
+    transform-origin: center;
+    position: absolute;
+    top: 80%;
+    left: 3%;
+    width: 95%;
+    height: 40%;
+    background-color: #212121;
+    transition: 0.5s;
+  }
+
+  .btnroom:hover::before, .btnroom:hover::after {
+    transform: scale(0)
+  }
+
+  .btnroom:hover {
+    box-shadow: inset 0px 0px 25px #1479EA;
+  }
+
+
 
 .bagianbawah {
     width: 100%;
