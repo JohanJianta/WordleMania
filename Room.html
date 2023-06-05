@@ -32,7 +32,8 @@
             </div>
 
             <div class="roomCode">
-                <p>Room: #1</p>
+                <p>Room:</p>
+                <p id="game-code"></p>
             </div>
 
             <div class="side-panel-container">
@@ -46,7 +47,7 @@
                         </div>
                         <div class="connecting">Connecting...</div>
                         <ul id="messageArea"></ul>
-                        <form id="messageForm" onsubmit="event.preventDefault(); sendChat();">
+                        <form id="messageForm">
                             <div class="form-group">
                                 <div class="input-group clearfix">
                                     <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control" />
@@ -63,21 +64,25 @@
         <div class="main-section">
             <div class="player-container">
                 <div class="player">
-                    <p>Pemain 3</p>
-                    <p>YOU</p>
+                    <img src="" alt="avatar" class="hidden">
+                    <i id="invite-icon-0" class="fa-solid fa-user-plus" style="color: #000000;"></i>
+                    <p id="player-name-0">Invite</p>
                 </div>
 
                 <div class="player">
-                    <i class="fa-solid fa-user-plus" style="color: #000000;"></i>
-                    <p>Invite</p>
+                    <img src="" alt="avatar" class="hidden">
+                    <i id="invite-icon-1" class="fa-solid fa-user-plus" style="color: #000000;"></i>
+                    <p id="player-name-1">Invite</p>
                 </div>
                 <div class="player">
-                    <i class="fa-solid fa-user-plus" style="color: #000000;"></i>
-                    <p>Invite</p>
+                    <img src="" alt="avatar" class="hidden">
+                    <i id="invite-icon-2" class="fa-solid fa-user-plus" style="color: #000000;"></i>
+                    <p id="player-name-2">Invite</p>
                 </div>
                 <div class="player">
-                    <i class="fa-solid fa-user-plus" style="color: #000000;"></i>
-                    <p>Invite</p>
+                    <img src="" alt="avatar" class="hidden">
+                    <i id="invite-icon-3" class="fa-solid fa-user-plus" style="color: #000000;"></i>
+                    <p id="player-name-3">Invite</p>
                 </div>
             </div>
 
@@ -142,7 +147,7 @@
         integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="js/script.js" type="module"></script>
-    <script src="js/main.js"></script>
+    <script src="js/chatClient.js"></script>
 
 </body>
 

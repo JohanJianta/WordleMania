@@ -13,6 +13,10 @@ body {
     background-color: #eaeaea;
 }
 
+.hidden {
+    display: none;
+}
+
 .top-section-container {
     display: flex;
     flex-flow: row nowrap;
@@ -61,7 +65,7 @@ body {
                 width: 200px;
                 height: 25px;
                 font-weight: 500;
-                background-color: #80D173;
+                background-color: transparent;
                 border: 1px solid black;
             }
         }
@@ -216,7 +220,7 @@ body {
     height: 100%;
     display: flex;
     gap: 30px;
-    overflow-x: auto;
+    overflow-x: scroll;
     overflow-y: hidden;
     -webkit-overflow-scrolling: auto;
 }

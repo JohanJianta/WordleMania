@@ -24,6 +24,11 @@
   justify-content: space-between;
 }
 
+.roomCode {
+  display: flex;
+  gap: 10px;
+}
+
 .roomCode p {
   font-size: 30px;
 }
@@ -119,6 +124,10 @@ button span {
   height: 130px;
   border-radius: 5px;
   background-color: #D9D9D9;
+}
+
+.player img {
+  width: 50px;
 }
 
 .player i {
@@ -494,7 +503,7 @@ button.primary {
   }
 
   #chat-panel {
-    top: -20px;
+    top: -10px;
   }
 
   .keyboard-button {

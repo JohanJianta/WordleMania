@@ -1,16 +1,46 @@
 'use strict';
 
-const notifDesc = document.querySelector('#notif-desc');
+const URL = "http://192.168.1.3";
+
+window.onload = function () {
+    if (!sessionStorage.getItem("idGuest") && !sessionStorage.getItem("username")) {
+        var currentDate = new Date();
+        var year = currentDate.getFullYear();
+        var month = currentDate.getMonth() + 1;
+        var day = currentDate.getDate();
+        var hour = currentDate.getHours();
+        var minute = currentDate.getMinutes();
+        var second = currentDate.getSeconds();
+        sessionStorage.setItem("hasLogin", "false");
+        sessionStorage.setItem("username", ("Guest" + (year + month + day + hour + minute + second)));
+        $.ajax({
+            type: "POST",
+            url: `${URL}:8080/Player/Guest`,
+            data: ("Guest" + (year + month + day + hour + minute + second)),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+                sessionStorage.setItem("idGuest", result.id);
+                sessionStorage.setItem("username", result.name);
+            },
+            error: function (jqXHR) {
+                console.log(jqXHR);
+                sessionStorage.setItem("username",);
+            }
+        });
+    }
+
+    if (sessionStorage.getItem("hasLogin") == "true") {
+        setLoginState(true);
+    } else {
+        setLoginState(false);
+    }
+
+    getLeaderboard();
+}
 
 window.onclick = function () {
     $(".notif-container").css("display", "none");
-}
-
-function showNotif(color, title, desc) {
-    $(".notif-container").css("display", "flex");
-    $(".notif-container").css("color", color);
-    $("#notif-title").text(title);
-    $("#notif-desc").text(desc);
 }
 
 function login() {
@@ -26,18 +56,25 @@ function login() {
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/Player/Login",
+            url: `${URL}:8080/Player/Login`,
             data: JSON.stringify(data),
             dataType: 'json',
             contentType: 'application/json',
             success: function (result) {
-                showNotif("green", "Login Success", "Directing to your home page...");
                 resetForm();
                 hideLogin();
-                getPlayerData(result.payload);
+                toastr.success("Login Success !!!");
+                sessionStorage.setItem("idGuest", result.payload.guestId);
+                sessionStorage.setItem("idUser", result.payload.userId);
+                sessionStorage.setItem("username", result.payload.name);
+                sessionStorage.setItem("score", result.payload.score);
+                sessionStorage.setItem("totalPlay", result.payload.totalPlay);
+                sessionStorage.setItem("totalWin", result.payload.totalWin);
+                sessionStorage.setItem("hasLogin", "true");
+                setLoginState(true);
             },
             error: function (jqXHR) {
-                showNotif("red", "Login Failed", JSON.parse(jqXHR.responseText).messages);
+                toastr.error("Login Failed: " + JSON.parse(jqXHR.responseText).messages);
                 resetForm();
             }
         });
@@ -51,6 +88,7 @@ function signUp() {
 
     if (nameInput && passwordInput && emailInput) {
         var data = {
+            guestId: sessionStorage.getItem("idGuest"),
             name: nameInput,
             email: emailInput,
             password: passwordInput
@@ -58,17 +96,17 @@ function signUp() {
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/Player/Register",
+            url: `${URL}:8080/Player/Register`,
             data: JSON.stringify(data),
             dataType: 'json',
             contentType: 'application/json',
             success: function (result) {
-                showNotif("green", "Registration Success", "Directing to your home page...");
+                toastr.success("Registration Success !!!");
                 resetForm();
                 hideSignUp();
             },
             error: function (jqXHR) {
-                showNotif("red", "Registration Failed", JSON.parse(jqXHR.responseText).messages);
+                toastr.error("Registration Failed: " + JSON.parse(jqXHR.responseText).messages);
                 resetForm();
             }
         });
@@ -116,76 +154,107 @@ function signUpToLogin() {
     showLogin();
 }
 
-function getPlayerData(idPlayer) {
-    $.ajax({
-        type: "GET",
-        url: `http://localhost:8080/Player/${idPlayer}`,
-        dataType: 'json',
-        success: function (result) {
-            let response = result.payload;
-            $("#player-nickname").text(response.name);
-            $("#player-id").text(response.id);
-            $("#player-score").text(response.score);
-            $("#player-total-play").text(response.totalPlay);
-            $("#player-total-win").text(response.totalWin);
-        },
-        error: function (jqXHR) {
-            console.log("Player Not Found")
-        }
-    });
-    getFriendList(idPlayer);
+function setLoginState(status) {
+    if (status) {
+        $(".nav-button-container").addClass("hidden");
+    } else {
+        $(".nav-button-container").removeClass("hidden");
+    }
+    showPlayerData(status);
+    showFriendList(status);
 }
 
-function getFriendList(idPlayer) {
-    $.ajax({
-        type: "GET",
-        url: `http://localhost:8080/Friends/${idPlayer}`,
-        dataType: 'json',
-        success: function (result) {
-            var friend;
-            console.log(result.payload.length)
-            for (let i = 0; i < result.payload.length; i++) {
-                friend = `<div class="friend-container">
-                            <div class="friend-profile">
-                                <div class="first-info">
-                                    <div class="profile"></div>
-                                    <div class="level">
-                                        <p>Level 100</p>
+function showPlayerData(status) {
+
+    if (status) {
+        $("#group-id").removeClass("hidden");
+        $("#group-id").addClass("group-info");
+        $("#group-score").removeClass("hidden");
+        $("#group-score").addClass("group-info");
+        $("#group-totalPlay").removeClass("hidden");
+        $("#group-totalPlay").addClass("group-info");
+        $("#group-totalWin").removeClass("hidden");
+        $("#group-totalWin").addClass("group-info");
+        $("#player-id").text(sessionStorage.getItem("idUser"));
+        $("#player-score").text(sessionStorage.getItem("score"));
+        $("#player-total-play").text(sessionStorage.getItem("totalPlay"));
+        $("#player-total-win").text(sessionStorage.getItem("totalWin"));
+    } else {
+        $("#group-id").removeClass("group-info");
+        $("#group-id").addClass("hidden");
+        $("#group-score").removeClass("group-info");
+        $("#group-score").addClass("hidden");
+        $("#group-totalPlay").removeClass("group-info");
+        $("#group-totalPlay").addClass("hidden");
+        $("#group-totalWin").removeClass("group-info");
+        $("#group-totalWin").addClass("hidden");
+    }
+
+    $("#player-nickname").text(sessionStorage.getItem("username"));
+
+}
+
+function showFriendList(status) {
+    if (status) {
+        $("#friends-unavailable").remove();
+        $("#friend-list-container").removeClass("hidden");
+        $("#friend-list-container").addClass("friend-list-container");
+        $("#friend-title").removeClass("hidden");
+        $("#friend-title").addClass("friend-title");
+        $.ajax({
+            type: "GET",
+            url: `${URL}:8080/Friends/${sessionStorage.getItem("idUser")}`,
+            dataType: 'json',
+            success: function (result) {
+                var friend;
+                for (let i = 0; i < result.payload.length; i++) {
+                    friend = `<div class="friend-container">
+                                <div class="friend-profile">
+                                    <div class="first-info">
+                                        <div class="profile"></div>
+                                        <div class="level">
+                                            <p>Level 100</p>
+                                        </div>
+                                    </div>
+    
+                                    <div class="second-info">
+                                        <div class="second-info-left">
+                                            <div class="group-info">
+                                                <p id="friend-nickname">${result.payload[i].name}</p>
+                                            </div>
+                                            <div class="group-info">
+                                                <p class="info-title">Score:  ${result.payload[i].score}</p>
+                                            </div>
+                                        </div>
+    
+                                        <div class="second-info-right">
+                                            <img src="picture/Group 38-edit.png" alt="">
+                                        </div>
+    
                                     </div>
                                 </div>
+                            </div>`;
 
-                                <div class="second-info">
-                                    <div class="second-info-left">
-                                        <div class="group-info">
-                                            <p id="friend-nickname">${result.payload[i].name}</p>
-                                        </div>
-                                        <div class="group-info">
-                                            <p class="info-title">Score:  ${result.payload[i].score}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="second-info-right">
-                                        <img src="picture/Group 38-edit.png" alt="">
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>`;
-                // friendDisplay.innerHTML += friend;
-
-                $(".friend-list-container").append(friend);
+                    $(".friend-list-container").append(friend);
+                }
+            },
+            error: function (jqXHR) {
+                toastr.warning("System can't load the friend list. Consider to refresh the page")
             }
-        },
-        error: function (jqXHR) {
-            console.log("Something went wrong with the friend list")
-        }
-    });
+        });
+    } else {
+        $("#friend-list-container").removeClass("friend-list-container");
+        $("#friend-list-container").addClass("hidden");
+        $("#friend-title").removeClass("friend-title");
+        $("#friend-title").addClass("hidden");
+        $(".friend-section").append("<p id='friends-unavailable'>This Feature Only Accessible After Login</p>");
+    }
 }
 
 function getLeaderboard() {
     $.ajax({
         type: "GET",
-        url: "http://localhost:8080/Player/Leaderboard",
+        url: `${URL}:8080/Player/Leaderboard`,
         dataType: 'json',
         success: function (result) {
             for (let i = 0; i < result.payload.length; i++) {
@@ -194,9 +263,71 @@ function getLeaderboard() {
             }
         },
         error: function (jqXHR) {
-            console.log("Something went wrong with the leaderboard")
+            toastr.warning("System can't load the leaderboard. Consider to refresh the page")
         }
     });
 }
 
-getLeaderboard();
+function searchRandomRoom() {
+    $.ajax({
+        type: "GET",
+        url: `${URL}:8080/Game`,
+        dataType: 'json',
+        success: function (result) {
+
+            $.ajax({
+                type: "POST",
+                url: `${URL}:8080/Game/Player`,
+                data: JSON.stringify({ gameId: result.payload, playerId: sessionStorage.getItem("idGuest") }),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function () {
+                    sessionStorage.setItem("gameCode", result.payload);
+                    window.location.assign(`${URL}:5500/Room.html`);
+                },
+                error: function (jqXHR) {
+                    toastr.error("Something went wrong when trying join the game. Please try again.");
+                }
+            });
+
+        },
+        error: function (jqXHR) {
+            toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
+        }
+    });
+}
+
+function createRoom() {
+    if (sessionStorage.getItem("hasLogin") == "true") {
+        $.ajax({
+            type: "POST",
+            url: `${URL}:8080/Game`,
+            data: "Public",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+
+                $.ajax({
+                    type: "POST",
+                    url: `${URL}:8080/Game/Player`,
+                    data: JSON.stringify({ gameId: result.payload, playerId: sessionStorage.getItem("idGuest") }),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function () {
+                        sessionStorage.setItem("gameCode", result.payload);
+                        window.location.assign(`${URL}:5500/Room.html`);
+                    },
+                    error: function (jqXHR) {
+                        toastr.error("Something went wrong when joining the game. Please try again.");
+                    }
+                });
+
+            },
+            error: function (jqXHR) {
+                toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
+            }
+        });
+    } else {
+        toastr.info("This feature only available for registered player");
+    }
+}
