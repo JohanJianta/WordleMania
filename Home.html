@@ -19,7 +19,24 @@
         <div class="topNav">
             <button class="history">History</button>
             <div class="title">
-                <ul>
+                <span style="--i:1">W</span>
+                <span style="--i:2">O</span>
+                <span style="--i:3">R</span>
+                <span style="--i:4">D</span>
+                <span style="--i:5">L</span>
+                <span style="--i:6">E</span>
+                <span style="--i:7"></span>
+                <span style="--i:8">M</span>
+                <span style="--i:9">A</span>
+                <span style="--i:10">N</span>
+                <span style="--i:11">I</span>
+                <span style="--i:12">A</span>
+
+
+
+
+
+                <!-- <ul>
                     <li>
                         <input type="checkbox" />
                         <div class="huruf">W</div>
@@ -44,7 +61,7 @@
                         <input type="checkbox" />
                         <div class="huruf">E</div>
                     </li>
-                </ul>
+                </ul> -->
             </div>
             <!-- <p class="title">Wordle Mania</p> -->
             <div>
@@ -70,10 +87,10 @@
 
                     <form onsubmit="event.preventDefault(); login();">
                         <label for="loginEmail">Email:</label>
-                        <input type="email" placeholder="masukkan email" id="loginEmail" required>
+                        <input type="email" placeholder="Masukkan email" id="loginEmail" required>
 
                         <label for="loginPass">Password:</label>
-                        <input type="password" placeholder="masukkan password" id="loginPass"
+                        <input type="password" placeholder="Masukkan password" id="loginPass"
                             style="margin-bottom: 10px;" required>
 
                         <div class="forgot">
@@ -120,6 +137,7 @@
                     <div class="hitam"></div>
                     <div class="infoatas">
                         <div class="profile">
+                            <img src="/picture/avatar/Avatar1.svg" width="60px">
                         </div>
                         <div class="level">
                             <p>Level 100</p>
@@ -127,7 +145,7 @@
                     </div>
                     <div class="infobawah">
                         <p>Nama</p>
-                        <p>Score : 9000</p>
+                        <p>Score : 8000</p>
                         <p>Rank #3</p>
                         <p>ID: 09232348</p>
                     </div>
@@ -142,7 +160,7 @@
                 <button class="btnroom" onclick="createRoom()">
                     <div class="svg-wrapper-1">
                         <div class="svg-wrapper">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="2 0 15 15"
                                 id="door">
                                 <path fill="#ffffff"
                                     d="M7.50960968,1.99999909 L7.59806,2.00971 L12.5981,3.00971 C12.8025875,3.05061625 12.9569266,3.21283578 12.9923162,3.41242007 L13,3.49999909 L13,12.4969 C13,12.7054125 12.8712219,12.8885828 12.6824666,12.9624697 L12.5981,12.9872 L7.59806,13.9872 C7.45117,14.0166 7.29885,13.9785 7.18301,13.8836 C7.09033,13.8076 7.0288116,13.701584 7.00791144,13.58552 L7,13.4969 L7,2.49999909 L7.00791144,2.41138361 C7.0288116,2.2953236 7.09033,2.189306 7.18301,2.11333 C7.275682,2.037354 7.3917012,1.997826 7.50960968,1.99999909 Z M6,3 L6,4 L4,4 L4,11.9969 L6,11.9969 L6,12.9969 L3.5,12.9969 C3.25454222,12.9969 3.0503921,12.8199914 3.00805575,12.5867645 L3,12.4969 L3,3.5 C3,3.25454222 3.17687704,3.0503921 3.41012499,3.00805575 L3.5,3 L6,3 Z M8,3.10991 L8,12.887 L12,12.087 L12,3.90991 L8,3.10991 Z M9.5,7.49841 C9.77614,7.49841 10,7.72227 10,7.99841 C10,8.27456 9.77614,8.49841 9.5,8.49841 C9.22386,8.49841 9,8.27456 9,7.99841 C9,7.72227 9.22386,7.49841 9.5,7.49841 Z">
@@ -159,7 +177,35 @@
             </div>
 
             <div class="kolom3">
-                <img src="/picture/leaderImg.png" alt="">
+                <div class="leaderboard">
+                    <div class="leaderboard2">
+                        <div class="judulleaderboard">
+                            <p>Leaderboard</p>
+                        </div>
+                        <div class="rank1">
+                            <div class="rankkiri">
+                                <p>#1</p>
+                            </div>
+                            <div class="ranktengah">Nama2</div>
+                            <div class="rankkanan">9000</div>
+                        </div>
+                        <div class="rank2">
+                            <div class="rankkiri">
+                                <p>#2</p>
+                            </div>
+                            <div class="ranktengah">Nama3</div>
+                            <div class="rankkanan">8500</div>
+                        </div>
+                        <div class="rank3">
+                            <div class="rankkiri">
+                                <p>#3</p>
+                            </div>
+                            <div class="ranktengah">Nama</div>
+                            <div class="rankkanan">8000</div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -171,14 +217,16 @@
             <div class="friend-container">
                 <div class="friendlist">
                     <div class="bagianatas-friend">
-                        <div class="profilefriend"></div>
+                        <div class="profilefriend">
+                            <img src="/picture/avatar/Avatar10.svg" width="45px">
+                        </div>
                         <div class="levelfriend">
                             <p>Level 20</p>
                         </div>
                     </div>
                     <div class="bagiantengah-friend">
                         <p>Nama2</p>
-                        <p>Score : 8000</p>
+                        <p>Score : 9000</p>
                         <p>Rank #1</p>
                     </div>
                     <div class="bagianbawah-friend">
@@ -192,10 +240,16 @@
                             <div class="textadd">Invite</div>
                         </button>
                     </div>
+
+
                 </div>
             </div>
+
+
         </div>
+
     </div>
+
 
     <!-- Navbar JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"
