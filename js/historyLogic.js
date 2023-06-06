@@ -1,11 +1,12 @@
 'use strict';
 
 const URL = 'http://localhost';
+const idPlayer = 1;
 
 window.onload = function () {
     $.ajax({
         type: "GET",
-        url: `${URL}:8080/History/${1}`,
+        url: `${URL}:8080/History/${idPlayer}`,
         dataType: 'json',
         success: function (result) {
             var histories = result.payload;

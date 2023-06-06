@@ -12,6 +12,92 @@ function closeForm() {
     $(".friend-req-container").hide();
 }
 
+function sendFriendRequest(DOM) {
+    var parent = $(DOM).closest('.friend-container');
+    var idFriend = parent.attr('data-idFriend');
+
+    $.ajax({
+        type: "POST",
+        url: `${URL}:8080/Friends/${idPlayer}`,
+        data: JSON.stringify({ id: idFriend }),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (result) {
+            toastr.info(result.messages[0]);
+            // parent.remove();
+        },
+        error: function (jqXHR) {
+            console.log(jqXHR.responseText);
+            toastr.info(JSON.parse(jqXHR.responseText).messages)
+        }
+    });
+}
+
+function searchFriendId(friendId) {
+    if (friendId != idPlayer) {
+        $.ajax({
+            type: "GET",
+            url: `${URL}:8080/Player/${friendId}`,
+            dataType: 'json',
+            success: function (result) {
+                $(".friend-display").empty();
+                var data = result.payload;
+                var syntax = $('<div>', {
+                    class: 'friend-container',
+                    'data-idFriend': data.userId
+                }).append(
+                    $('<div>', {
+                        class: 'avatar'
+                    }),
+                    $('<b>').append(
+                        $('<p>', {
+                            text: data.name
+                        })
+                    ),
+                    $('<div>', {
+                        class: 'level'
+                    }).append(
+                        $('<p>', {
+                            text: 'Level ' + data.totalPlay
+                        })
+                    ),
+                    $('<div>', {
+                        class: 'score'
+                    }).append(
+                        $('<p>', {
+                            text: data.score
+                        })
+                    ),
+                    $('<div>', {
+                        class: 'rank'
+                    }).append(
+                        $('<p>', {
+                            text: 'Rank: #5'
+                        })
+                    ),
+                    $('<button>', {
+                        class: 'add',
+                        html: $('<b>', {
+                            text: 'Add Friend'
+                        })
+                    }));
+
+                $('.friend-display').append(syntax);
+            
+                $('.add').on('click', function () {
+                    sendFriendRequest(this);
+                });
+
+            },
+            error: function (jqXHR) {
+                toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
+            }
+        });
+    } else {
+        toastr.error('You can\'t search your own account');
+    }
+}
+
 function getFriendRequests() {
     $.ajax({
         type: "GET",
@@ -94,6 +180,11 @@ function sendResponse(DOM) {
 
 $('.btn-response').on('click', function () {
     sendResponse(this);
+});
+
+$('.search__btn').on('click', function () {
+    var inputValue = $('.input').val().trim();
+    searchFriendId(inputValue);
 });
 
 $('#btn-req').on('click', openForm);
