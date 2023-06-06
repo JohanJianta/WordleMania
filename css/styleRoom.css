@@ -27,6 +27,7 @@
 .roomCode {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .roomCode p {
