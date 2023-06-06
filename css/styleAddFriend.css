@@ -1,0 +1,311 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: rgb(230, 230, 230);
+}
+
+body {
+    background-color: #282A3A;
+}
+
+.main-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column nowrap;
+    gap: 20px;
+}
+
+.tabelFriend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    width: 70%;
+    height: 70vh;
+    background-color: #27374D;
+    border: 3px solid whitesmoke;
+    border-radius: 20px;
+}
+
+.top-tabel {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 80px;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+}
+
+.input {
+    max-width: 190px;
+    height: 50%;
+    outline: none;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #53535f;
+    caret-color: #f7f7f8;
+    color: #fff;
+    padding: 7px 10px;
+    border: 2px solid transparent;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+    margin-right: 1px;
+    transition: all .2s ease;
+}
+
+.input:hover {
+    border: 2px solid rgba(255, 255, 255, 0.16);
+}
+
+.input:focus {
+    border: 2px solid #a970ff;
+    background-color: #0e0e10;
+}
+
+.search__btn {
+    border: none;
+    cursor: pointer;
+    background-color: rgba(42, 42, 45, 1);
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    height: 100%;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search__btn:hover {
+    background-color: rgba(54, 54, 56, 1);
+}
+
+.friendreq {
+    padding: 0 10px;
+    height: 30px;
+    border: 3px solid whitesmoke;
+    color: whitesmoke;
+    border-radius: 10px;
+    background-color: #282A3A;
+    transition: all .2s ease;
+}
+
+.friendreq:hover {
+    border: 2px solid #a970ff;
+    background-color: #0e0e10;
+}
+
+#img-req {
+    display: none;
+}
+
+.friend-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 55px;
+    background-color: #404258;
+}
+
+.friend-container .avatar {
+    position: relative;
+    width: 5%;
+    max-width: 40px;
+    min-width: 30px;
+    border: 2px solid #282A3A;
+    background-color: #794B4B;
+}
+
+.friend-container .avatar::before {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+    /* This creates the 1:1 aspect ratio */
+}
+
+.friend-container .level {
+    width: 100px;
+    height: 12px;
+    background-color: #6B728E;
+    border: 2px solid #282A3A;
+}
+
+.friend-container .level {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    height: 20px;
+}
+
+.friend-container .score {
+    font-size: 15px;
+}
+
+.friend-container .rank {
+    font-size: 15px;
+}
+
+.friend-container .add {
+    background-color: #282A3A;
+    padding: 0 10px;
+    height: 30px;
+    border-radius: 10px;
+    border: 2px solid whitesmoke;
+    transition: all .2s ease-in-out;
+}
+
+.friend-container .add:hover {
+    border: 2px solid #a970ff;
+    background-color: #0e0e10;
+}
+
+
+@media screen and (max-width: 750px) {
+    .top-tabel p {
+        display: none;
+    }
+
+    .friend-container .rank {
+        display: none;
+    }
+
+    .friend-container .score {
+        display: none;
+    }
+
+    #btn-req {
+        display: none;
+    }
+
+    #img-req {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .friend-container .level {
+        display: none;
+    }
+
+    .friend-container .rank {
+        display: none;
+    }
+
+    .friend-container .score {
+        display: none;
+    }
+
+    .tabelFriend {
+        width: 90%;
+        height: 80vh;
+    }
+}
+
+/* pop up */
+
+.friend-req-container {
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.7);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .5s ease-in-out;
+    display: none;
+}
+
+.modal {
+    /* width: 80%; */
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    width: 80%;
+    max-width: 500px;
+    min-width: 300px;
+    height: 400px;
+    border-radius: 10px;
+    border: 3px solid whitesmoke;
+    padding: 20px;
+    box-shadow: 1px 1px 5px;
+    background-color: #27374D;
+}
+
+.modal h2 {
+    font-size: 24px;
+    padding-bottom: 20px;
+}
+
+.modal #close-req {
+    color: #0e0e10;
+    width: 20px;
+    height: 25px;
+    border-radius: 40px;
+    border: 2px solid whitesmoke;
+    align-self: flex-end;
+    transition: all .2s ease;
+}
+
+.modal #close-req:hover {
+    border: 2px solid #a970ff;
+    background-color: #0e0e10;
+}
+
+.modal .list-friend {
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+    flex-flow: column nowrap;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    overflow-y: scroll;
+}
+
+.orang {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #404258;
+}
+
+.orang #img1 {
+    width: 35px;
+    height: 35px;
+}
+
+.orang #img2 {
+    width: 35px;
+    height: 35px;
+
+}
+
+.list-friend .orang .avatar-req {
+    position: relative;
+    width: 25px;
+    background-color: #794B4B;
+    border: 1px solid black;
+}
+
+.orang .avatar-req::before {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+    /* This creates the 1:1 aspect ratio */
+}
