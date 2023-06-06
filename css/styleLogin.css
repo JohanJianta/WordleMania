@@ -153,7 +153,7 @@ input[type="checkbox"]:checked~div {
     /* width: 120px; */
     background-color: transparent;
     border: 1.5px solid white;
-
+    cursor: pointer;
     width: 9em;
     height: 2em;
     border-radius: 30em;
@@ -195,7 +195,7 @@ input[type="checkbox"]:checked~div {
 #btn-login {
     background-color: transparent;
     border: 1.5px solid white;
-
+    cursor: pointer;
     width: 7em;
     height: 2em;
     border-radius: 30em;
@@ -227,6 +227,7 @@ input[type="checkbox"]:checked~div {
 
 #btn-signUp {
     background-color: #36C5F3;
+    cursor: pointer;
 }
 
 #btn-signUp:hover {

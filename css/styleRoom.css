@@ -31,6 +31,7 @@
 
 .roomCode p {
   font-size: 30px;
+  color: white;
 }
 
 #giveUp-btn {
@@ -118,13 +119,27 @@ button span {
   align-items: center;
   align-content: center;
   flex-flow: row wrap;
+  cursor: pointer;
   gap: 10px;
   width: 23%;
   max-width: 250px;
   height: 130px;
   border-radius: 5px;
   background-color: #D9D9D9;
+  transition: all 0.3s ease-in-out;
+  border: 1px solid black;
+  box-shadow: 0 0 0 0 black;
 }
+
+.player:hover {
+  transform: translateY(-4px) translateX(-2px);
+  box-shadow: 2px 5px 0 0 black;
+};
+
+.player:active {
+  transform: translateY(2px) translateX(1px);
+  box-shadow: 0 0 0 0 black;
+};
 
 .player img {
   width: 50px;
@@ -438,6 +453,10 @@ button.primary {
   text-transform: capitalize;
 }
 
+.keyboard-button:hover {
+  background-color: #646f6f;
+}
+
 @media screen and (max-width: 480px) and (max-height: 740px) {
   .letter-box {
     /* color: whitesmoke; */
@@ -610,6 +629,7 @@ button.primary {
   margin-top: 15vh;
   width: 90%;
   height: 136px;
+  margin-top: -5px;
 }
 
 .button-container #giveUp-btn {
