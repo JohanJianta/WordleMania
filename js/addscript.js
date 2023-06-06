@@ -1,6 +1,7 @@
 'use strict';
 
 const URL = 'http://localhost';
+const idPlayer = 2;
 
 function openForm() {
     $(".friend-req-container").css('display', 'flex');
@@ -11,14 +12,10 @@ function closeForm() {
     $(".friend-req-container").hide();
 }
 
-window.onload = function () {
-
-}
-
 function getFriendRequests() {
     $.ajax({
         type: "GET",
-        url: `${URL}:8080/Friends/Requests/${2}`,
+        url: `${URL}:8080/Friends/Requests/${idPlayer}`,
         dataType: 'json',
         success: function (result) {
             $('.list-req').empty();
@@ -72,16 +69,32 @@ function getFriendRequests() {
     });
 }
 
+function sendResponse(DOM) {
+    var id = $(DOM).attr('id');
+    var parent = $(DOM).closest('.orang');
+    var idFriend = parent.attr('data-idFriend');
+    var response = id === 'check' ? "ACCEPT" : "REJECT";
+
+    $.ajax({
+        type: "PUT",
+        url: `${URL}:8080/Friends/${idPlayer}`,
+        data: JSON.stringify({ id: idFriend, status: response }),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (result) {
+            toastr.info(result.messages[0]);
+            parent.remove();
+        },
+        error: function (jqXHR) {
+            console.log(jqXHR.responseText);
+            toastr.warning(JSON.parse(jqXHR.responseText).messages)
+        }
+    });
+}
+
 $('.btn-response').on('click', function () {
     sendResponse(this);
 });
-
-function sendResponse(DOM) {
-    // var abc = $("#friendName");
-    var id = $(DOM).attr('id');
-    var idFriend = $(DOM).closest('.orang').attr('data-idFriend');
-    console.log(idFriend + " is " + (id === 'check' ? "accepted." : "rejected."));
-}
 
 $('#btn-req').on('click', openForm);
 $('#img-req').on('click', openForm);

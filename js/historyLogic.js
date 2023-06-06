@@ -18,45 +18,49 @@ window.onload = function () {
                     hour: '2-digit',
                     minute: '2-digit',
                 });
-                var syntax = $('<div class="history-container">').append(
+
+                var syntax = $('<div>', {
+                    class: 'history-container',
+                    'data-idHistory': histories[i].roomId
+                }).append(
                     $('<h1>', {
-                        id: 'winLabel',
-                        text: histories[i].win,
-                        css: { color: histories[i].win ? 'green' : 'red' }
+                        text: histories[i].win == true ? 'WIN' : 'LOSE',
+                        css: { textTransform: 'uppercase' }
                     }),
+                    $('<div>', {
+                        class: 'background-word',
+                        css: { backgroundColor: histories[i].win ? 'rgba(0, 128, 0, 0.6)' : 'rgba(220, 20, 60, 0.6)' }
+                    }).append(
+                        $('<h2>', {
+                            text: histories[i].word,
+                            css: { fontStyle: 'italic', textTransform: 'capitalize' }
+                        })
+                    ),
+                    $('<div class="player-list">').append(
+                        $('<p>', {
+                            text: histories[i].playerNames[0] !== undefined ? histories[i].playerNames[0] : '',
+                        }),
+                        $('<p>', {
+                            text: histories[i].playerNames[1] !== undefined ? histories[i].playerNames[1] : '',
+                        }),
+                        $('<p>', {
+                            text: histories[i].playerNames[2] !== undefined ? histories[i].playerNames[2] : '',
+                        }),
+                        $('<p>', {
+                            text: histories[i].playerNames[3] !== undefined ? histories[i].playerNames[3] : ''
+                        })
+                    ),
                     $('<p>', {
-                        id: 'wordLabel',
-                        text: histories[i].word
-                    }),
-                    $('<p>', {
-                        id: 'player1Label',
-                        text: histories[i].playerNames[0],
-                        css: { display: histories[i].playerNames[0] !== undefined ? 'block' : 'none' }
-                    }),
-                    $('<p>', {
-                        id: 'player2Label',
-                        text: histories[i].playerNames[1],
-                        css: { display: histories[i].playerNames[1] !== undefined ? 'block' : 'none' }
-                    }),
-                    $('<p>', {
-                        id: 'player3Label',
-                        text: histories[i].playerNames[2],
-                        css: { display: histories[i].playerNames[2] !== undefined ? 'block' : 'none' }
-                    }),
-                    $('<p>', {
-                        id: 'player4Label',
-                        text: histories[i].playerNames[3],
-                        css: { display: histories[i].playerNames[3] !== undefined ? 'block' : 'none' }
-                    }),
-                    $('<p>', {
-                        id: 'dateLabel',
                         text: formattedDate
                     }),
-                    $('<h1>', {
-                        id: 'poinLabel',
-                        text: (histories[i].win ? '+' : '-') + histories[i].score,
-                        css: { color: (histories[i].win ? 'green' : 'red') }
-                    })
+                    $('<div>', {
+                        class: 'background-score',
+                        css: { backgroundColor: histories[i].win ? 'green' : 'crimson' }
+                    }).append(
+                        $('<h1>', {
+                            text: (histories[i].win ? '+' : '-') + histories[i].score
+                        })
+                    )
                 );
                 $(".list-history").append(syntax);
             }
