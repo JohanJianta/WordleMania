@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@500&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -9,7 +10,7 @@
 
 body {
     margin: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Mono', monospace;
 }
 
 .flex-center-row {
@@ -40,7 +41,7 @@ input {
     margin-bottom: 30px;
     border: none;
     border-bottom: 2px solid green;
-    font-family: sans-serif;
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 16px;
 }
 
