@@ -12,7 +12,9 @@
 
 <body>
 
-    <!-- <div class="topnav">
+
+    <div class="body-wrapper">
+        <!-- <div class="topnav">
         <div class="inputKode">
             <input type="text" name="kode" placeholder="Masukkan Kode Ruangan">
         </div>
@@ -27,145 +29,72 @@
         </div>
     </div> -->
 
-    <div class="main-section">
+        <div class="main-section">
 
-        <b>
-            <p style="font-size: 24px; color: whitesmoke;">Add Friend</p>
-        </b>
+            <b>
+                <p style="font-size: 24px; color: whitesmoke;">Add Friend</p>
+            </b>
 
-        <div class="tabelFriend">
-            <div class="top-tabel">
-                <p style="font-size: 16px; font-weight: 900; color: whitesmoke;">My ID: 09232348</p>
+            <div class="tabelFriend">
+                <div class="top-tabel">
+                    <p style="font-size: 16px; font-weight: 900; color: whitesmoke;">My ID: 09232348</p>
 
-                <div class="container">
-                    <input type="text" name="text" class="input" placeholder="Input ID">
-                    <button class="search__btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22">
-                            <path
-                                d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"
-                                fill="#efeff1"></path>
-                        </svg>
-                    </button>
+                    <div class="container">
+                        <input type="text" name="text" class="input" placeholder="Input ID">
+                        <button class="search__btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22">
+                                <path
+                                    d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"
+                                    fill="#efeff1"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <button class="friendreq" id="btn-req">Friend Request</button>
+                    <img src="/picture/friend-notif.png" class="friendreq" id="img-req"></img>
                 </div>
 
-                <button class="friendreq" id="btn-req">Friend Request</button>
-                <img src="/picture/friend-notif.png" class="friendreq" id="img-req"></img>
+                <div class="friend-display">
+                    <div class="friend-container">
+                        <div class="avatar"></div>
+
+                        <b>
+                            <p>Pemain 5</p>
+                        </b>
+
+                        <div class="level">
+                            <p>Level 21</p>
+                        </div>
+
+                        <div class="score">
+                            <p>Score: 2200</p>
+                        </div>
+
+                        <div class="rank">
+                            <p>Rank: #5</p>
+                        </div>
+
+                        <button class="add"><b>Add Friend</b></button>
+                    </div>
+                </div>
             </div>
 
-            <div class="friend-container">
-                <div class="avatar"></div>
 
-                <b>
-                    <p>Pemain 5</p>
-                </b>
-
-                <div class="level">
-                    <p>Level 21</p>
-                </div>
-
-                <div class="score">
-                    <p>Score: 2200</p>
-                </div>
-
-                <div class="rank">
-                    <p>Rank: #5</p>
-                </div>
-
-                <button class="add"><b>Add Friend</b></button>
-            </div>
-
-        </div>
-    </div>
-
-
-    <div class="friend-req-container" id="wrab">
-        <div class="modal" id="modal">
-            <button id="close-req">x</button>
-            <h2>Friend Request</h2>
-            <div class="list-friend">
-                <div class="orang">
-                    <div class="avatar-req"></div>
-
-                    <b>
-                        <p>Pemain 1</p>
-                    </b>
-
-                    <p>1000 pt</p>
-
-                    <div>
-                        <img id="img1" src="picture/accept.png" alt="">
-                        <img id="img2" src="picture/reject.png" alt="">
+            <div class="friend-req-container">
+                <div class="modal">
+                    <button id="close-req">X</button>
+                    <h2>Friend Request</h2>
+                    <div class="list-req">
                     </div>
                 </div>
-                <div class="orang">
-                    <div class="avatar-req"></div>
-
-                    <b>
-                        <p>Pemain 1</p>
-                    </b>
-
-                    <p>1000 pt</p>
-
-                    <div>
-                        <img id="img1" src="picture/accept.png" alt="">
-                        <img id="img2" src="picture/reject.png" alt="">
-                    </div>
-                </div>
-                <div class="orang">
-                    <div class="avatar-req"></div>
-
-                    <b>
-                        <p>Pemain 1</p>
-                    </b>
-
-                    <p>1000 pt</p>
-
-                    <div>
-                        <img id="img1" src="picture/accept.png" alt="">
-                        <img id="img2" src="picture/reject.png" alt="">
-                    </div>
-                </div>
-                <div class="orang">
-                    <div class="avatar-req"></div>
-
-                    <b>
-                        <p>Pemain 1</p>
-                    </b>
-
-
-                    <p>1000 pt</p>
-
-
-                    <div>
-                        <img id="img1" src="picture/accept.png" alt="">
-                        <img id="img2" src="picture/reject.png" alt="">
-                    </div>
-                </div>
-                <div class="orang">
-                    <div class="avatar-req"></div>
-
-                    <b>
-                        <p>Pemain 1</p>
-                    </b>
-
-
-                    <p>1000 pt</p>
-
-
-                    <div>
-                        <img id="img1" src="picture/accept.png" alt="">
-                        <img id="img2" src="picture/reject.png" alt="">
-                    </div>
-                </div>
-
             </div>
         </div>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.0.js"
-        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="js/addscript.js" type="module"></script>
+
+        <script src="https://code.jquery.com/jquery-3.7.0.js"
+            integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="js/addscript.js" type="module"></script>
 
 </body>
 

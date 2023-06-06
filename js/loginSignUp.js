@@ -1,6 +1,6 @@
 'use strict';
 
-const URL = "http://192.168.1.3";
+const URL = "http://localhost";
 
 window.onload = function () {
     if (!sessionStorage.getItem("idGuest") && !sessionStorage.getItem("username")) {

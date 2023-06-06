@@ -8,7 +8,6 @@ window.onload = function () {
         url: `${URL}:8080/History/${1}`,
         dataType: 'json',
         success: function (result) {
-            console.log(result.payload);
             var histories = result.payload;
             for (let i = 0; i < histories.length; i++) {
                 let dateValue = new Date(histories[i].date);
@@ -61,9 +60,6 @@ window.onload = function () {
                 );
                 $(".list-history").append(syntax);
             }
-
-
-            console.log(formattedDate);
         },
         error: function (jqXHR) {
             console.log(jqXHR.responseText);
