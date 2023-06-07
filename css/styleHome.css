@@ -55,7 +55,7 @@
     width: 35%;
     max-width: 300px;
     min-width: 200px;
-    height: 200px;
+    height: 230px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -690,16 +690,11 @@
     }
 
     .bagianatas .section-atas {
-        justify-content: center;
-        flex-flow: column nowrap;
         gap: 20px;
     }
 
     .kolom1 {
-        margin-top: 20px;
         padding: 10px 30px;
-        width: 60%;
-        max-width: 60%;
     }
 
     .kolom1 p {
