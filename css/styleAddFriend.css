@@ -106,8 +106,9 @@ body {
 }
 
 .friendreq:hover {
-    border: 2px solid #a970ff;
+    border: 3px solid #a970ff;
     background-color: #0e0e10;
+    color: #a970ff;
 }
 
 #img-req {
@@ -119,6 +120,27 @@ body {
     height: calc(100% - 95px);
     display: inline-block;
     overflow-y: auto;
+}
+
+/* Custom Scrollbar */
+.friend-display::-webkit-scrollbar {
+    width: 0.7em;
+    height: 0.7em;
+}
+
+.friend-display::-webkit-scrollbar-track {
+    background: #53535f;
+    border-radius: 100vw;
+}
+
+.friend-display::-webkit-scrollbar-thumb {
+    background: #311a52;
+    border: 2px solid #53535f;
+    border-radius: 100vw;
+}
+
+.friend-display::-webkit-scrollbar-thumb:hover {
+    background: #482678;
 }
 
 .friend-container {
@@ -174,6 +196,7 @@ body {
     background-color: #282A3A;
     padding: 0 10px;
     height: 30px;
+    font-weight: 700;
     border-radius: 10px;
     border: 2px solid whitesmoke;
     transition: all .2s ease-in-out;
@@ -182,6 +205,7 @@ body {
 .friend-container .add:hover {
     border: 2px solid #a970ff;
     background-color: #0e0e10;
+    color: #a970ff;
 }
 
 /* pop up */
@@ -238,12 +262,31 @@ body {
 .modal .list-req {
     list-style-type: none;
     display: inline-block;
-    /* display: flex;
-    gap: 20px;
-    flex-flow: column nowrap; */
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Custom Scrollbar */
+.list-req::-webkit-scrollbar {
+    width: 0.7em;
+    height: 0.7em;
+}
+
+.list-req::-webkit-scrollbar-track {
+    background: #53535f;
+    border-radius: 100vw;
+}
+
+.list-req::-webkit-scrollbar-thumb {
+    background: #311a52;
+    border: 2px solid #53535f;
+    border-radius: 100vw;
+}
+
+.list-req::-webkit-scrollbar-thumb:hover {
+    background: #482678;
 }
 
 .orang {

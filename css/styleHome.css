@@ -49,6 +49,7 @@
 
 .kolom1 {
     border: 2px solid aqua;
+    background-color: #27374D;
     border-radius: 20px;
     padding: 30px;
     width: 35%;
@@ -175,7 +176,6 @@
     content: '';
     position: absolute;
     background: #07182E;
-    ;
     inset: 5px;
     border-radius: 15px;
 }
@@ -471,6 +471,31 @@
     height: 50%;
     display: flex;
     flex-flow: row nowrap;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+/* Custom Scrollbar */
+.friend-container::-webkit-scrollbar {
+    width: 0.7em;
+    height: 0.7em;
+}
+
+.friend-container::-webkit-scrollbar-track {
+    background: #53535f;
+    border-radius: 100vw;
+    margin-block: 0.5em;
+}
+
+.friend-container::-webkit-scrollbar-thumb {
+    background: #311a52;
+    border: 2px solid #53535f;
+    border-radius: 100vw;
+}
+
+.friend-container::-webkit-scrollbar-thumb:hover {
+    background: #482678;
 }
 
 .friendlist {
@@ -482,6 +507,7 @@
     max-height: auto;
     height: 100%;
     padding: 25px;
+    background-color: #27374D;
     border: 2px solid #80D173;
     border-radius: 20px;
     gap: 10px;
@@ -642,7 +668,7 @@
         width: 60%;
         max-width: 60%;
     }
-    
+
     .kolom2 {
         width: 80%;
         flex-flow: row nowrap;
@@ -651,7 +677,7 @@
     .player .infoatas {
         gap: 20%;
     }
-    
+
     .player .infobawah {
         font-size: 18px;
     }
