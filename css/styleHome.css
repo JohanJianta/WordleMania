@@ -682,3 +682,31 @@
         font-size: 18px;
     }
 }
+
+@media screen and (max-height: 800px) {
+
+    .colombagi {
+        gap: 10px;
+    }
+
+    .bagianatas .section-atas {
+        justify-content: center;
+        flex-flow: column nowrap;
+        gap: 20px;
+    }
+
+    .kolom1 {
+        margin-top: 20px;
+        padding: 10px 30px;
+        width: 60%;
+        max-width: 60%;
+    }
+
+    .kolom1 p {
+        font-size: 14px;
+    }
+
+    .kolom2 p {
+        font-size: 12px;
+    }
+}
