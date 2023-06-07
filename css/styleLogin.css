@@ -6,13 +6,6 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    text-decoration: none;
-}
-
-body {
-    background-color: #282A3A;
-    margin: 0;
-    font-family: 'IBM Plex Mono', monospace;
 }
 
 .flex-center-row {
@@ -33,11 +26,10 @@ body {
 }
 
 .alignCenter {
-    margin-top: -2%;
     align-self: center;
 }
 
-input {
+form input {
     width: 100%;
     padding: 10px 0;
     margin-bottom: 30px;
@@ -49,11 +41,6 @@ input {
 
 /* font animation  */
 .title {
-    /* display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    font-weight: 900; */
 
     position: relative;
     -webkit-box-reflect: below -20px linear-gradient(transparent, rgba(0, 0, 0, .2));
@@ -96,12 +83,14 @@ input {
 
 .topNav {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
     background-color: #27374D;
     width: 100%;
     height: 60px;
-
+    font-family: 'IBM Plex Mono', monospace;
+    margin: 0;
+    text-decoration: none;
 }
 
 .topNav .history {
@@ -118,7 +107,7 @@ input {
     overflow: hidden;
     z-index: 1;
     color: white;
-
+    display: none;
 }
 
 .topNav .history::before {
@@ -139,7 +128,7 @@ input {
     width: 9em;
 }
 
-.topNav button {
+.nav-button-container button {
     width: 100px;
     height: 30px;
     border-radius: 20px;
@@ -193,6 +182,55 @@ input {
     transform: translate(0em, 0.2em);
 }
 
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+}
+
+.container .input {
+    /* display: none; */
+    max-width: 0px;
+    height: 50%;
+    outline: none;
+    font-weight: 500;
+    background-color: #53535f;
+    caret-color: #f7f7f8;
+    color: #fff;
+    padding: 7px 10px;
+    border: 2px solid transparent;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+    margin-right: 1px;
+    transition: all .2s ease;
+}
+
+.container .input:hover {
+    border: 2px solid rgba(255, 255, 255, 0.16);
+}
+
+.container .input:focus {
+    border: 2px solid #a970ff;
+    background-color: #0e0e10;
+}
+
+.container .search__btn {
+    border: none;
+    cursor: pointer;
+    background-color: rgba(42, 42, 45, 1);
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    height: 100%;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .search__btn:hover {
+    background-color: rgba(54, 54, 56, 1);
+}
 
 /* Pop Up */
 .changePopUp {
@@ -265,25 +303,4 @@ input {
     100% {
         opacity: 1;
     }
-}
-
-.notif-container {
-    z-index: 11;
-    position: absolute;
-    display: none;
-    flex-flow: column nowrap;
-    gap: 20px;
-    bottom: calc(100vh/2 - 100px);
-    background-color: blanchedalmond;
-    color: crimson;
-    text-align: center;
-    font-size: 30px;
-    width: 400px;
-    height: 200px;
-}
-
-#notif-desc {
-    color: black;
-    font-size: 20px;
-    width: 90%;
 }
