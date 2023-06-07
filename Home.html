@@ -24,6 +24,15 @@
                     <button id="btn-signUp" onclick="showSignUp()">Sign Up</button>
                 </div>
 
+                <div class="dropdown">
+                    <img src="/picture/hamburger-edit.png" alt="hamburger" class="burger-menu" onclick="myFunction()">
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="#">Login / Sign Up</a>
+                        <a href="#">History</a>
+                        <a href="#">Search Friend</a>
+                    </div>
+                </div>
+
                 <div class="title">
                     <span style="--i:1">W</span>
                     <span style="--i:2">O</span>
@@ -71,7 +80,7 @@
                 </div>
 
                 <div class="container">
-                    <input type="text" name="text" class="input" placeholder="roomcode...">
+                    <input type="text" name="text" class="input" placeholder="roomcode">
                     <button class="search__btn">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22">
                             <path
@@ -91,13 +100,15 @@
                         <h2 class="alignCenter">Login</h2>
 
                         <form onsubmit="event.preventDefault(); login();">
-                            <label for="loginEmail">Email:</label>
-                            <input type="email" placeholder="Masukkan email" id="loginEmail" required>
-
-                            <label for="loginPass">Password:</label>
-                            <input type="password" placeholder="Masukkan password" id="loginPass"
-                                style="margin-bottom: 10px;" required>
-
+                            <div class="input-group">
+                                <input required="" type="email" autocomplete="off" class="input" id="loginEmail">
+                                <label class="user-label" for="loginEmail">Email</label>
+                            </div>
+                            <div class="input-group">
+                                <input required="" type="password" autocomplete="off" class="input" id="loginPass"
+                                    style="margin-bottom: 10px;">
+                                <label class="user-label" for="loginPass">Password</label>
+                            </div>
                             <div class="forgot">
                                 <a href="#">Forgot Password?</a>
                             </div>
@@ -105,8 +116,7 @@
                         </form>
 
                         <p class="alignCenter">Don't have an account? <a class="changePopUp"
-                                onclick="loginToSignUp()">Sign
-                                Up</a>
+                                onclick="loginToSignUp()">Sign Up</a>
                         </p>
                     </div>
                 </div>
@@ -119,14 +129,20 @@
                         <button class="close-btn alignEnd" onclick="hideSignUp()">X</button>
                         <h2 class="alignCenter">Sign Up</h2>
                         <form onsubmit="event.preventDefault(); signUp();">
-                            <label for="signUpName">Username:</label>
-                            <input type="text" placeholder="masukkan username" id="signUpName" maxlength="50"
-                                required />
-                            <label for="signUpEmail">Email:</label>
-                            <input type="email" placeholder="masukkan email" id="signUpEmail" required />
-                            <label for="signUpPass">Password:</label>
-                            <input type="password" placeholder="masukkan password" id="signUpPass" minlength="8"
-                                required />
+                            <div class="input-group">
+                                <input required="" type="text" autocomplete="off" class="input" id="signUpName"
+                                    maxlength="50">
+                                <label class="user-label" for="signUpName">Username</label>
+                            </div>
+                            <div class="input-group">
+                                <input required="" type="email" autocomplete="off" class="input" id="signUpEmail">
+                                <label class="user-label" for="signUpEmail">Email</label>
+                            </div>
+                            <div class="input-group">
+                                <input required="" type="password" autocomplete="off" class="input" id="signUpPass"
+                                    minlength="8" style="margin-bottom: 30px;">
+                                <label class="user-label" for="signUpPass">Password</label>
+                            </div>
                             <button type="submit" class="btn">Create Account</button>
                         </form>
                         <p class="alignCenter">Already have an account? <a class="changePopUp"
@@ -218,7 +234,7 @@
                         <p><b>Friend List</b></p>
                     </div>
 
-                    <div class="friend-container" id="friend-scroll">
+                    <div class="friend-container">
                         <div class="friendlist">
                             <div class="bagianatas-friend">
                                 <div class="profilefriend">
@@ -432,16 +448,37 @@
             </div>
 
         </div>
+
     </div>
     <!-- Navbar -->
 
+    <script>
+        /* When the user clicks on the button, 
+        toggle between hiding and showing the dropdown content */
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
 
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.burger-menu')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
 
     <!-- Navbar JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"
         integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="js/loginSignUp.js"></script>
+    <script src="/js/loginSignUp.js"></script>
 
 </body>
 
