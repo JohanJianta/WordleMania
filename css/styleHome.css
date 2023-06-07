@@ -9,7 +9,7 @@
 }
 
 body {
-    background-color: #eaeaea;
+    background-color: #282A3A;
     font-family: 'IBM Plex Mono', monospace;
 }
 
@@ -433,7 +433,7 @@ body {
     height: 50%;
     display: flex;
     flex-flow: column nowrap;
-    background-color: #212121;
+    background-color: #282A3A;
 }
 
 .judulfriend {
@@ -445,7 +445,7 @@ body {
 }
 
 .friend-container {
-    background-color: #212121;
+    background-color: #282A3A;
     width: 100%;
     height: 100%;
     display: flex;

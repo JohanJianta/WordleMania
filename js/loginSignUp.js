@@ -43,6 +43,16 @@ window.onclick = function () {
     $(".notif-container").css("display", "none");
 }
 
+function toHistory() {
+    if(sessionStorage.getItem("hasLogin") == "true") {
+        window.location.assign("History.html");
+    } else {
+        toastr.info("This feature only available for registered player")
+    }
+}
+
+$(".history").on('click', toHistory);
+
 function login() {
     var emailInput = $("#loginEmail").val().trim();
     var passwordInput = $("#loginPass").val().trim();
