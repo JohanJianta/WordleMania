@@ -7,17 +7,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/styleHistory.css">
+    <link rel="stylesheet" href="css/styleLogin.css">
     <title>History</title>
 </head>
 
 <body>
+    <div>
+        <div class="topNav">
+            <div class="nav-button-container-2 hidden">
+                <button class="history" onclick="toHistory()">History</button>
+                <button class="btn-signUp-friend" onclick="toSearchFriend()">Find Friend</button>
+            </div>
+
+            <div class="nav-button-container-1">
+                <button id="btn-login" onclick="showLogin()">Login</button>
+                <button class="btn-signUp-friend" id="btn-signUp" onclick="showSignUp()">Sign Up</button>
+            </div>
+
+            <div class="dropdown">
+                <img src="/picture/menu.png" alt="hamburger" class="burger-menu" onclick="burgerContent()" tabindex="0">
+                <div id="myDropDown" class="dropdown-content">
+                    <a href="#" onclick="showLogin()" class="burger-not-login">Login</a>
+                    <a href="#" onclick="showSignUp()" class="burger-not-login">Sign Up</a>
+                    <a href="#" onclick="toHistory()" class="burger-must-login">History</a>
+                    <a href="#" onclick="toSearchFriend()" class="burger-must-login">Find Friend</a>
+                    <a href="#" onclick="showLogOut()" class="burger-must-login">Log Out</a>
+                </div>
+            </div>
+
+            <div class="title" onclick="toHome()">
+                <span style="--i:1">W</span>
+                <span style="--i:2">O</span>
+                <span style="--i:3">R</span>
+                <span style="--i:4">D</span>
+                <span style="--i:5">L</span>
+                <span style="--i:6">E</span>
+                <span style="--i:7"></span>
+                <span style="--i:8">M</span>
+                <span style="--i:9">A</span>
+                <span style="--i:10">N</span>
+                <span style="--i:11">I</span>
+                <span style="--i:12">A</span>
+            </div>
+
+            <div class="container">
+                <input type="text" name="text" class="input" placeholder="roomcode">
+                <button class="search__btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22">
+                        <path
+                            d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"
+                            fill="#efeff1"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Login Pop Up -->
+        <div class="popUp-disabled" id="login">
+            <div class="popUp-bg">
+                <div class="popUp-container">
+
+                    <button class="close-btn alignEnd" onclick="hideLogin()">X</button>
+                    <h2 class="alignCenter">Login</h2>
+
+                    <form onsubmit="event.preventDefault(); login();">
+                        <div class="input-group">
+                            <input required="" type="email" autocomplete="off" class="input-form" id="loginEmail">
+                            <label class="user-label" for="loginEmail">Email</label>
+                        </div>
+                        <div class="input-group">
+                            <input required="" type="password" autocomplete="off" class="input-form" id="loginPass"
+                                style="margin-bottom: 10px;">
+                            <label class="user-label" for="loginPass">Password</label>
+                        </div>
+                        <div class="forgot">
+                            <a href="#">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+
+                    <p class="alignCenter">Don't have an account? <a href="#" class="changePopUp"
+                            onclick="loginToSignUp()">Sign Up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Up Pop Up -->
+        <div class="popUp-disabled" id="signUp">
+            <div class="popUp-bg">
+                <div class="popUp-container">
+                    <button class="close-btn alignEnd" onclick="hideSignUp()">X</button>
+                    <h2 class="alignCenter">Sign Up</h2>
+                    <form onsubmit="event.preventDefault(); signUp();">
+                        <div class="input-group">
+                            <input required="" type="text" autocomplete="off" class="input-form" id="signUpName"
+                                maxlength="50">
+                            <label class="user-label" for="signUpName">Username</label>
+                        </div>
+                        <div class="input-group">
+                            <input required="" type="email" autocomplete="off" class="input-form" id="signUpEmail">
+                            <label class="user-label" for="signUpEmail">Email</label>
+                        </div>
+                        <div class="input-group">
+                            <input required="" type="password" autocomplete="off" class="input-form" id="signUpPass"
+                                minlength="8" style="margin-bottom: 30px;">
+                            <label class="user-label" for="signUpPass">Password</label>
+                        </div>
+                        <button type="submit" class="btn">Create Account</button>
+                    </form>
+                    <p class="alignCenter">Already have an account? <a href="#" class="changePopUp"
+                            onclick="signUpToLogin()">Login</a> </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="list-history"></div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"
         integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="js/historyLogic.js"></script>
+    <script src="/js/historyLogic.js"></script>
+    <script src="/js/topNav.js"></script>
 
 </body>
 

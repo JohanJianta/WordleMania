@@ -417,10 +417,9 @@
 .btnroom::after {
     content: "";
     position: absolute;
-    top: -10px;
-    left: 3%;
-    width: 95%;
-    height: 40%;
+    top: -3px;
+    width: 100%;
+    height: 10%;
     background-color: #212121;
     transition: 0.5s;
     transform-origin: center;
@@ -430,10 +429,9 @@
     content: "";
     transform-origin: center;
     position: absolute;
-    top: 80%;
-    left: 3%;
-    width: 95%;
-    height: 40%;
+    top: 97%;
+    width: 100%;
+    height: 10%;
     background-color: #212121;
     transition: 0.5s;
 }

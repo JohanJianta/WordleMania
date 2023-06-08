@@ -1,6 +1,6 @@
 'use strict';
 
-const URL = "http://localhost";
+const URL = "http://127.0.0.1";
 
 window.onload = function () {
     if (!sessionStorage.getItem("idGuest") && !sessionStorage.getItem("username")) {
@@ -11,6 +11,7 @@ window.onload = function () {
         var hour = currentDate.getHours();
         var minute = currentDate.getMinutes();
         var second = currentDate.getSeconds();
+        console.log("im heree1")
         sessionStorage.setItem("hasLogin", "false");
         sessionStorage.setItem("username", ("Guest" + (year + month + day + hour + minute + second)));
         $.ajax({
@@ -28,30 +29,22 @@ window.onload = function () {
                 sessionStorage.setItem("username",);
             }
         });
+        console.log("im heree2")
     }
 
     if (sessionStorage.getItem("hasLogin") == "true") {
-        setLoginState(true);
+        showPlayerData(true);
+        showFriendList(true);
     } else {
-        setLoginState(false);
+        showPlayerData(false);
+        showFriendList(false);
     }
+
+    
+    console.log("hello world");
 
     getLeaderboard();
 }
-
-window.onclick = function () {
-    $(".notif-container").css("display", "none");
-}
-
-function toHistory() {
-    if(sessionStorage.getItem("hasLogin") == "true") {
-        window.location.assign("History.html");
-    } else {
-        toastr.info("This feature only available for registered player")
-    }
-}
-
-$(".history").on('click', toHistory);
 
 function login() {
     var emailInput = $("#loginEmail").val().trim();
@@ -164,42 +157,22 @@ function signUpToLogin() {
     showLogin();
 }
 
-function setLoginState(status) {
-    if (status) {
-        $(".nav-button-container").addClass("hidden");
-    } else {
-        $(".nav-button-container").removeClass("hidden");
-    }
-    showPlayerData(status);
-    showFriendList(status);
-}
-
 function showPlayerData(status) {
 
     if (status) {
-        $("#group-id").removeClass("hidden");
-        $("#group-id").addClass("group-info");
-        $("#group-score").removeClass("hidden");
-        $("#group-score").addClass("group-info");
-        $("#group-totalPlay").removeClass("hidden");
-        $("#group-totalPlay").addClass("group-info");
-        $("#group-totalWin").removeClass("hidden");
-        $("#group-totalWin").addClass("group-info");
-        $("#player-id").text(sessionStorage.getItem("idUser"));
+        console.log(status);
+        // $("#player-id").show();
+        // $("#player-score").show();
+        $("#player-id").text(sessionStorage.getItem("idGuest"));
         $("#player-score").text(sessionStorage.getItem("score"));
-        $("#player-total-play").text(sessionStorage.getItem("totalPlay"));
-        $("#player-total-win").text(sessionStorage.getItem("totalWin"));
+        // $("#player-total-play").text(sessionStorage.getItem("totalPlay"));
+        // $("#player-total-win").text(sessionStorage.getItem("totalWin"));
     } else {
-        $("#group-id").removeClass("group-info");
-        $("#group-id").addClass("hidden");
-        $("#group-score").removeClass("group-info");
-        $("#group-score").addClass("hidden");
-        $("#group-totalPlay").removeClass("group-info");
-        $("#group-totalPlay").addClass("hidden");
-        $("#group-totalWin").removeClass("group-info");
-        $("#group-totalWin").addClass("hidden");
+        
+        console.log(status);
     }
 
+    console.log(status);
     $("#player-nickname").text(sessionStorage.getItem("username"));
 
 }
@@ -284,7 +257,7 @@ function searchRandomRoom() {
         url: `${URL}:8080/Game`,
         dataType: 'json',
         success: function (result) {
-            
+
             // $.ajax({
             //     type: "POST",
             //     url: `${URL}:8080/Game/Player`,
@@ -292,8 +265,8 @@ function searchRandomRoom() {
             //     dataType: 'json',
             //     contentType: 'application/json',
             //     success: function () {
-                    sessionStorage.setItem("gameCode", result.payload);
-                    window.location.assign(`${URL}:5500/Room.html`);
+            sessionStorage.setItem("gameCode", result.payload);
+            window.location.assign(`${URL}:5500/Room.html`);
             //     },
             //     error: function (jqXHR) {
             //         toastr.error("Something went wrong when joining the game. Please try again.");
@@ -324,8 +297,8 @@ function createRoom() {
                 //     dataType: 'json',
                 //     contentType: 'application/json',
                 //     success: function () {
-                        sessionStorage.setItem("gameCode", result.payload);
-                        window.location.assign(`${URL}:5500/Room.html`);
+                sessionStorage.setItem("gameCode", result.payload);
+                window.location.assign(`${URL}:5500/Room.html`);
                 //     },
                 //     error: function (jqXHR) {
                 //         toastr.error("Something went wrong when joining the game. Please try again.");

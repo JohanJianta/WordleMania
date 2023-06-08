@@ -1,6 +1,6 @@
 'use strict';
 
-const URL = "http://localhost";
+const URL = "http://127.0.0.1";
 
 var NUMBER_OF_GUESSES;
 var WORD_LENGTH;
