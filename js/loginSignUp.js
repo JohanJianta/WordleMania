@@ -11,7 +11,6 @@ window.onload = function () {
         var hour = currentDate.getHours();
         var minute = currentDate.getMinutes();
         var second = currentDate.getSeconds();
-        console.log("im heree1")
         sessionStorage.setItem("hasLogin", "false");
         sessionStorage.setItem("username", ("Guest" + (year + month + day + hour + minute + second)));
         $.ajax({
@@ -29,7 +28,6 @@ window.onload = function () {
                 sessionStorage.setItem("username",);
             }
         });
-        console.log("im heree2")
     }
 
     if (sessionStorage.getItem("hasLogin") == "true") {
@@ -39,9 +37,6 @@ window.onload = function () {
         showPlayerData(false);
         showFriendList(false);
     }
-
-    
-    console.log("hello world");
 
     getLeaderboard();
 }
@@ -160,7 +155,6 @@ function signUpToLogin() {
 function showPlayerData(status) {
 
     if (status) {
-        console.log(status);
         // $("#player-id").show();
         // $("#player-score").show();
         $("#player-id").text(sessionStorage.getItem("idGuest"));
@@ -169,10 +163,8 @@ function showPlayerData(status) {
         // $("#player-total-win").text(sessionStorage.getItem("totalWin"));
     } else {
         
-        console.log(status);
     }
 
-    console.log(status);
     $("#player-nickname").text(sessionStorage.getItem("username"));
 
 }
