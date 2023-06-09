@@ -121,6 +121,7 @@ function deleteLetter() {
   let row = document.getElementsByClassName("letter-row")[NUMBER_OF_GUESSES - guessesRemaining];
   let box = row.children[nextLetter - 1];
   box.textContent = "";
+  box.style.backgroundColor = "transparent";
   box.classList.remove("filled-box");
   currentGuess.pop();
   nextLetter -= 1;
@@ -219,6 +220,7 @@ function insertLetter(pressedKey) {
   let box = row.children[nextLetter];
   animateCSS(box, "pulse");
   box.textContent = pressedKey;
+  box.style.backgroundColor = "whitesmoke";
   box.classList.add("filled-box");
   currentGuess.push(pressedKey);
   nextLetter += 1;

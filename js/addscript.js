@@ -1,7 +1,16 @@
 'use strict';
 
 const URL = 'http://127.0.0.1';
-const idPlayer = 2;
+var idPlayer;
+
+window.onload = () => {
+    if(sessionStorage.getItem('hasLogin') == "true") {
+        idPlayer = sessionStorage.getItem('idUser');
+        $('#myId').text(`My ID : ${idPlayer}`);
+    } else {
+        toastr.warning('This section only available for registered player. Please try to register or login first.')
+    }
+}
 
 function openForm() {
     $(".friend-req-container").css('display', 'flex');
@@ -34,7 +43,7 @@ function sendFriendRequest(DOM) {
 }
 
 function searchFriendId(friendId) {
-    if (friendId != idPlayer) {
+    if (idPlayer != null) {
         $.ajax({
             type: "GET",
             url: `${URL}:8080/Player/${friendId}`,
@@ -58,7 +67,7 @@ function searchFriendId(friendId) {
                         class: 'level'
                     }).append(
                         $('<p>', {
-                            text: 'Level ' + data.totalPlay
+                            text: 'Level ' + parseInt((data.totalPlay / 5 + data.totalWin / 2).toFixed(0))
                         })
                     ),
                     $('<div>', {
@@ -94,7 +103,7 @@ function searchFriendId(friendId) {
             }
         });
     } else {
-        toastr.error('You can\'t search your own account');
+        toastr.error('You need to login first in order to use this feature');
     }
 }
 
@@ -182,8 +191,8 @@ $('.btn-response').on('click', function () {
     sendResponse(this);
 });
 
-$('.search__btn').on('click', function () {
-    var inputValue = $('.input').val().trim();
+$('.search_friend_btn').on('click', function () {
+    var inputValue = $('.input-search').val().trim();
     searchFriendId(inputValue);
 });
 

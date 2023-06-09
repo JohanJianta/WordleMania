@@ -8,6 +8,7 @@
 
 /* set overflow hidden dalam warpper, klo langsung ke body tdk berfungsi di HP */
 .body-wrapper {
+  background-color: #282A3A;
   overflow: hidden;
   position: relative;
   width: 100vw;
@@ -410,7 +411,7 @@ button.primary {
 .letter-box {
   /* color: whitesmoke; */
   border: 2px solid gray;
-  border-radius: 3px;
+  border-radius: 5px;
   margin: 3px;
   font-weight: 700;
   font-size: 1.2rem;
@@ -420,6 +421,7 @@ button.primary {
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
+  color: #282A3A;
 }
 
 .filled-box {

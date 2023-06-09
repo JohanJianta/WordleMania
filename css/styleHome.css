@@ -9,7 +9,6 @@
 }
 
 .body-wrapper {
-    background-color: #282A3A;
     font-family: 'IBM Plex Mono', monospace;
     color: whitesmoke;
     overflow: hidden;
@@ -114,6 +113,7 @@
     margin-top: 10px;
     width: 95%;
     font-size: 24px;
+    font-weight: 700;
 }
 
 .rank1 {
@@ -121,12 +121,16 @@
     height: 25%;
     align-items: center;
     border-bottom: 2px solid #1479EA;
-    ;
     color: white;
     display: flex;
     flex-flow: row nowrap;
     z-index: 1;
     justify-content: space-around;
+}
+
+.rank1 > * {
+    flex-basis: 35%;
+    text-align: center;
 }
 
 .rank2 {
@@ -142,6 +146,11 @@
     justify-content: space-around;
 }
 
+.rank2 > * {
+    flex-basis: 35%;
+    text-align: center;
+}
+
 .rank3 {
     width: 95%;
     color: white;
@@ -152,6 +161,11 @@
     margin-top: 5px;
     z-index: 3;
     justify-content: space-around;
+}
+
+.rank3 > * {
+    flex-basis: 35%;
+    text-align: center;
 }
 
 .leaderboard::before {
@@ -204,6 +218,12 @@
     gap: 10px;
     width: 100%;
     color: white;
+}
+
+.infobawah #player-nickname {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
 }
 
 .infoatas .profile {
@@ -537,6 +557,11 @@
     gap: 10px;
 }
 
+.friendlist .bagiantengah-friend .friend-name {
+    font-size: 18px;
+    font-weight: 700;
+}
+
 .profilefriend {
     min-width: 45px;
     min-height: 45px;
@@ -598,7 +623,7 @@
 .addplayer:hover .sign {
     width: 30%;
     transition-duration: .3s;
-    padding-left: 20px;
+    padding-left: 10px;
 }
 
 .addplayer:hover .textadd {
