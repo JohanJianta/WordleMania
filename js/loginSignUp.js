@@ -24,8 +24,7 @@ window.onload = function () {
                 sessionStorage.setItem("username", result.name);
             },
             error: function (jqXHR) {
-                console.log(jqXHR);
-                sessionStorage.setItem("username",);
+                toastr.warning('Error occurred while creating guest data')
             }
         });
     }
@@ -69,7 +68,6 @@ function login() {
                 sessionStorage.setItem("totalPlay", result.payload.totalPlay);
                 sessionStorage.setItem("totalWin", result.payload.totalWin);
                 sessionStorage.setItem("hasLogin", "true");
-                setLoginState(true);
             },
             error: function (jqXHR) {
                 toastr.error("Login Failed: " + JSON.parse(jqXHR.responseText).messages);
@@ -108,7 +106,6 @@ function signUp() {
                 resetForm();
             }
         });
-
     }
 }
 
@@ -155,14 +152,19 @@ function signUpToLogin() {
 function showPlayerData(status) {
 
     if (status) {
-        // $("#player-id").show();
-        // $("#player-score").show();
-        $("#player-id").text(sessionStorage.getItem("idGuest"));
-        $("#player-score").text(sessionStorage.getItem("score"));
-        // $("#player-total-play").text(sessionStorage.getItem("totalPlay"));
-        // $("#player-total-win").text(sessionStorage.getItem("totalWin"));
+        $("#player-id").show();
+        $("#player-score").show();
+        $("#player-rank").show();
+        $("#player-id").text(`Id : ${sessionStorage.getItem("idGuest")}`);
+        $("#player-score").text(`Score : ${sessionStorage.getItem("score")}`);
+        $("#player-rank").text(`Rank n/a`);
+        // $("#player-rank").text(`Rank #${sessionStorage.getItem("rank")}`);
+        $("#player-level").text(`Level ${parseInt(sessionStorage.getItem("totalPlay") / 5 + sessionStorage.getItem("totalWin") / 2).toFixed(0)}`);
     } else {
-        
+        $("#player-id").hide();
+        $("#player-score").hide();
+        $("#player-rank").hide();
+        $("#player-level").text("Level 0");
     }
 
     $("#player-nickname").text(sessionStorage.getItem("username"));
@@ -181,36 +183,39 @@ function showFriendList(status) {
             url: `${URL}:8080/Friends/${sessionStorage.getItem("idUser")}`,
             dataType: 'json',
             success: function (result) {
-                var friend;
-                for (let i = 0; i < result.payload.length; i++) {
-                    friend = `<div class="friend-container">
-                                <div class="friend-profile">
-                                    <div class="first-info">
-                                        <div class="profile"></div>
-                                        <div class="level">
-                                            <p>Level 100</p>
-                                        </div>
-                                    </div>
-    
-                                    <div class="second-info">
-                                        <div class="second-info-left">
-                                            <div class="group-info">
-                                                <p id="friend-nickname">${result.payload[i].name}</p>
-                                            </div>
-                                            <div class="group-info">
-                                                <p class="info-title">Score:  ${result.payload[i].score}</p>
-                                            </div>
-                                        </div>
-    
-                                        <div class="second-info-right">
-                                            <img src="picture/Group 38-edit.png" alt="">
-                                        </div>
-    
-                                    </div>
-                                </div>
-                            </div>`;
+                $(".friend-container").empty();
+                var friendList = result.payload;
+                var syntax;
+                for (let i = 0; i < friendList.length; i++) {
+                    syntax = `<div class="friendlist" data-friendId="${friendList[i].userId}">
+                    <div class="bagianatas-friend">
+                        <div class="profilefriend">
+                            <img src="/picture/avatar/Avatar10.svg" width="45px">
+                        </div>
+                        <div class="levelfriend">
+                            <p class="friend-level">Level ${parseInt(friendList[i].totalPlay / 5 + friendList[i].totalWin / 2).toFixed(0)}</p>
+                        </div>
+                    </div>
+                    <div class="bagiantengah-friend">
+                        <p class="friend-name">${friendList[i].name}</p>
+                        <p class="friend-score">Score : ${friendList[i].score}</p>
+                        <p class="friend-rank">Rank n/a</p>
+                    </div>
+                    <div class="bagianbawah-friend">
+                        <button class="addplayer">
+                            <div class="sign"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    id="add-account">
+                                    <path
+                                        d="M21,10.5H20v-1a1,1,0,0,0-2,0v1H17a1,1,0,0,0,0,2h1v1a1,1,0,0,0,2,0v-1h1a1,1,0,0,0,0-2Zm-7.7,1.72A4.92,4.92,0,0,0,15,8.5a5,5,0,0,0-10,0,4.92,4.92,0,0,0,1.7,3.72A8,8,0,0,0,2,19.5a1,1,0,0,0,2,0,6,6,0,0,1,12,0,1,1,0,0,0,2,0A8,8,0,0,0,13.3,12.22ZM10,11.5a3,3,0,1,1,3-3A3,3,0,0,1,10,11.5Z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="textadd">Invite</div>
+                        </button>
+                    </div>
+                </div>`;
 
-                    $(".friend-list-container").append(friend);
+                    $(".friend-container").append(syntax);
                 }
             },
             error: function (jqXHR) {

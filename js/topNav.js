@@ -1,13 +1,5 @@
 'use strict';
 
-window.onload = function () {
-    if (sessionStorage.getItem("hasLogin") == "true") {
-        setNavbarVisibility(true);
-    } else {
-        setNavbarVisibility(false);
-    }
-}
-
 function setNavbarVisibility(status) {
     if (status) {
         $(".nav-button-container-1").addClass("hidden");
@@ -21,7 +13,7 @@ function setNavbarVisibility(status) {
         $(".nav-button-container-1").removeClass("hidden");
     }
 }
- 
+
 function burgerContent() {
     document.getElementById("myDropDown").classList.toggle("show");
     document.getElementsByClassName("burger-menu")[0].classList.toggle("active");
@@ -57,4 +49,10 @@ function toSearchFriend() {
 function showChat() {
     document.getElementById("chat-panel").classList.toggle('active');
     document.getElementById("side-panel-toggle").classList.toggle('move');
+}
+
+if (sessionStorage.getItem("hasLogin") == "true") {
+    setNavbarVisibility(true);
+} else {
+    setNavbarVisibility(false);
 }
