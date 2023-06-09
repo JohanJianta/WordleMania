@@ -15,18 +15,24 @@
 <body>
 
     <div class="body-wrapper">
+
+        <!-- Navbar -->
         <div>
             <div class="topNav">
+
+                <!-- Button History & Search Friend -->
                 <div class="nav-button-container-2">
                     <button class="history" onclick="toHistory()">History</button>
                     <button class="btn-signUp-friend" onclick="toSearchFriend()">Find Friend</button>
                 </div>
 
+                <!-- Button Login & Signup -->
                 <div class="nav-button-container-1">
                     <button id="btn-login" onclick="showLogin()">Login</button>
                     <button class="btn-signUp-friend" id="btn-signUp" onclick="showSignUp()">Sign Up</button>
                 </div>
 
+                <!-- Burger Menu -->
                 <div class="dropdown">
                     <img src="/picture/menu.png" alt="hamburger" class="burger-menu" onclick="burgerContent()"
                         tabindex="0">
@@ -39,6 +45,7 @@
                     </div>
                 </div>
 
+                <!-- Title Navbar -->
                 <div class="title" onclick="toHome()">
                     <span style="--i:1">W</span>
                     <span style="--i:2">O</span>
@@ -54,6 +61,7 @@
                     <span style="--i:12">A</span>
                 </div>
 
+                <!-- Searchbar -->
                 <div class="container">
                     <input type="text" name="text" class="input" placeholder="roomcode">
                     <button class="search__btn">
@@ -127,11 +135,14 @@
             </div>
         </div>
 
-        <!-- Top Section -->
         <hr>
+
+        <!-- Tampilan Utama -->
         <div class="colombagi">
             <div class="bagianatas">
                 <div class="section-atas">
+
+                    <!-- Profil User -->
                     <div class="kolom1">
                         <div class="player">
                             <div class="infoatas">
@@ -151,6 +162,7 @@
                         </div>
                     </div>
 
+                    <!-- Tombol Mulai -->
                     <div class="kolom2">
                         <button class="btnstranger" onclick="searchRandomRoom()"><span></span>
                             <p data-start="good luck!" data-text="start!" data-title="play with stranger"></p>
@@ -170,6 +182,7 @@
                         </button>
                     </div>
 
+                    <!-- Leaderboard -->
                     <div class="kolom3">
                         <div class="leaderboard">
                             <div class="leaderboard2">
@@ -203,6 +216,7 @@
                 </div>
             </div>
 
+            <!-- Friend View -->
             <div class="bagianbawah">
                 <div class="section-bawah">
                     <div class="judulfriend">

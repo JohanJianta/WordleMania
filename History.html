@@ -12,18 +12,24 @@
 </head>
 
 <body>
+
+    <!-- Navbar -->
     <div>
         <div class="topNav">
-            <div class="nav-button-container-2 hidden">
+
+            <!-- Button History & Search Friend -->
+            <div class="nav-button-container-2">
                 <button class="history" onclick="toHistory()">History</button>
                 <button class="btn-signUp-friend" onclick="toSearchFriend()">Find Friend</button>
             </div>
 
+            <!-- Button Login & Signup -->
             <div class="nav-button-container-1">
                 <button id="btn-login" onclick="showLogin()">Login</button>
                 <button class="btn-signUp-friend" id="btn-signUp" onclick="showSignUp()">Sign Up</button>
             </div>
 
+            <!-- Burger Menu -->
             <div class="dropdown">
                 <img src="/picture/menu.png" alt="hamburger" class="burger-menu" onclick="burgerContent()" tabindex="0">
                 <div id="myDropDown" class="dropdown-content">
@@ -35,6 +41,7 @@
                 </div>
             </div>
 
+            <!-- Title Navbar -->
             <div class="title" onclick="toHome()">
                 <span style="--i:1">W</span>
                 <span style="--i:2">O</span>
@@ -50,6 +57,7 @@
                 <span style="--i:12">A</span>
             </div>
 
+            <!-- Searchbar -->
             <div class="container">
                 <input type="text" name="text" class="input" placeholder="roomcode">
                 <button class="search__btn">
@@ -123,6 +131,7 @@
         </div>
     </div>
 
+    <!-- Tampilan History -->
     <div class="list-history"></div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"

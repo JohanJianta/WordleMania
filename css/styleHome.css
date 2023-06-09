@@ -9,6 +9,7 @@
 }
 
 .body-wrapper {
+    background-color: #282A3A;
     font-family: 'IBM Plex Mono', monospace;
     color: whitesmoke;
     overflow: hidden;
@@ -192,6 +193,10 @@
     background: #07182E;
     inset: 5px;
     border-radius: 15px;
+}
+
+.judulfriend {
+    display: none;
 }
 
 .player {
