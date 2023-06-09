@@ -30,14 +30,26 @@ window.onload = function () {
     }
 
     if (sessionStorage.getItem("hasLogin") == "true") {
-        showPlayerData(true);
-        showFriendList(true);
+        setLoginState(true);
     } else {
-        showPlayerData(false);
-        showFriendList(false);
+        setLoginState(false);
     }
 
     getLeaderboard();
+}
+
+function setLoginState(state) {
+    if (state) {
+        $(".judulfriend").css("display", "block");
+        $(".info-friend").hide();
+        $(".friend-container").css("display", "flex");
+    } else {
+        $(".judulfriend").hide();
+        $(".info-friend").css("display", "flex");
+        $(".friend-container").hide();
+    }
+    showPlayerData(state);
+    showFriendList(state);
 }
 
 function login() {
@@ -60,7 +72,7 @@ function login() {
             success: function (result) {
                 resetForm();
                 hideLogin();
-                toastr.success("Login Success !!!");
+                toastr.success("Login Success");
                 sessionStorage.setItem("idGuest", result.payload.guestId);
                 sessionStorage.setItem("idUser", result.payload.userId);
                 sessionStorage.setItem("username", result.payload.name);
@@ -68,6 +80,7 @@ function login() {
                 sessionStorage.setItem("totalPlay", result.payload.totalPlay);
                 sessionStorage.setItem("totalWin", result.payload.totalWin);
                 sessionStorage.setItem("hasLogin", "true");
+                setLoginState(true);
             },
             error: function (jqXHR) {
                 toastr.error("Login Failed: " + JSON.parse(jqXHR.responseText).messages);
@@ -97,7 +110,7 @@ function signUp() {
             dataType: 'json',
             contentType: 'application/json',
             success: function (result) {
-                toastr.success("Registration Success !!!");
+                toastr.success("Registration Success");
                 resetForm();
                 hideSignUp();
             },
@@ -183,7 +196,7 @@ function showFriendList(status) {
             url: `${URL}:8080/Friends/${sessionStorage.getItem("idUser")}`,
             dataType: 'json',
             success: function (result) {
-                $(".friend-container").empty();
+                // $(".friend-container").empty();
                 var friendList = result.payload;
                 var syntax;
                 for (let i = 0; i < friendList.length; i++) {
