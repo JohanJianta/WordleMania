@@ -6,13 +6,11 @@ function setNavbarVisibility(status) {
         $(".nav-button-container-1").addClass("hidden");
         $(".burger-not-login").hide();
         $(".burger-must-login").css("display", "block");
-        $(".judulfriend").show();
     } else {
         $(".nav-button-container-1").removeClass("hidden");
         $(".nav-button-container-2").addClass("hidden");
         $(".burger-must-login").hide();
         $(".burger-not-login").css("display", "block");
-        $(".judulfriend").hide();
     }
 }
 
