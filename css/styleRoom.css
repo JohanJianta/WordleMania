@@ -16,11 +16,18 @@
   font-family: 'Inter', sans-serif;
 }
 
+.nav-container {
+  background-color: #27374D;
+  width: 100%;
+  height: 70px;
+}
+
 .topnav {
   position: relative;
   display: flex;
-  margin: 10px;
+  padding: 20px;
   width: calc(100% - 20px);
+  height: 100%;
   align-items: center;
   justify-content: space-between;
 }
@@ -342,27 +349,28 @@ button.primary {
   width: 400px;
   height: 100vh;
   background-color: black;
+  margin-top: -5px;
   top: -10px;
-  right: -410px;
+  right: -440px;
   transition: .4s;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
 }
 
 #chat-panel.active {
-  right: -10px;
-}
-
-#side-panel-toggle.move {
-  right: 390px;
+  right: -40px;
 }
 
 #side-panel-toggle {
   position: absolute;
-  right: -10px;
+  right: -40px;
   transition: .4s;
   background-color: #009578;
   border-radius: 10px 0 0 10px;
   padding: 0.9rem 0.9rem;
+}
+
+#side-panel-toggle.move {
+  right: 360px;
 }
 
 #side-panel-toggle:hover {
@@ -394,7 +402,7 @@ button.primary {
   }
 
   #side-panel-toggle.move {
-    right: 290px;
+    right: 260px;
   }
 
 }
@@ -652,10 +660,6 @@ button.primary {
     display: flex;
   }
 
-  .topnav {
-    border-bottom: 1px solid black;
-  }
-
   .topnav #game-title {
     display: block;
   }
@@ -679,5 +683,9 @@ button.primary {
 
   .topnav #game-title {
     display: none;
+  }
+
+  .main-section {
+    margin-top: 20px;
   }
 }

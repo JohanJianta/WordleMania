@@ -19,52 +19,58 @@
 <body>
     <div class="body-wrapper">
 
-        <div class="topnav">
-            <button id="giveUp-btn">
-                <span class="text">Give Up</span>
-                <span class="icon">
-                    <img src="picture/flags.png" alt="">
-                </span>
-            </button>
-
-            <div class="roomCode" id="game-title">
-               <a href="Home.html" style="text-decoration: none;"> <p><b>WordleMania</b></p></a>
-            </div>
-
-            <div class="roomCode">
-                <p>Room:</p>
-                <p id="game-code"></p>
-            </div>
-
-            <div class="side-panel-container">
-                <button id="side-panel-toggle" type="button" onclick="showChat()">
-                    <img src="picture/chat.png" alt="">
+        <div class="nav-container">
+            <div class="topnav">
+                <button id="giveUp-btn">
+                    <span class="text">Give Up</span>
+                    <span class="icon">
+                        <img src="picture/flags.png" alt="">
+                    </span>
                 </button>
-                <div id="chat-panel">
-                    <div class="chat-container">
-                        <div class="chat-header">
-                            <h2>Chat Box</h2>
-                        </div>
-                        <div class="connecting">Connecting...</div>
-                        <ul id="messageArea"></ul>
-                        <form id="messageForm">
-                            <div class="form-group">
-                                <div class="input-group clearfix">
-                                    <input type="text" id="message" placeholder="Type a message..." autocomplete="off"
-                                        class="form-control" />
-                                    <button type="submit" class="primary">Send</button>
-                                </div>
+
+                <div class="roomCode" id="game-title">
+                    <a href="Home.html" style="text-decoration: none;">
+                        <p><b>WordleMania</b></p>
+                    </a>
+                </div>
+
+                <div class="roomCode">
+                    <p>Room:</p>
+                    <p id="game-code"></p>
+                </div>
+
+                <div class="side-panel-container">
+                    <button id="side-panel-toggle" type="button" onclick="showChat()">
+                        <img src="picture/chat.png" alt="">
+                    </button>
+                    <div id="chat-panel">
+                        <div class="chat-container">
+                            <div class="chat-header">
+                                <h2>Chat Box</h2>
                             </div>
-                        </form>
+                            <div class="connecting">Connecting...</div>
+                            <ul id="messageArea"></ul>
+                            <form id="messageForm">
+                                <div class="form-group">
+                                    <div class="input-group clearfix">
+                                        <input type="text" id="message" placeholder="Type a message..."
+                                            autocomplete="off" class="form-control" />
+                                        <button type="submit" class="primary">Send</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
+
+        <hr>
 
         <!-- Tampilan Utama -->
         <div class="main-section">
-            
+
             <!-- Player View -->
             <div class="player-container">
                 <div class="player">

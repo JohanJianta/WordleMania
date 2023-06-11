@@ -12,6 +12,7 @@ let rightGuessString;
 let playerSeat;
 let playerCount = 0;
 
+let arrayCheckpoint = [];
 let gameCode;
 let roomId;
 
@@ -26,9 +27,7 @@ window.onload = () => {
     dataType: 'json',
     contentType: 'application/json',
     success: function () {
-
       connect();
-
     },
     error: function (jqXHR) {
       toastr.error("Something went wrong when joining the game. Please try again.");
@@ -62,6 +61,29 @@ function loadRoomData() {
 
         removeDivElements();
         initBoard();
+      }
+
+      if (sessionStorage.getItem("checkpoint")) {
+        arrayCheckpoint = JSON.parse(sessionStorage.getItem("checkpoint"));
+
+        for (let i = 0; i < arrayCheckpoint.length; i++) {
+
+          let row = document.getElementsByClassName("letter-row")[i];
+          guessesRemaining--;
+
+          for (let j = 0; j < arrayCheckpoint[i][1].length; j++) {
+            let box = row.children[j];
+            box.textContent = arrayCheckpoint[i][0][j];
+            let delay = 0;
+            setTimeout(() => {
+              //flip box
+              box.style.backgroundColor = arrayCheckpoint[i][1][j];
+              animateCSS(box, "flipInX");
+              //shade box
+              shadeKeyBoard(box.textContent, arrayCheckpoint[i][1][j]);
+            }, delay);
+          }
+        }
       }
 
     },
@@ -102,15 +124,13 @@ function initBoard() {
 function shadeKeyBoard(letter, color) {
   for (const elem of document.getElementsByClassName("keyboard-button")) {
     if (elem.textContent === letter) {
-      let oldColor = getComputedStyle(elem).backgroundColor;
-      if (oldColor === "rgb(60, 226, 77)") {
+      let oldColor = elem.style.backgroundColor;
+
+      if (oldColor === "rgb(60, 226, 77)" || color === "whitesmoke" || (color === "#e2a714" && oldColor === "rgb(226, 167, 20)")) {
         return;
       }
 
-      // if (oldColor === "rgb(226, 167, 20)" && color !== "rgb(60, 226, 77)") {
-      //   return;
-      // }
-
+      console.log(`${letter}, ${color} : ${elem.textContent}, ${oldColor}`);
       elem.style.backgroundColor = color;
       break;
     }
@@ -160,7 +180,8 @@ function checkGuess() {
 
 function onWordReceived(payload) {
   currentGuess = JSON.parse(payload.body).content;
-  let row = document.getElementsByClassName("letter-row")[NUMBER_OF_GUESSES - guessesRemaining];
+  let rowCheckpoint = NUMBER_OF_GUESSES - guessesRemaining;
+  let row = document.getElementsByClassName("letter-row")[rowCheckpoint];
   let rightGuess = Array.from(rightGuessString);
   var letterColor = [];
 
@@ -178,8 +199,13 @@ function onWordReceived(payload) {
 
     if (rightGuess.includes(currentGuess[i])) {
       letterColor[i] = "#e2a714"; // yellow gold color
+    } else {
+      letterColor[i] = "whitesmoke";
     }
   }
+
+  arrayCheckpoint.push([currentGuess, letterColor])
+  sessionStorage.setItem("checkpoint", JSON.stringify(arrayCheckpoint));
 
   for (let i = 0; i < WORD_LENGTH; i++) {
     let box = row.children[i];
@@ -187,9 +213,9 @@ function onWordReceived(payload) {
     let delay = 250 * i;
     setTimeout(() => {
       //flip box
+      box.style.backgroundColor = letterColor[i];
       animateCSS(box, "flipInX");
       //shade box
-      box.style.backgroundColor = letterColor[i];
       shadeKeyBoard(box.textContent, letterColor[i]);
     }, delay);
   }
@@ -197,7 +223,6 @@ function onWordReceived(payload) {
   if (currentGuess === rightGuessString) {
     toastr.success("You guessed right! Congratulation!");
     guessesRemaining = 0;
-    return;
   } else {
     guessesRemaining -= 1;
     currentGuess = [];
@@ -226,7 +251,7 @@ function insertLetter(pressedKey) {
   nextLetter += 1;
 }
 
-const animateCSS = (element, animation, prefix = "animate__") =>
+const animateCSS = (element, animation, prefix = "animate__") => {
   // We create a Promise and return it
   new Promise((resolve, _reject) => {
     const animationName = `${prefix}${animation}`;
@@ -245,7 +270,7 @@ const animateCSS = (element, animation, prefix = "animate__") =>
 
     node.addEventListener("animationend", handleAnimationEnd, { once: true });
   });
-
+}
 
 document.addEventListener("keyup", (e) => {
   let pressedKey = String(e.key);
@@ -311,7 +336,6 @@ function onDisconnect() {
 }
 
 function connect() {
-  // gameCode = JSON.parse(sessionStorage.getItem("gameCode")).payload.id;
   username = sessionStorage.getItem('username');
 
   if (username && gameCode) {
