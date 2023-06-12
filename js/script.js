@@ -1,16 +1,16 @@
 'use strict';
 
-const URL = "http://127.0.0.1";
-
 var NUMBER_OF_GUESSES;
 var WORD_LENGTH;
 
+let score;
 let guessesRemaining;
 let currentGuess = [];
+let colorCheckmark = [];
 let nextLetter = 0;
 let rightGuessString;
 let playerSeat;
-let playerCount = 0;
+// let playerCount = 0;
 
 // let arrayCheckpoint = [];
 let gameCode;
@@ -43,13 +43,16 @@ function loadRoomData() {
     success: function (result) {
       let room = result.payload;
 
-      for (playerCount; playerCount < room.playerNames.length; playerCount++) {
-        $(`#invite-icon-${playerCount}`).addClass("hidden");
-        $(`#player-name-${playerCount}`).text(room.playerNames[playerCount]);
-        if (room.playerIds[playerCount] == sessionStorage.getItem("idGuest")) {
-          playerSeat = playerCount;
+      for (let i = 0; i < room.playerNames.length; i++) {
+        $(`#invite-icon-${i}`).addClass("hidden");
+        $(`#player-name-${i}`).text(room.playerNames[i]);
+        $(`.player`).eq(i).removeClass("vacant");
+        if (room.playerIds[i] == sessionStorage.getItem("idGuest")) {
+          playerSeat = i;
         }
       }
+
+      setInviteListener();
 
       if (roomId != room.roomId || NUMBER_OF_GUESSES != room.guessesTry || rightGuessString != room.word.toLowerCase()) {
         gameCode = room.gameCode;
@@ -58,33 +61,35 @@ function loadRoomData() {
         guessesRemaining = room.guessesTry;
         rightGuessString = room.word.toLowerCase();
         WORD_LENGTH = room.word.length;
+        score = room.score;
+
+        // if (sessionStorage.getItem("checkpoint") && sessionStorage.getItem("colorCheckmark") {
+        // colorCheckmark = sessionStorage.getItem("colorCheckmark");
+        //   arrayCheckpoint = JSON.parse(sessionStorage.getItem("checkpoint"));
+  
+        //   for (let i = 0; i < arrayCheckpoint.length; i++) {
+  
+        //     let row = document.getElementsByClassName("letter-row")[i];
+        //     guessesRemaining--;
+  
+        //     for (let j = 0; j < arrayCheckpoint[i][1].length; j++) {
+        //       let box = row.children[j];
+        //       box.textContent = arrayCheckpoint[i][0][j];
+        //       let delay = 0;
+        //       setTimeout(() => {
+        //         //flip box
+        //         box.style.backgroundColor = arrayCheckpoint[i][1][j];
+        //         animateCSS(box, "flipInX");
+        //         //shade box
+        //         shadeKeyBoard(box.textContent, arrayCheckpoint[i][1][j]);
+        //       }, delay);
+        //     }
+        //   }
+        // }
 
         removeDivElements();
         initBoard();
       }
-
-      // if (sessionStorage.getItem("checkpoint")) {
-      //   arrayCheckpoint = JSON.parse(sessionStorage.getItem("checkpoint"));
-
-      //   for (let i = 0; i < arrayCheckpoint.length; i++) {
-
-      //     let row = document.getElementsByClassName("letter-row")[i];
-      //     guessesRemaining--;
-
-      //     for (let j = 0; j < arrayCheckpoint[i][1].length; j++) {
-      //       let box = row.children[j];
-      //       box.textContent = arrayCheckpoint[i][0][j];
-      //       let delay = 0;
-      //       setTimeout(() => {
-      //         //flip box
-      //         box.style.backgroundColor = arrayCheckpoint[i][1][j];
-      //         animateCSS(box, "flipInX");
-      //         //shade box
-      //         shadeKeyBoard(box.textContent, arrayCheckpoint[i][1][j]);
-      //       }, delay);
-      //     }
-      //   }
-      // }
 
     },
     error: function (_jqXHR) {
@@ -94,18 +99,28 @@ function loadRoomData() {
   });
 }
 
+function setInviteListener() {
+  $(".player:not(.vacant)").off("click");
+
+  $(".vacant").on("click", function () {
+    $(".friend-req-container").css('display', 'flex');
+  });
+
+  $("#close-req").on("click", function () {
+    $(".friend-req-container").hide();
+  });
+}
+
 function removeDivElements() {
-  let rows = document.getElementsByClassName("letter-row");
-
-  while (rows.length > 0) {
-    rows[0].remove();
-  }
-
-  playerCount = 0;
+  $("#game-board").empty();
+  $("#game-result").empty();
+  colorCheckmark.length = 0;
+  // playerCount = 0;
 }
 
 function initBoard() {
   let board = document.getElementById("game-board");
+  let result = document.getElementById("game-result");
 
   for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
     let row = document.createElement("div");
@@ -119,6 +134,18 @@ function initBoard() {
 
     board.appendChild(row);
   }
+
+  let row = document.createElement("div");
+  row.className = "letter-row";
+  for (let i = 0; i < WORD_LENGTH; i++) {
+    let box = document.createElement("div");
+    box.className = "letter-box";
+    box.innerText = rightGuessString[i];
+    row.appendChild(box);
+    colorCheckmark.push("whitesmoke");
+  }
+  result.appendChild(row);
+
 }
 
 function shadeKeyBoard(letter, color) {
@@ -189,6 +216,7 @@ function onWordReceived(payload) {
     if (rightGuess[i] == currentGuess[i]) {
       letterColor[i] = "#3CE24D"; //dark green color
       rightGuess[i] = "#";
+      colorCheckmark[i] = "#3CE24D";
     }
   }
 
@@ -205,6 +233,7 @@ function onWordReceived(payload) {
 
   // arrayCheckpoint.push([currentGuess, letterColor]);
   // sessionStorage.setItem("checkpoint", JSON.stringify(arrayCheckpoint));
+  // sessionStorage.setItem("colorCheckmark", JSON.stringify(colorCheckmark));
 
   for (let i = 0; i < WORD_LENGTH; i++) {
     let box = row.children[i];
@@ -219,21 +248,59 @@ function onWordReceived(payload) {
     }, delay);
   }
 
+  guessesRemaining -= 1;
+
   if (currentGuess === rightGuessString) {
     toastr.success("You guessed right! Congratulation!");
+    showGameResult();
     guessesRemaining = 0;
-    saveGameResult(true);
+    // saveGameResult(true);
   } else {
-    guessesRemaining -= 1;
     currentGuess = [];
     nextLetter = 0;
 
     if (guessesRemaining === 0) {
       toastr.error("You've run out of guesses! Game over!");
       toastr.info(`The right word was: "${rightGuessString}"`);
-      saveGameResult(false);
+      showGameResult();
+      // saveGameResult(false);
     }
   }
+}
+
+function showGameResult() {
+  let letterBoxes = $("#game-result").find(".letter-box");
+  let correctCount = 0;
+  for (let i = 0; i < colorCheckmark.length; i++) {
+    $(letterBoxes[i]).css("background-color", colorCheckmark[i]);
+    if (colorCheckmark[i] === "#3CE24D") {
+      correctCount += 1;
+    }
+  }
+
+  if (correctCount === WORD_LENGTH) {
+    score = score + guessesRemaining * 10;
+    $("#result-desc").text(`You managed to guess the word in ${NUMBER_OF_GUESSES - guessesRemaining} try`);
+    $("#result-title").text(`Point Gain`);
+    $("#result-point").css(`color`, '#3CE24D');
+    $("#result-point").text(`+${score}`);
+  } else {
+    score = score / 2 - correctCount * 10;
+    $("#result-desc").text(`You managed to guess ${correctCount} letters`);
+    $("#result-title").text(`Point Lose`);
+    $("#result-point").css(`color`, 'crimson');
+    $("#result-point").text(`-${score}`);
+  }
+
+  setTimeout(() => {
+
+    $(".result-container").css('display', 'flex');
+
+  }, (250 * (WORD_LENGTH + 3)));
+
+  $("#response-leave").on('click', function () {
+    window.location.assign('/Home.html');
+  });
 }
 
 function saveGameResult(status) {
@@ -361,7 +428,7 @@ function onDisconnect() {
     }
   });
 
-  sessionStorage.removeItem("gameCode");
+  // sessionStorage.removeItem("gameCode");
   if (stompClient) {
     stompClient.send("/app/chat.send", {}, JSON.stringify({ sender: username, content: playerSeat, type: 'LEAVE', gameCode: gameCode }));
     stompClient.disconnect();
@@ -439,12 +506,14 @@ function onMessageReceived(payload) {
     loadRoomData();
     toastr.success(`${message.sender} has joined the room`);
   } else if (message.type === 'LEAVE') {
-    $(`#invite-icon-${message.content}`).removeClass("hidden");
+    $(`#invite-icon-${message.content}`).removeClass("hidden"); // remove player from seat
     $(`#player-name-${message.content}`).text("Invite");
+    $(`.player`).eq(message.content).addClass("vacant");
     messageElement.classList.add('event-message');
     message.content = message.sender + ' left!';
     toastr.error(`${message.sender} has leaved the room`);
-    playerCount -= 1;
+    // playerCount -= 1;
+    setInviteListener();
   } else {
     messageElement.classList.add('chat-message');
 

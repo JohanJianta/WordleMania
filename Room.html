@@ -73,23 +73,23 @@
 
             <!-- Player View -->
             <div class="player-container">
-                <div class="player">
+                <div class="player vacant">
                     <img src="" alt="avatar" class="hidden">
                     <i id="invite-icon-0" class="fa-solid fa-user-plus" style="color: #000000;"></i>
                     <p id="player-name-0">Invite</p>
                 </div>
 
-                <div class="player">
+                <div class="player vacant">
                     <img src="" alt="avatar" class="hidden">
                     <i id="invite-icon-1" class="fa-solid fa-user-plus" style="color: #000000;"></i>
                     <p id="player-name-1">Invite</p>
                 </div>
-                <div class="player">
+                <div class="player vacant">
                     <img src="" alt="avatar" class="hidden">
                     <i id="invite-icon-2" class="fa-solid fa-user-plus" style="color: #000000;"></i>
                     <p id="player-name-2">Invite</p>
                 </div>
-                <div class="player">
+                <div class="player vacant">
                     <img src="" alt="avatar" class="hidden">
                     <i id="invite-icon-3" class="fa-solid fa-user-plus" style="color: #000000;"></i>
                     <p id="player-name-3">Invite</p>
@@ -98,7 +98,50 @@
 
             <!-- Game View -->
             <div class="game-display">
-                <div id="game-board"></div>
+                <div id="game-board">
+                    <div class="letter-row">
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                    </div>
+                    <div class="letter-row">
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                    </div>
+                    <div class="letter-row">
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                    </div>
+                    <div class="letter-row">
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                    </div>
+                    <div class="letter-row">
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                    </div>
+                    <div class="letter-row">
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                        <div class="letter-box"></div>
+                    </div>
+                </div>
 
                 <div id="keyboard-cont">
                     <div class="first-row">
@@ -148,6 +191,55 @@
                 </button>
             </div>
 
+        </div>
+
+        <!-- Popup Invite Friend -->
+        <div class="friend-req-container">
+            <div class="modal">
+                <button id="close-req">X</button>
+                <h2>Friend List</h2>
+                <div class="list-req">
+                    <!-- <div class="orang" data-idFriend="${requests[i].id}">
+                        <div class="avatar-req"></div>
+
+                        <b>
+                            <p id=friendName>Javascript</p>
+                        </b>
+
+                        <p id="friendScore">1000</p>
+
+                        <button>Invite</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="result-container">
+            <div class="modal">
+                <h2>Game Result</h2>
+                <div class="result-info">
+                    <div>
+                        <p id="result-desc">You managed to guess # letters</p>
+                        <div id="game-result">
+                            <div class="letter-row">
+                                <div class="letter-box"></div>
+                                <div class="letter-box"></div>
+                                <div class="letter-box"></div>
+                                <div class="letter-box"></div>
+                                <div class="letter-box"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p id="result-title">Point Lose</p>
+                        <p id="result-point">-20</p>
+                    </div>
+                    <div class="result-response">
+                        <button id="response-leave">Leave</button>
+                        <button class="disabled" id="response-play">Play again</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>

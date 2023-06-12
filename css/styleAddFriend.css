@@ -220,7 +220,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all .5s ease-in-out;
     display: none;
 }
 
@@ -235,7 +234,8 @@ body {
     border-radius: 10px;
     border: 3px solid whitesmoke;
     padding: 20px;
-    box-shadow: 1px 1px 5px;
+    box-shadow: 1px 1px 5px whitesmoke;
+    transition: all .5s ease-in-out;
     background-color: #27374D;
 }
 
@@ -260,6 +260,7 @@ body {
 .modal #close-req:hover {
     border: 2px solid #a970ff;
     background-color: #0e0e10;
+    color: #a970ff;
 }
 
 .modal .list-req {
@@ -300,6 +301,16 @@ body {
     background-color: #404258;
     height: 50px;
     margin-bottom: 20px;
+    border: 2px solid #53535f;
+    border-radius: 10px;
+}
+
+.orang p {
+  white-space: nowrap; /* Menghindari pemisahan kata */
+  overflow: hidden; /* Menyembunyikan teks yang melebihi lebar elemen */
+  text-overflow: ellipsis;
+  text-align: center;
+  width: 100px;
 }
 
 .orang .req-response {

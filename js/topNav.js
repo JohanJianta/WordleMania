@@ -1,6 +1,8 @@
 'use strict';
 
-window.setNavbarVisibility = function(status) {
+const URL = "http://127.0.0.1";
+
+window.setNavbarVisibility = function (status) {
     if (status) {
         $(".nav-button-container-2").removeClass("hidden");
         $(".nav-button-container-1").addClass("hidden");
@@ -46,10 +48,38 @@ function toSearchFriend() {
     }
 }
 
+// Fungsi di Room.html
 function showChat() {
     document.getElementById("chat-panel").classList.toggle('active');
     document.getElementById("side-panel-toggle").classList.toggle('move');
 }
+
+function searchRoomById(roomId) {
+    $.ajax({
+        type: "GET",
+        url: `${URL}:8080/Game/${roomId}`,
+        dataType: 'json',
+        success: function (result) {
+
+            sessionStorage.setItem("gameCode", roomId);
+            window.location.assign(`${URL}:5500/Room.html`);
+
+        },
+        error: function (jqXHR) {
+            toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
+        }
+    });
+}
+
+$('.search__btn').on('click', function () {
+    var roomId = $('.input').val().trim();
+    if (roomId != '') {
+        $('.input').val('');
+        searchRoomById(roomId);
+    } else {
+        toastr.error("Please input the room id")
+    }
+});
 
 if (sessionStorage.getItem("hasLogin") == "true") {
     setNavbarVisibility(true);

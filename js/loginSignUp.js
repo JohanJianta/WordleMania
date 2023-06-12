@@ -1,7 +1,5 @@
 'use strict';
 
-const URL = "http://127.0.0.1";
-
 window.onload = function () {
     if (!sessionStorage.getItem("idGuest") && !sessionStorage.getItem("username")) {
         var currentDate = new Date();

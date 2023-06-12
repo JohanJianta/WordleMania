@@ -14,7 +14,6 @@
   position: relative;
   width: 100vw;
   height: 100vh;
-  /* font-family: 'Inter', sans-serif; */
   font-family: 'IBM Plex Mono', monospace;
 }
 
@@ -109,6 +108,7 @@ button span {
 }
 
 .main-section {
+  margin-top: 30px;
   position: relative;
   display: flex;
   flex-flow: column nowrap;
@@ -145,12 +145,16 @@ button span {
 .player:hover {
   transform: translateY(-4px) translateX(-2px);
   box-shadow: 2px 5px 0 0 black;
-};
+}
+
+;
 
 .player:active {
   transform: translateY(2px) translateX(1px);
   box-shadow: 0 0 0 0 black;
-};
+}
+
+;
 
 .player img {
   width: 50px;
@@ -162,7 +166,7 @@ button span {
 }
 
 .player p {
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .side-panel-container {
@@ -347,6 +351,7 @@ button.primary:hover {
   padding-top: 5px;
   text-align: center;
   color: #2a2a2a;
+  background-color: #6982a7;
   top: 65px;
   width: 100%;
 }
@@ -417,7 +422,7 @@ button.primary:hover {
 /* Game Board  */
 
 #game-board {
-  margin: 30px 0;
+  margin: 10px 0 40px 0;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -445,6 +450,7 @@ button.primary:hover {
 
 .letter-row {
   display: flex;
+  justify-content: center;
 }
 
 #keyboard-cont {
@@ -475,6 +481,228 @@ button.primary:hover {
   background-color: #646f6f;
 }
 
+/* Popup Invite Friend */
+.friend-req-container {
+  animation-name: animatetop;
+  animation-duration: 0.3s;
+  z-index: 10;
+  position: absolute;
+  background-color: rgb(0, 0, 0, 0.7);
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  font-family: 'IBM Plex Mono', monospace;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  width: 80%;
+  max-width: 500px;
+  min-width: 300px;
+  height: 400px;
+  border-radius: 10px;
+  border: 3px solid whitesmoke;
+  padding: 20px;
+  box-shadow: 1px 1px 5px whitesmoke;
+  transition: all .5s ease-in-out;
+  background-color: #27374D;
+  color: whitesmoke;
+}
+
+.modal h2 {
+  font-size: 24px;
+  padding-bottom: 20px;
+  margin: 0;
+}
+
+.modal #close-req {
+  font-family: 'IBM Plex Mono', monospace;
+  margin-right: -10px;
+  margin-top: -10px;
+  color: whitesmoke;
+  background-color: #282A3A;
+  width: 25px;
+  height: 30px;
+  border-radius: 40px;
+  border: 2px solid whitesmoke;
+  align-self: flex-end;
+  transition: all .2s ease;
+}
+
+.modal #close-req:hover {
+  border: 2px solid #a970ff;
+  background-color: #0e0e10;
+  color: #a970ff;
+}
+
+.modal .list-req {
+  list-style-type: none;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* Custom Scrollbar */
+.list-req::-webkit-scrollbar {
+  width: 0.7em;
+  height: 0.7em;
+}
+
+.list-req::-webkit-scrollbar-track {
+  background: #53535f;
+  border-radius: 100vw;
+}
+
+.list-req::-webkit-scrollbar-thumb {
+  background: #311a52;
+  border: 2px solid #53535f;
+  border-radius: 100vw;
+}
+
+.list-req::-webkit-scrollbar-thumb:hover {
+  background: #482678;
+}
+
+.orang {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #404258;
+  height: 50px;
+  margin-bottom: 20px;
+  border: 2px solid #53535f;
+  border-radius: 10px;
+}
+
+.orang p {
+  white-space: nowrap;
+  /* Menghindari pemisahan kata */
+  overflow: hidden;
+  /* Menyembunyikan teks yang melebihi lebar elemen */
+  text-overflow: ellipsis;
+  text-align: center;
+  width: 120px;
+}
+
+.orang button {
+  color: whitesmoke;
+  font-weight: 500;
+  font-family: 'IBM Plex Mono', monospace;
+  width: 80px;
+  height: 25px;
+  border-radius: 10px;
+  border: 2px solid whitesmoke;
+  background-color: #282A3A;
+}
+
+.orang button:hover {
+  border: 2px solid #a970ff;
+  background-color: #0e0e10;
+  color: #a970ff;
+}
+
+.list-req .orang .avatar-req {
+  position: relative;
+  width: 25px;
+  background-color: #794B4B;
+  border: 1px solid black;
+}
+
+.orang .avatar-req::before {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+  /* This creates the 1:1 aspect ratio */
+}
+
+.result-container {
+  animation-name: animatetop;
+  animation-duration: 0.7s;
+  z-index: 10;
+  position: absolute;
+  background-color: rgb(0, 0, 0, 0.3);
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.result-container .result-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-flow: column nowrap;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+#game-result {
+  margin-top: 10px;
+}
+
+.result-info #result-point {
+  font-size: 50px;
+}
+
+.result-info .result-response {
+  justify-self: end;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+}
+
+.result-response button {
+  height: 100%;
+  width: 120px;
+  border-radius: 5px;
+  background-color: #282A3A;
+  color: rgb(211, 211, 211);
+  font-weight: 700;
+  border: 2px solid rgb(211, 211, 211);
+}
+
+.result-response button.disabled {
+  color: #82828b;
+  border: 2px solid #404258;
+  pointer-events: none;
+}
+
+#response-leave:hover {
+  background-color: #282a3a98;
+  border: 2px solid crimson;
+  color: crimson;
+}
+
+#response-play:hover {
+  border: 2px solid #3CE24D;
+  color: #3CE24D;
+}
+
+@keyframes animatetop {
+  0% {
+      top: 0;
+      opacity: 0;
+  }
+
+  100% {
+      opacity: 1;
+  }
+}
+
 @media screen and (max-width: 480px) and (max-height: 740px) {
   .letter-box {
     /* color: whitesmoke; */
@@ -488,6 +716,20 @@ button.primary:hover {
   .keyboard-button {
     font-size: 1rem;
     margin: 0 2px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .player {
+    height: 100px;
+  }
+
+  .player p {
+    font-size: 12px;
+  }
+
+  #friendScore {
+    display: none;
   }
 }
 
@@ -584,15 +826,11 @@ button.primary:hover {
 
 @media screen and (min-width: 1000px) and (max-height: 700px) {
 
-  #game-board {
-    margin: 0 0 30px 0;
-  }
-
   .letter-box {
     font-weight: 600;
-    font-size: 1.8rem;
-    height: 2.2rem;
-    width: 2.2rem;
+    font-size: 2rem;
+    height: 2.5rem;
+    width: 2.5rem;
     margin: 2px;
   }
 
@@ -620,6 +858,10 @@ button.primary:hover {
 
   .player p {
     font-size: 24px;
+  }
+
+  #game-board {
+    margin: 40px 0 50px 0;
   }
 
   .game-display {
@@ -694,5 +936,9 @@ button.primary:hover {
 
   .main-section {
     margin-top: 20px;
+  }
+  
+  #game-board {
+    margin: 30px 0 30px 0;
   }
 }
