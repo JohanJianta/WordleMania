@@ -31,8 +31,10 @@ window.onload = function () {
 
     if (sessionStorage.getItem("hasLogin") == "true") {
         setLoginState(true);
+        setNavbarVisibility(true);
     } else {
         setLoginState(false);
+        setNavbarVisibility(false);
     }
 
     getLeaderboard();
@@ -81,6 +83,7 @@ function login() {
                 sessionStorage.setItem("totalWin", result.payload.totalWin);
                 sessionStorage.setItem("hasLogin", "true");
                 setLoginState(true);
+                setNavbarVisibility(true);
             },
             error: function (jqXHR) {
                 toastr.error("Login Failed: " + JSON.parse(jqXHR.responseText).messages);

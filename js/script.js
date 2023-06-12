@@ -12,7 +12,7 @@ let rightGuessString;
 let playerSeat;
 let playerCount = 0;
 
-let arrayCheckpoint = [];
+// let arrayCheckpoint = [];
 let gameCode;
 let roomId;
 
@@ -63,28 +63,28 @@ function loadRoomData() {
         initBoard();
       }
 
-      if (sessionStorage.getItem("checkpoint")) {
-        arrayCheckpoint = JSON.parse(sessionStorage.getItem("checkpoint"));
+      // if (sessionStorage.getItem("checkpoint")) {
+      //   arrayCheckpoint = JSON.parse(sessionStorage.getItem("checkpoint"));
 
-        for (let i = 0; i < arrayCheckpoint.length; i++) {
+      //   for (let i = 0; i < arrayCheckpoint.length; i++) {
 
-          let row = document.getElementsByClassName("letter-row")[i];
-          guessesRemaining--;
+      //     let row = document.getElementsByClassName("letter-row")[i];
+      //     guessesRemaining--;
 
-          for (let j = 0; j < arrayCheckpoint[i][1].length; j++) {
-            let box = row.children[j];
-            box.textContent = arrayCheckpoint[i][0][j];
-            let delay = 0;
-            setTimeout(() => {
-              //flip box
-              box.style.backgroundColor = arrayCheckpoint[i][1][j];
-              animateCSS(box, "flipInX");
-              //shade box
-              shadeKeyBoard(box.textContent, arrayCheckpoint[i][1][j]);
-            }, delay);
-          }
-        }
-      }
+      //     for (let j = 0; j < arrayCheckpoint[i][1].length; j++) {
+      //       let box = row.children[j];
+      //       box.textContent = arrayCheckpoint[i][0][j];
+      //       let delay = 0;
+      //       setTimeout(() => {
+      //         //flip box
+      //         box.style.backgroundColor = arrayCheckpoint[i][1][j];
+      //         animateCSS(box, "flipInX");
+      //         //shade box
+      //         shadeKeyBoard(box.textContent, arrayCheckpoint[i][1][j]);
+      //       }, delay);
+      //     }
+      //   }
+      // }
 
     },
     error: function (_jqXHR) {
@@ -130,7 +130,6 @@ function shadeKeyBoard(letter, color) {
         return;
       }
 
-      console.log(`${letter}, ${color} : ${elem.textContent}, ${oldColor}`);
       elem.style.backgroundColor = color;
       break;
     }
@@ -204,8 +203,8 @@ function onWordReceived(payload) {
     }
   }
 
-  arrayCheckpoint.push([currentGuess, letterColor])
-  sessionStorage.setItem("checkpoint", JSON.stringify(arrayCheckpoint));
+  // arrayCheckpoint.push([currentGuess, letterColor]);
+  // sessionStorage.setItem("checkpoint", JSON.stringify(arrayCheckpoint));
 
   for (let i = 0; i < WORD_LENGTH; i++) {
     let box = row.children[i];
@@ -223,6 +222,7 @@ function onWordReceived(payload) {
   if (currentGuess === rightGuessString) {
     toastr.success("You guessed right! Congratulation!");
     guessesRemaining = 0;
+    saveGameResult(true);
   } else {
     guessesRemaining -= 1;
     currentGuess = [];
@@ -231,8 +231,39 @@ function onWordReceived(payload) {
     if (guessesRemaining === 0) {
       toastr.error("You've run out of guesses! Game over!");
       toastr.info(`The right word was: "${rightGuessString}"`);
+      saveGameResult(false);
     }
   }
+}
+
+function saveGameResult(status) {
+  $.ajax({
+    type: "POST",
+    url: `${URL}:8080/History`,
+    data: JSON.stringify({ gameId: gameCode, playerId: roomId }),
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function (result) {
+      toastr.success("Game result successfully saved to history")
+    },
+    error: function (_jqXHR) {
+      toastr.error("Something went wrong while saving the result");
+    }
+  });
+
+  $.ajax({
+    type: "PUT",
+    url: `${URL}:8080/Game/Data/${roomId}`,
+    data: JSON.stringify({ win: status }),
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function (result) {
+      toastr.success("Game result successfully saved")
+    },
+    error: function (_jqXHR) {
+      toastr.error("Something went wrong while saving the result");
+    }
+  });
 }
 
 function insertLetter(pressedKey) {
@@ -322,17 +353,20 @@ function onDisconnect() {
     data: JSON.stringify({ gameId: gameCode, playerId: sessionStorage.getItem("idGuest") }),
     dataType: 'json',
     contentType: 'application/json',
-    success: function () {
-      sessionStorage.removeItem("gameCode");
-      if (stompClient) {
-        stompClient.send("/app/chat.send", {}, JSON.stringify({ sender: username, content: playerSeat, type: 'LEAVE', gameCode: gameCode }));
-        stompClient.disconnect();
-      }
+    success: function (result) {
+
     },
     error: function (_jqXHR) {
       console.log("Something went wrong when trying to leave the game");
     }
   });
+
+  sessionStorage.removeItem("gameCode");
+  if (stompClient) {
+    stompClient.send("/app/chat.send", {}, JSON.stringify({ sender: username, content: playerSeat, type: 'LEAVE', gameCode: gameCode }));
+    stompClient.disconnect();
+  }
+  window.location.assign(`${URL}:5500/Home.html`);
 }
 
 function connect() {
@@ -365,8 +399,6 @@ function onError(_error) {
   connectingElement.style.color = 'red';
 }
 
-$("#messageForm").submit(sendChat);
-
 function sendChat(event) {
   var messageContent = messageInput.value.trim();
   if (messageContent && stompClient) {
@@ -383,6 +415,19 @@ function sendChat(event) {
   event.preventDefault();
 }
 
+$("#messageForm").submit(sendChat);
+
+function getAvatarColor(messageSender) {
+  var hash = 0;
+  for (var i = 0; i < messageSender.length; i++) {
+    hash = 31 * hash + messageSender.charCodeAt(i);
+  }
+
+  var index = Math.abs(hash % colors.length);
+
+  return colors[index];
+}
+
 function onMessageReceived(payload) {
   var message = JSON.parse(payload.body);
 
@@ -394,12 +439,12 @@ function onMessageReceived(payload) {
     loadRoomData();
     toastr.success(`${message.sender} has joined the room`);
   } else if (message.type === 'LEAVE') {
-    console.log("im here")
     $(`#invite-icon-${message.content}`).removeClass("hidden");
     $(`#player-name-${message.content}`).text("Invite");
     messageElement.classList.add('event-message');
     message.content = message.sender + ' left!';
     toastr.error(`${message.sender} has leaved the room`);
+    playerCount -= 1;
   } else {
     messageElement.classList.add('chat-message');
 
@@ -424,17 +469,6 @@ function onMessageReceived(payload) {
 
   messageArea.appendChild(messageElement);
   messageArea.scrollTop = messageArea.scrollHeight;
-}
-
-function getAvatarColor(messageSender) {
-  var hash = 0;
-  for (var i = 0; i < messageSender.length; i++) {
-    hash = 31 * hash + messageSender.charCodeAt(i);
-  }
-
-  var index = Math.abs(hash % colors.length);
-
-  return colors[index];
 }
 
 function onSettingReceived(payload) {
