@@ -129,7 +129,7 @@
     justify-content: space-around;
 }
 
-.rank1 > * {
+.rank1>* {
     flex-basis: 35%;
     text-align: center;
 }
@@ -147,7 +147,7 @@
     justify-content: space-around;
 }
 
-.rank2 > * {
+.rank2>* {
     flex-basis: 35%;
     text-align: center;
 }
@@ -164,7 +164,7 @@
     justify-content: space-around;
 }
 
-.rank3 > * {
+.rank3>* {
     flex-basis: 35%;
     text-align: center;
 }
