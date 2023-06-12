@@ -1,6 +1,6 @@
 'use strict';
 
-function setNavbarVisibility(status) {
+window.setNavbarVisibility = function(status) {
     if (status) {
         $(".nav-button-container-2").removeClass("hidden");
         $(".nav-button-container-1").addClass("hidden");

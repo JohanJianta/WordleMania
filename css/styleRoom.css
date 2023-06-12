@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
 
 * {
@@ -13,7 +14,8 @@
   position: relative;
   width: 100vw;
   height: 100vh;
-  font-family: 'Inter', sans-serif;
+  /* font-family: 'Inter', sans-serif; */
+  font-family: 'IBM Plex Mono', monospace;
 }
 
 .nav-container {
@@ -226,17 +228,21 @@ button {
 }
 
 button.primary {
-  background-color: #25be38;
+  background-color: #3282B8;
   font-size: 16px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
   color: #fff;
   border-radius: 5px;
 }
 
+button.primary:hover {
+  background-color: #3282b8a1;
+}
+
 .chat-container {
   display: flex;
   flex-flow: column nowrap;
-  background-color: #009578;
+  background-color: #425d82;
   box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
   height: 100%;
   width: 100%;
@@ -244,10 +250,9 @@ button.primary {
 
 .chat-container ul {
   list-style-type: none;
-  background-color: #70c6b5;
+  background-color: #6982a7;
   margin: 0;
-  overflow: auto;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 0 20px 0px 20px;
   height: calc(100% - 100px);
 }
@@ -260,7 +265,6 @@ button.primary {
   line-height: 1.5rem;
   padding: 10px 20px;
   margin: 0;
-  border-bottom: 1px solid #f4f4f4;
 }
 
 .chat-container ul li p {
@@ -274,7 +278,7 @@ button.primary {
 }
 
 .chat-container .event-message p {
-  color: #777;
+  color: #2a2a2a;
   font-size: 14px;
   word-wrap: break-word;
 }
@@ -282,6 +286,9 @@ button.primary {
 .chat-container .chat-message {
   padding-left: 68px;
   position: relative;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background-color: #425d82;
 }
 
 .chat-container .chat-message i {
@@ -294,7 +301,7 @@ button.primary {
   vertical-align: middle;
   font-size: 18px;
   line-height: 42px;
-  color: #fff;
+  color: #425d82;
   text-align: center;
   border-radius: 50%;
   font-style: normal;
@@ -302,12 +309,12 @@ button.primary {
 }
 
 .chat-container .chat-message span {
-  color: #333;
+  color: #2a2a2a;
   font-weight: 600;
 }
 
 .chat-container .chat-message p {
-  color: #43464b;
+  color: whitesmoke;
 }
 
 #messageForm .input-group input {
@@ -333,13 +340,13 @@ button.primary {
 .chat-header h2 {
   margin: 0;
   font-weight: 700;
+  color: whitesmoke;
 }
 
 .connecting {
-  background-color: #70c6b5;
   padding-top: 5px;
   text-align: center;
-  color: #454545;
+  color: #2a2a2a;
   top: 65px;
   width: 100%;
 }
@@ -364,7 +371,7 @@ button.primary {
   position: absolute;
   right: -40px;
   transition: .4s;
-  background-color: #009578;
+  background-color: #5879ab;
   border-radius: 10px 0 0 10px;
   padding: 0.9rem 0.9rem;
 }
@@ -374,7 +381,7 @@ button.primary {
 }
 
 #side-panel-toggle:hover {
-  background-color: #007960;
+  background-color: #5879aba3;
 }
 
 #side-panel-toggle img {
@@ -393,7 +400,7 @@ button.primary {
 
   #chat-panel {
     width: 300px;
-    right: -310px;
+    right: -340px;
   }
 
   #side-panel-toggle {
