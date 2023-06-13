@@ -277,7 +277,7 @@ function searchRandomRoom() {
             //     contentType: 'application/json',
             //     success: function () {
             sessionStorage.setItem("gameCode", result.payload);
-            window.location.assign(`${URL}:5500/Room.html`);
+            window.location.assign(`/Room.html`);
             //     },
             //     error: function (jqXHR) {
             //         toastr.error("Something went wrong when joining the game. Please try again.");
@@ -309,7 +309,7 @@ function createRoom() {
                 //     contentType: 'application/json',
                 //     success: function () {
                 sessionStorage.setItem("gameCode", result.payload);
-                window.location.assign(`${URL}:5500/Room.html`);
+                window.location.assign(`/Room.html`);
                 //     },
                 //     error: function (jqXHR) {
                 //         toastr.error("Something went wrong when joining the game. Please try again.");
