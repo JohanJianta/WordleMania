@@ -33,6 +33,10 @@
   justify-content: space-between;
 }
 
+#game-title {
+  cursor: pointer;
+}
+
 .roomCode {
   display: flex;
   gap: 10px;
