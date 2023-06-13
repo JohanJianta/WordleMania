@@ -17,6 +17,10 @@ let isLeaving = false;
 
 
 window.onload = () => {
+  if (!sessionStorage.getItem("gameCode")) {
+    window.location.assign("/Home.html");
+  }
+
   gameCode = sessionStorage.getItem("gameCode");
   $("#game-code").text(gameCode);
 
@@ -60,7 +64,6 @@ function loadRoomData() {
           sessionStorage.removeItem("colorCheckmark");
           sessionStorage.setItem("roomId", room.roomId);
         }
-
 
         gameCode = room.gameCode;
         roomId = room.roomId;
@@ -137,6 +140,7 @@ function setInviteListener() {
   });
 
   $(".player:not(.vacant)").off("click");
+  $(".player:not(.vacant)").css("cursor","default");
 
   $(".vacant").on("click", function () {
     $(".friend-req-container").css('display', 'flex');
@@ -423,7 +427,7 @@ document.addEventListener("keyup", (e) => {
     deleteLetter();
   } else if (pressedKey === "Enter") {
     checkGuess();
-  } else if (pressedKey.match(/[a-z]/gi) && pressedKey.match(/[a-z]/gi).length == 1) {
+  } else if (pressedKey.match(/^[a-zA-Z]$/) && pressedKey.length === 1) {
     insertLetter(pressedKey);
   } else {
     return;
@@ -604,12 +608,12 @@ $(".giveUp-btn").on('click', function() {
   $(".confirmation-container").css("display", "flex");
 });
 
-$("#confirmation-play").on('click', function() {
-  $(".confirmation-container").hide();
-});
-
 $("#game-title").on('click', function() {
   $(".confirmation-container").css("display", "flex");
+});
+
+$("#confirmation-play").on('click', function() {
+  $(".confirmation-container").hide();
 });
 
 $(".response-leave").on('click', leaveRoom);

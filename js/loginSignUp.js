@@ -127,9 +127,18 @@ function signUp() {
             dataType: 'json',
             contentType: 'application/json',
             success: function (result) {
-                toastr.success("Registration Success");
                 resetForm();
                 hideSignUp();
+                toastr.success("Registration Success");
+                sessionStorage.setItem("idGuest", result.payload.guestId);
+                sessionStorage.setItem("idUser", result.payload.userId);
+                sessionStorage.setItem("username", result.payload.name);
+                sessionStorage.setItem("score", result.payload.score);
+                sessionStorage.setItem("totalPlay", result.payload.totalPlay);
+                sessionStorage.setItem("totalWin", result.payload.totalWin);
+                sessionStorage.setItem("hasLogin", "true");
+                setLoginState(true);
+                setNavbarVisibility(true);
             },
             error: function (jqXHR) {
                 toastr.error("Registration Failed: " + JSON.parse(jqXHR.responseText).messages);

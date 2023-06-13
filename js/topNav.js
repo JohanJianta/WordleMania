@@ -53,19 +53,26 @@ function toSearchFriend() {
 function showChat() {
     document.getElementById("chat-panel").classList.toggle('active');
     document.getElementById("side-panel-toggle").classList.toggle('move');
+
+    $(document).on("click", function (event) {
+        if (!$(event.target).closest(".side-panel-container").length) {
+            $("#chat-panel").removeClass("active");
+            $("#side-panel-toggle").removeClass("move");
+        }
+    });
 }
 
 function searchRoomById(roomId) {
-    if(!regex.test(roomId.trim())) {
+    if (!regex.test(roomId.trim())) {
         $.ajax({
             type: "GET",
             url: `${URL}:8080/Game/${roomId}`,
             dataType: 'json',
             success: function (result) {
-    
+
                 sessionStorage.setItem("gameCode", roomId);
                 window.location.assign(`/Room.html`);
-    
+
             },
             error: function (jqXHR) {
                 toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
