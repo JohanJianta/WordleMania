@@ -4,6 +4,7 @@ var idPlayer;
 
 window.onload = () => {
     if (sessionStorage.getItem('hasLogin') == "true") {
+        $(".info-history").hide();
         idPlayer = sessionStorage.getItem('idUser');
 
         $.ajax({
@@ -75,6 +76,7 @@ window.onload = () => {
         });
         
     } else {
+        $(".info-history").css('display', 'flex');
         toastr.warning('This section only available for registered player. Please try to register or login first.')
     }
 }

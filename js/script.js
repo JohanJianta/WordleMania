@@ -289,11 +289,11 @@ function showGameResult() {
     $("#result-point").css(`color`, '#3CE24D');
     $("#result-point").text(`+${scorePrize}`);
   } else {
-    scorePrize = scorePrize / 2 - correctCount * 10;
+    scorePrize = 0 - scorePrize / 2 + correctCount * 10;
     $("#result-desc").text(`You managed to guess ${correctCount} letters`);
     $("#result-title").text(`Point Lose`);
     $("#result-point").css(`color`, 'crimson');
-    $("#result-point").text(`-${scorePrize}`);
+    $("#result-point").text(`${scorePrize}`);
   }
 
   setTimeout(() => {
@@ -333,6 +333,22 @@ function saveGameResult(status, scoreFinal) {
       toastr.warning("Something went wrong while saving the result");
     }
   });
+
+  if (sessionStorage.getItem("idUser")) {
+    $.ajax({
+      type: "PUT",
+      url: `${URL}:8080/Player/${sessionStorage.getItem("idUser")}`,
+      data: JSON.stringify({ score: scoreFinal, totalPlay: 1, totalWin: status == true ? 1 : 0 }),
+      dataType: 'json',
+      contentType: 'application/json',
+      success: function (result) {
+        // toastr.success("Game result successfully saved")
+      },
+      error: function (_jqXHR) {
+        toastr.warning("Something went wrong while updating user data");
+      }
+    });
+  }
 }
 
 function insertLetter(pressedKey) {

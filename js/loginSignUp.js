@@ -28,7 +28,23 @@ window.onload = function () {
     }
 
     if (sessionStorage.getItem("hasLogin") == "true") {
-        setLoginState(true);
+        $.ajax({
+            type: "GET",
+            url: `${URL}:8080/Player/${sessionStorage.getItem("idUser")}`,
+            dataType: 'json',
+            success: function (result) {
+                sessionStorage.setItem("idGuest", result.payload.guestId);
+                sessionStorage.setItem("idUser", result.payload.userId);
+                sessionStorage.setItem("username", result.payload.name);
+                sessionStorage.setItem("score", result.payload.score);
+                sessionStorage.setItem("totalPlay", result.payload.totalPlay);
+                sessionStorage.setItem("totalWin", result.payload.totalWin);
+                setLoginState(true);
+            },
+            error: function (jqXHR) {
+                toastr.warning("Something went wrong when loading player data. Consider to refresh the page")
+            }
+        });
         setNavbarVisibility(true);
     } else {
         setLoginState(false);
