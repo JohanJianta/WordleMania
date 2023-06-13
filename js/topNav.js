@@ -62,7 +62,7 @@ function searchRoomById(roomId) {
         success: function (result) {
 
             sessionStorage.setItem("gameCode", roomId);
-            window.location.assign(`${URL}:5500/Room.html`);
+            window.location.assign(`/Room.html`);
 
         },
         error: function (jqXHR) {

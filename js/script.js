@@ -6,13 +6,12 @@ var WORD_LENGTH;
 let score;
 let guessesRemaining;
 let currentGuess = [];
-let colorCheckmark = [];
 let nextLetter = 0;
 let rightGuessString;
 let playerSeat;
-// let playerCount = 0;
 
-// let arrayCheckpoint = [];
+let colorCheckmark = [];
+let arrayCheckpoint = [];
 let gameCode;
 let roomId;
 
@@ -55,6 +54,13 @@ function loadRoomData() {
       setInviteListener();
 
       if (roomId != room.roomId || NUMBER_OF_GUESSES != room.guessesTry || rightGuessString != room.word.toLowerCase()) {
+        if ((roomId != null && NUMBER_OF_GUESSES != null && rightGuessString != null)) {
+          sessionStorage.removeItem("checkpoint");
+          sessionStorage.removeItem("colorCheckmark");
+          sessionStorage.setItem("roomId", room.roomId);
+        }
+
+
         gameCode = room.gameCode;
         roomId = room.roomId;
         NUMBER_OF_GUESSES = room.guessesTry;
@@ -63,32 +69,32 @@ function loadRoomData() {
         WORD_LENGTH = room.word.length;
         score = room.score;
 
-        // if (sessionStorage.getItem("checkpoint") && sessionStorage.getItem("colorCheckmark") {
-        // colorCheckmark = sessionStorage.getItem("colorCheckmark");
-        //   arrayCheckpoint = JSON.parse(sessionStorage.getItem("checkpoint"));
-  
-        //   for (let i = 0; i < arrayCheckpoint.length; i++) {
-  
-        //     let row = document.getElementsByClassName("letter-row")[i];
-        //     guessesRemaining--;
-  
-        //     for (let j = 0; j < arrayCheckpoint[i][1].length; j++) {
-        //       let box = row.children[j];
-        //       box.textContent = arrayCheckpoint[i][0][j];
-        //       let delay = 0;
-        //       setTimeout(() => {
-        //         //flip box
-        //         box.style.backgroundColor = arrayCheckpoint[i][1][j];
-        //         animateCSS(box, "flipInX");
-        //         //shade box
-        //         shadeKeyBoard(box.textContent, arrayCheckpoint[i][1][j]);
-        //       }, delay);
-        //     }
-        //   }
-        // }
-
         removeDivElements();
         initBoard();
+      }
+
+      if (sessionStorage.getItem("checkpoint") && sessionStorage.getItem("colorCheckmark")) {
+        colorCheckmark = JSON.parse(sessionStorage.getItem("colorCheckmark"));
+        arrayCheckpoint = JSON.parse(sessionStorage.getItem("checkpoint"));
+
+        for (let i = 0; i < arrayCheckpoint.length; i++) {
+
+          let row = document.getElementsByClassName("letter-row")[i];
+          guessesRemaining--;
+
+          for (let j = 0; j < arrayCheckpoint[i][1].length; j++) {
+            let box = row.children[j];
+            box.textContent = arrayCheckpoint[i][0][j];
+            let delay = 0;
+            setTimeout(() => {
+              //flip box
+              box.style.backgroundColor = arrayCheckpoint[i][1][j];
+              animateCSS(box, "flipInX");
+              //shade box
+              shadeKeyBoard(box.textContent, arrayCheckpoint[i][1][j]);
+            }, delay);
+          }
+        }
       }
 
     },
@@ -115,7 +121,6 @@ function removeDivElements() {
   $("#game-board").empty();
   $("#game-result").empty();
   colorCheckmark.length = 0;
-  // playerCount = 0;
 }
 
 function initBoard() {
@@ -231,9 +236,7 @@ function onWordReceived(payload) {
     }
   }
 
-  // arrayCheckpoint.push([currentGuess, letterColor]);
-  // sessionStorage.setItem("checkpoint", JSON.stringify(arrayCheckpoint));
-  // sessionStorage.setItem("colorCheckmark", JSON.stringify(colorCheckmark));
+  arrayCheckpoint.push([currentGuess, letterColor]);
 
   for (let i = 0; i < WORD_LENGTH; i++) {
     let box = row.children[i];
@@ -298,9 +301,7 @@ function showGameResult() {
 
   }, (250 * (WORD_LENGTH + 3)));
 
-  $("#response-leave").on('click', function () {
-    window.location.assign('/Home.html');
-  });
+  $("#response-leave").on('click', leaveRoom);
 }
 
 function saveGameResult(status) {
@@ -428,12 +429,13 @@ function onDisconnect() {
     }
   });
 
-  // sessionStorage.removeItem("gameCode");
   if (stompClient) {
     stompClient.send("/app/chat.send", {}, JSON.stringify({ sender: username, content: playerSeat, type: 'LEAVE', gameCode: gameCode }));
     stompClient.disconnect();
   }
-  window.location.assign(`${URL}:5500/Home.html`);
+  sessionStorage.setItem("checkpoint", JSON.stringify(arrayCheckpoint));
+  sessionStorage.setItem("colorCheckmark", JSON.stringify(colorCheckmark));
+  window.location.assign(`/Home.html`);
 }
 
 function connect() {
@@ -512,7 +514,6 @@ function onMessageReceived(payload) {
     messageElement.classList.add('event-message');
     message.content = message.sender + ' left!';
     toastr.error(`${message.sender} has leaved the room`);
-    // playerCount -= 1;
     setInviteListener();
   } else {
     messageElement.classList.add('chat-message');
@@ -544,3 +545,12 @@ function onSettingReceived(payload) {
   rightGuessString = payload.body;
   console.log(rightGuessString);
 }
+
+function leaveRoom() {
+  sessionStorage.removeItem("gameCode");
+  sessionStorage.removeItem("checkpoint");
+  sessionStorage.removeItem("colorCheckmark");
+  window.location.assign("/Home.html");
+}
+
+$(".giveUp-btn").on('click', leaveRoom)

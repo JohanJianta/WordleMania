@@ -3,7 +3,7 @@
 var idPlayer;
 
 window.onload = () => {
-    if(sessionStorage.getItem('hasLogin') == "true") {
+    if (sessionStorage.getItem('hasLogin') == "true") {
         idPlayer = sessionStorage.getItem('idUser');
         $('#myId').text(`My ID : ${idPlayer}`);
     } else {
@@ -80,18 +80,16 @@ function searchFriendId(friendId) {
                         class: 'rank'
                     }).append(
                         $('<p>', {
-                            text: 'Rank: #5'
+                            text: 'Rank: n/a'
                         })
                     ),
                     $('<button>', {
                         class: 'add',
-                        html: $('<b>', {
-                            text: 'Add Friend'
-                        })
+                        text: 'Add Friend'
                     }));
 
                 $('.friend-display').append(syntax);
-            
+
                 $('.add').on('click', function () {
                     sendFriendRequest(this);
                 });
