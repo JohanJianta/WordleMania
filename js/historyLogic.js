@@ -62,7 +62,7 @@ window.onload = () => {
                             css: { backgroundColor: histories[i].win ? 'green' : 'crimson' }
                         }).append(
                             $('<h1>', {
-                                text: (histories[i].win ? '+' : '-') + histories[i].score
+                                text: (histories[i].win ? '+' : '') + histories[i].score
                             })
                         )
                     );

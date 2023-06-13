@@ -214,8 +214,8 @@ function showFriendList(status) {
             dataType: 'json',
             success: function (result) {
                 // $(".friend-container").empty();
-                var friendList = result.payload;
-                var syntax;
+                let friendList = result.payload;
+                let syntax;
                 for (let i = 0; i < friendList.length; i++) {
                     syntax = `<div class="friendlist" data-friendId="${friendList[i].userId}">
                     <div class="bagianatas-friend">

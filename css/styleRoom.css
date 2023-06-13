@@ -685,15 +685,46 @@ button.primary:hover {
   pointer-events: none;
 }
 
-#response-leave:hover {
+.response-leave:hover {
   background-color: #282a3a98;
   border: 2px solid crimson;
   color: crimson;
 }
 
-#response-play:hover {
+.response-play:hover {
   border: 2px solid #3CE24D;
   color: #3CE24D;
+}
+
+.confirmation-container {
+  animation-name: animatetop;
+  animation-duration: 0.3s;
+  z-index: 10;
+  position: absolute;
+  background-color: rgb(0, 0, 0, 0.3);
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.confirmation-container .modal {
+  padding: 20px 30px;
+  max-width: 400px;
+  max-height: 250px;
+  justify-content: space-around;
+}
+
+.confirmation-container .result-response {
+  justify-self: end;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 40px;
 }
 
 @keyframes animatetop {
@@ -734,6 +765,11 @@ button.primary:hover {
 
   #friendScore {
     display: none;
+  }
+
+  .result-response button {
+    height: 100%;
+    width: 100px;
   }
 }
 

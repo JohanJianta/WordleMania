@@ -107,6 +107,35 @@ function loadRoomData() {
 }
 
 function setInviteListener() {
+  $.ajax({
+    type: "GET",
+    url: `${URL}:8080/Friends/${sessionStorage.getItem("idUser")}`,
+    dataType: 'json',
+    success: function (result) {
+      $(".list-req").empty();
+      let friendList = result.payload;
+      let syntax;
+      for (let i = 0; i < friendList.length; i++) {
+        syntax = `<div class="orang" data-idFriend="${friendList[i].id}">
+        <div class="avatar-req"></div>
+
+        <b>
+            <p id=friendName>${friendList[i].name}</p>
+        </b>
+
+        <p id="friendScore">${friendList[i].score}</p>
+
+        <button>Invite</button>
+    </div>`;
+
+        $(".list-req").append(syntax);
+      }
+    },
+    error: function (jqXHR) {
+      toastr.warning("System can't load the friend list. Consider to refresh the page")
+    }
+  });
+
   $(".player:not(.vacant)").off("click");
 
   $(".vacant").on("click", function () {
@@ -301,8 +330,6 @@ function showGameResult() {
     $(".result-container").css('display', 'flex');
 
   }, (250 * (WORD_LENGTH + 3)));
-
-  $("#response-leave").on('click', leaveRoom);
 }
 
 function saveGameResult(status, scoreFinal) {
@@ -573,6 +600,16 @@ function leaveRoom() {
   window.location.assign("/Home.html");
 }
 
-$(".giveUp-btn").on('click', leaveRoom);
+$(".giveUp-btn").on('click', function() {
+  $(".confirmation-container").css("display", "flex");
+});
 
-$("#game-title").on('click', leaveRoom);
+$("#confirmation-play").on('click', function() {
+  $(".confirmation-container").hide();
+});
+
+$("#game-title").on('click', function() {
+  $(".confirmation-container").css("display", "flex");
+});
+
+$(".response-leave").on('click', leaveRoom);

@@ -1,6 +1,7 @@
 'use strict';
 
 const URL = "http://127.0.0.1";
+let regex = /[a-zA-Z!@#$%^&*(),.?":{}|<>]/;
 
 window.setNavbarVisibility = function (status) {
     if (status) {
@@ -55,20 +56,24 @@ function showChat() {
 }
 
 function searchRoomById(roomId) {
-    $.ajax({
-        type: "GET",
-        url: `${URL}:8080/Game/${roomId}`,
-        dataType: 'json',
-        success: function (result) {
-
-            sessionStorage.setItem("gameCode", roomId);
-            window.location.assign(`/Room.html`);
-
-        },
-        error: function (jqXHR) {
-            toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
-        }
-    });
+    if(!regex.test(roomId.trim())) {
+        $.ajax({
+            type: "GET",
+            url: `${URL}:8080/Game/${roomId}`,
+            dataType: 'json',
+            success: function (result) {
+    
+                sessionStorage.setItem("gameCode", roomId);
+                window.location.assign(`/Room.html`);
+    
+            },
+            error: function (jqXHR) {
+                toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
+            }
+        });
+    } else {
+        toastr.error("Roomcode must only contain number");
+    }
 }
 
 $('.search__btn').on('click', function () {
