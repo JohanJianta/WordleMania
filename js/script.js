@@ -3,17 +3,18 @@
 var NUMBER_OF_GUESSES;
 var WORD_LENGTH;
 
-let score;
-let guessesRemaining;
 let currentGuess = [];
-let nextLetter = 0;
-let rightGuessString;
-let playerSeat;
-
 let colorCheckmark = [];
 let arrayCheckpoint = [];
 let gameCode;
 let roomId;
+let scorePrize;
+let guessesRemaining;
+let rightGuessString;
+let nextLetter = 0;
+let playerSeat;
+let isLeaving = false;
+
 
 window.onload = () => {
   gameCode = sessionStorage.getItem("gameCode");
@@ -54,7 +55,7 @@ function loadRoomData() {
       setInviteListener();
 
       if (roomId != room.roomId || NUMBER_OF_GUESSES != room.guessesTry || rightGuessString != room.word.toLowerCase()) {
-        if ((roomId != null && NUMBER_OF_GUESSES != null && rightGuessString != null)) {
+        if ((roomId != null && NUMBER_OF_GUESSES != null && rightGuessString != null) || sessionStorage.getItem("roomId") != room.roomId) {
           sessionStorage.removeItem("checkpoint");
           sessionStorage.removeItem("colorCheckmark");
           sessionStorage.setItem("roomId", room.roomId);
@@ -67,7 +68,7 @@ function loadRoomData() {
         guessesRemaining = room.guessesTry;
         rightGuessString = room.word.toLowerCase();
         WORD_LENGTH = room.word.length;
-        score = room.score;
+        scorePrize = room.score;
 
         removeDivElements();
         initBoard();
@@ -256,17 +257,17 @@ function onWordReceived(payload) {
   if (currentGuess === rightGuessString) {
     toastr.success("You guessed right! Congratulation!");
     showGameResult();
+    saveGameResult(true, scorePrize);
     guessesRemaining = 0;
-    // saveGameResult(true);
   } else {
     currentGuess = [];
     nextLetter = 0;
 
     if (guessesRemaining === 0) {
       toastr.error("You've run out of guesses! Game over!");
-      toastr.info(`The right word was: "${rightGuessString}"`);
+      toastr.info(`The right word is "${rightGuessString}"`);
       showGameResult();
-      // saveGameResult(false);
+      saveGameResult(false, scorePrize);
     }
   }
 }
@@ -282,17 +283,17 @@ function showGameResult() {
   }
 
   if (correctCount === WORD_LENGTH) {
-    score = score + guessesRemaining * 10;
+    scorePrize = scorePrize + guessesRemaining * 10;
     $("#result-desc").text(`You managed to guess the word in ${NUMBER_OF_GUESSES - guessesRemaining} try`);
     $("#result-title").text(`Point Gain`);
     $("#result-point").css(`color`, '#3CE24D');
-    $("#result-point").text(`+${score}`);
+    $("#result-point").text(`+${scorePrize}`);
   } else {
-    score = score / 2 - correctCount * 10;
+    scorePrize = scorePrize / 2 - correctCount * 10;
     $("#result-desc").text(`You managed to guess ${correctCount} letters`);
     $("#result-title").text(`Point Lose`);
     $("#result-point").css(`color`, 'crimson');
-    $("#result-point").text(`-${score}`);
+    $("#result-point").text(`-${scorePrize}`);
   }
 
   setTimeout(() => {
@@ -304,7 +305,7 @@ function showGameResult() {
   $("#response-leave").on('click', leaveRoom);
 }
 
-function saveGameResult(status) {
+function saveGameResult(status, scoreFinal) {
   $.ajax({
     type: "POST",
     url: `${URL}:8080/History`,
@@ -312,24 +313,24 @@ function saveGameResult(status) {
     dataType: 'json',
     contentType: 'application/json',
     success: function (result) {
-      toastr.success("Game result successfully saved to history")
+      // toastr.success("Game result successfully saved to history")
     },
     error: function (_jqXHR) {
-      toastr.error("Something went wrong while saving the result");
+      toastr.warning("Something went wrong while saving the result");
     }
   });
 
   $.ajax({
     type: "PUT",
     url: `${URL}:8080/Game/Data/${roomId}`,
-    data: JSON.stringify({ win: status }),
+    data: JSON.stringify({ win: status, scorePrize: scoreFinal }),
     dataType: 'json',
     contentType: 'application/json',
     success: function (result) {
-      toastr.success("Game result successfully saved")
+      // toastr.success("Game result successfully saved")
     },
     error: function (_jqXHR) {
-      toastr.error("Something went wrong while saving the result");
+      toastr.warning("Something went wrong while saving the result");
     }
   });
 }
@@ -429,13 +430,14 @@ function onDisconnect() {
     }
   });
 
-  if (stompClient) {
-    stompClient.send("/app/chat.send", {}, JSON.stringify({ sender: username, content: playerSeat, type: 'LEAVE', gameCode: gameCode }));
-    stompClient.disconnect();
+  if (!isLeaving) {
+    if (stompClient) {
+      stompClient.send("/app/chat.send", {}, JSON.stringify({ sender: username, content: playerSeat, type: 'LEAVE', gameCode: gameCode }));
+      stompClient.disconnect();
+    }
+    sessionStorage.setItem("checkpoint", JSON.stringify(arrayCheckpoint));
+    sessionStorage.setItem("colorCheckmark", JSON.stringify(colorCheckmark));
   }
-  sessionStorage.setItem("checkpoint", JSON.stringify(arrayCheckpoint));
-  sessionStorage.setItem("colorCheckmark", JSON.stringify(colorCheckmark));
-  window.location.assign(`/Home.html`);
 }
 
 function connect() {
@@ -547,10 +549,14 @@ function onSettingReceived(payload) {
 }
 
 function leaveRoom() {
+  isLeaving = true;
   sessionStorage.removeItem("gameCode");
+  sessionStorage.removeItem("roomId");
   sessionStorage.removeItem("checkpoint");
   sessionStorage.removeItem("colorCheckmark");
   window.location.assign("/Home.html");
 }
 
-$(".giveUp-btn").on('click', leaveRoom)
+$(".giveUp-btn").on('click', leaveRoom);
+
+$("#game-title").on('click', leaveRoom);
