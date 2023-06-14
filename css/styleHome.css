@@ -42,6 +42,9 @@ body {
 }
 
 .popUp-container-rules {
+    animation-name: animatetop;
+    animation-duration: 0.7s;
+    /* top: calc(50vh / 2); */
     position: relative;
     display: flex;
     flex-flow: column nowrap;
@@ -57,6 +60,18 @@ body {
     background-color: #27374D;
     height: auto;
 }
+
+@keyframes animatetop {
+    0% {
+        top: 0;
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 
 .popUp-container-rules h2 {
     text-align: center;
