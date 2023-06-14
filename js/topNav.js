@@ -1,6 +1,7 @@
 'use strict';
 
 const URL = "http://127.0.0.1";
+let regex = /[a-zA-Z!@#$%^&*(),.?":{}|<>]/;
 
 window.setNavbarVisibility = function (status) {
     if (status) {
@@ -52,23 +53,34 @@ function toSearchFriend() {
 function showChat() {
     document.getElementById("chat-panel").classList.toggle('active');
     document.getElementById("side-panel-toggle").classList.toggle('move');
+
+    $(document).on("click", function (event) {
+        if (!$(event.target).closest(".side-panel-container").length) {
+            $("#chat-panel").removeClass("active");
+            $("#side-panel-toggle").removeClass("move");
+        }
+    });
 }
 
 function searchRoomById(roomId) {
-    $.ajax({
-        type: "GET",
-        url: `${URL}:8080/Game/${roomId}`,
-        dataType: 'json',
-        success: function (result) {
+    if (!regex.test(roomId.trim())) {
+        $.ajax({
+            type: "GET",
+            url: `${URL}:8080/Game/${roomId}`,
+            dataType: 'json',
+            success: function (result) {
 
-            sessionStorage.setItem("gameCode", roomId);
-            window.location.assign(`/Room.html`);
+                sessionStorage.setItem("gameCode", roomId);
+                window.location.assign(`/Room.html`);
 
-        },
-        error: function (jqXHR) {
-            toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
-        }
-    });
+            },
+            error: function (jqXHR) {
+                toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
+            }
+        });
+    } else {
+        toastr.error("Roomcode must only contain number");
+    }
 }
 
 $('.search__btn').on('click', function () {

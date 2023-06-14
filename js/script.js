@@ -17,6 +17,10 @@ let isLeaving = false;
 
 
 window.onload = () => {
+  if (!sessionStorage.getItem("gameCode")) {
+    window.location.assign("/Home.html");
+  }
+
   gameCode = sessionStorage.getItem("gameCode");
   $("#game-code").text(gameCode);
 
@@ -60,7 +64,6 @@ function loadRoomData() {
           sessionStorage.removeItem("colorCheckmark");
           sessionStorage.setItem("roomId", room.roomId);
         }
-
 
         gameCode = room.gameCode;
         roomId = room.roomId;
@@ -107,7 +110,37 @@ function loadRoomData() {
 }
 
 function setInviteListener() {
+  $.ajax({
+    type: "GET",
+    url: `${URL}:8080/Friends/${sessionStorage.getItem("idUser")}`,
+    dataType: 'json',
+    success: function (result) {
+      $(".list-req").empty();
+      let friendList = result.payload;
+      let syntax;
+      for (let i = 0; i < friendList.length; i++) {
+        syntax = `<div class="orang" data-idFriend="${friendList[i].id}">
+        <div class="avatar-req"></div>
+
+        <b>
+            <p id=friendName>${friendList[i].name}</p>
+        </b>
+
+        <p id="friendScore">${friendList[i].score}</p>
+
+        <button>Invite</button>
+    </div>`;
+
+        $(".list-req").append(syntax);
+      }
+    },
+    error: function (jqXHR) {
+      toastr.warning("System can't load the friend list. Consider to refresh the page")
+    }
+  });
+
   $(".player:not(.vacant)").off("click");
+  $(".player:not(.vacant)").css("cursor","default");
 
   $(".vacant").on("click", function () {
     $(".friend-req-container").css('display', 'flex');
@@ -301,8 +334,6 @@ function showGameResult() {
     $(".result-container").css('display', 'flex');
 
   }, (250 * (WORD_LENGTH + 3)));
-
-  $("#response-leave").on('click', leaveRoom);
 }
 
 function saveGameResult(status, scoreFinal) {
@@ -396,7 +427,7 @@ document.addEventListener("keyup", (e) => {
     deleteLetter();
   } else if (pressedKey === "Enter") {
     checkGuess();
-  } else if (pressedKey.match(/[a-z]/gi) && pressedKey.match(/[a-z]/gi).length == 1) {
+  } else if (pressedKey.match(/^[a-zA-Z]$/) && pressedKey.length === 1) {
     insertLetter(pressedKey);
   } else {
     return;
@@ -573,6 +604,16 @@ function leaveRoom() {
   window.location.assign("/Home.html");
 }
 
-$(".giveUp-btn").on('click', leaveRoom);
+$(".giveUp-btn").on('click', function() {
+  $(".confirmation-container").css("display", "flex");
+});
 
-$("#game-title").on('click', leaveRoom);
+$("#game-title").on('click', function() {
+  $(".confirmation-container").css("display", "flex");
+});
+
+$("#confirmation-play").on('click', function() {
+  $(".confirmation-container").hide();
+});
+
+$(".response-leave").on('click', leaveRoom);

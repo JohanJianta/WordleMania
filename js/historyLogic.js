@@ -4,7 +4,6 @@ var idPlayer;
 
 window.onload = () => {
     if (sessionStorage.getItem('hasLogin') == "true") {
-        $(".info-history").hide();
         idPlayer = sessionStorage.getItem('idUser');
 
         $.ajax({
@@ -13,60 +12,66 @@ window.onload = () => {
             dataType: 'json',
             success: function (result) {
                 var histories = result.payload;
-                for (let i = 0; i < histories.length; i++) {
-                    let dateValue = new Date(histories[i].date);
-                    let formattedDate = dateValue.toLocaleString('id-ID', {
-                        year: 'numeric',
-                        month: 'numeric',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                    });
+                if (histories.length == 0) {
+                    $(".info-history").css('display', 'flex');
+                } else {
+                    $(".info-history").hide();
 
-                    var syntax = $('<div>', {
-                        class: 'history-container',
-                        'data-idHistory': histories[i].roomId
-                    }).append(
-                        $('<h1>', {
-                            text: histories[i].win == true ? 'WIN' : 'LOSE',
-                            css: { textTransform: 'uppercase' }
-                        }),
-                        $('<div>', {
-                            class: 'background-word',
-                            css: { backgroundColor: histories[i].win ? 'rgba(0, 128, 0, 0.6)' : 'rgba(220, 20, 60, 0.6)' }
-                        }).append(
-                            $('<h2>', {
-                                text: histories[i].word,
-                                css: { fontStyle: 'italic', textTransform: 'capitalize' }
-                            })
-                        ),
-                        $('<div class="player-list">').append(
-                            $('<p>', {
-                                text: histories[i].playerNames[0] !== undefined ? histories[i].playerNames[0] : '',
-                            }),
-                            $('<p>', {
-                                text: histories[i].playerNames[1] !== undefined ? histories[i].playerNames[1] : '',
-                            }),
-                            $('<p>', {
-                                text: histories[i].playerNames[2] !== undefined ? histories[i].playerNames[2] : '',
-                            }),
-                            $('<p>', {
-                                text: histories[i].playerNames[3] !== undefined ? histories[i].playerNames[3] : ''
-                            })
-                        ),
-                        $('<p>', {
-                            text: formattedDate
-                        }),
-                        $('<div>', {
-                            class: 'background-score',
-                            css: { backgroundColor: histories[i].win ? 'green' : 'crimson' }
+                    for (let i = 0; i < histories.length; i++) {
+                        let dateValue = new Date(histories[i].date);
+                        let formattedDate = dateValue.toLocaleString('id-ID', {
+                            year: 'numeric',
+                            month: 'numeric',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        });
+
+                        var syntax = $('<div>', {
+                            class: 'history-container',
+                            'data-idHistory': histories[i].roomId
                         }).append(
                             $('<h1>', {
-                                text: (histories[i].win ? '+' : '-') + histories[i].score
-                            })
-                        )
-                    );
-                    $(".list-history").append(syntax);
+                                text: histories[i].win == true ? 'WIN' : 'LOSE',
+                                css: { textTransform: 'uppercase' }
+                            }),
+                            $('<div>', {
+                                class: 'background-word',
+                                css: { backgroundColor: histories[i].win ? 'rgba(0, 128, 0, 0.6)' : 'rgba(220, 20, 60, 0.6)' }
+                            }).append(
+                                $('<h2>', {
+                                    text: histories[i].word,
+                                    css: { fontStyle: 'italic', textTransform: 'capitalize' }
+                                })
+                            ),
+                            $('<div class="player-list">').append(
+                                $('<p>', {
+                                    text: histories[i].playerNames[0] !== undefined ? histories[i].playerNames[0] : '',
+                                }),
+                                $('<p>', {
+                                    text: histories[i].playerNames[1] !== undefined ? histories[i].playerNames[1] : '',
+                                }),
+                                $('<p>', {
+                                    text: histories[i].playerNames[2] !== undefined ? histories[i].playerNames[2] : '',
+                                }),
+                                $('<p>', {
+                                    text: histories[i].playerNames[3] !== undefined ? histories[i].playerNames[3] : ''
+                                })
+                            ),
+                            $('<p>', {
+                                text: formattedDate
+                            }),
+                            $('<div>', {
+                                class: 'background-score',
+                                css: { backgroundColor: histories[i].win ? 'green' : 'crimson' }
+                            }).append(
+                                $('<h1>', {
+                                    text: (histories[i].win ? '+' : '') + histories[i].score
+                                })
+                            )
+                        );
+                        $(".list-history").append(syntax);
+                    }
                 }
             },
             error: function (jqXHR) {
@@ -74,9 +79,9 @@ window.onload = () => {
                 toastr.warning("System failed to load the history. Please refresh the page")
             }
         });
-        
+
     } else {
-        $(".info-history").css('display', 'flex');
-        toastr.warning('This section only available for registered player. Please try to register or login first.')
+        toastr.warning('This section only available for registered player. Please try to register or login first.');
+        window.location.assign("/Home.html");
     }
 }

@@ -218,6 +218,7 @@ body a {
     border-bottom-left-radius: 7px;
     margin-right: 1px;
     transition: all .2s ease;
+    text-align: center;
 }
 
 .container .input:hover {
@@ -428,7 +429,7 @@ input:valid~label {
     }
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 700px) {
     .nav-button-container-1 {
         display: none;
     }
@@ -454,11 +455,16 @@ input:valid~label {
     .dropdown {
         display: inline-block;
     }
+
+    .dropdown-content a {
+      font-size: 16px;
+    }
 }
 
 @media screen and (max-width: 500px) {
     .container .input {
-        display: none;
+        max-width: 70px;
+        padding: 7px 5px;
     }
 
     .title {

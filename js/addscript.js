@@ -7,7 +7,8 @@ window.onload = () => {
         idPlayer = sessionStorage.getItem('idUser');
         $('#myId').text(`My ID : ${idPlayer}`);
     } else {
-        toastr.warning('This section only available for registered player. Please try to register or login first.')
+        toastr.warning('This section only available for registered player. Please try to register or login first.');
+        window.location.assign("/Home.html");
     }
 }
 

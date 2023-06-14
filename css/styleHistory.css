@@ -7,22 +7,30 @@
 }
 
 body {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 16px;
-  background-color: #282A3A;
-  color: whitesmoke;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
 }
 
+.body-wrapper {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px;
+  color: whitesmoke;
+  background-color: #282A3A;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .list-history {
-  display: flex;
-  margin-top: 15px;
-  flex-flow: column nowrap;
+  width: 100%;
+  height: calc(100% - 60px);
+  display: inline-block;
   gap: 20px;
+  overflow-x: auto;
 }
 
 .history-container {
+  margin-top: 15px;
   width: 100%;
   height: 70px;
   display: grid;
@@ -44,10 +52,11 @@ body {
 }
 
 .history-container .background-score {
+  justify-self: end;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 80%;
   height: 100%;
   border-top-left-radius: 40px;
   border-bottom-left-radius: 40px;
@@ -56,9 +65,10 @@ body {
 
 .history-container .player-list {
   width: 35vw;
+  height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .info-history {
@@ -70,7 +80,7 @@ body {
 }
 
 @media screen and (max-width: 1100px) {
-  body {
+  .body-wrapper {
     font-size: 14px;
   }
 
@@ -85,11 +95,12 @@ body {
 }
 
 @media screen and (max-width: 755px) {
-  body {
+  .body-wrapper {
     font-size: 14px;
   }
 
   .history-container {
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -105,7 +116,7 @@ body {
 }
 
 @media screen and (max-width: 400px) {
-  body {
+  .body-wrapper {
     font-size: 12px;
   }
 }

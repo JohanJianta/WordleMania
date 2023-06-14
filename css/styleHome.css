@@ -11,7 +11,6 @@
 body {
     width: 100vw;
     height: 100vh;
-    /* overflow: hidden; */
 }
 
 .body-wrapper {
@@ -26,6 +25,80 @@ body {
 .hidden {
     display: none;
 }
+
+
+.popUp-bgs {
+    /* display: none; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgb(0, 0, 0, .7);
+    z-index: 10;
+}
+
+.popUp-container-rules {
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 15px;
+    border-radius: 10px;
+    padding: 20px 40px 40px;
+    /* margin: auto; */
+    /* min-width: 250px;
+    max-width: 350px; */
+    width: 40%;
+    box-shadow: 1px 1px 5px;
+    border: 3px solid whitesmoke;
+    background-color: #27374D;
+    height: auto;
+}
+
+.popUp-container-rules h2 {
+    text-align: center;
+}
+
+#boards {
+    display: flex;
+  align-items: center;
+  flex-flow: row nowrap;
+}
+
+.letter-box {
+    border: 2px solid gray;
+    border-radius: 3px;
+    margin: 2px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+  }
+
+  .dot {
+    cursor: pointer;
+    height: 12px;
+    width: 12px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+  }
+  
+  .active, .dot:hover {
+    background-color: #717171;
+  }
+  
+
+
 
 .colombagi {
     display: flex;
