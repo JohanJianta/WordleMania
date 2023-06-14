@@ -12,13 +12,15 @@ let scorePrize;
 let guessesRemaining;
 let rightGuessString;
 let nextLetter = 0;
+let playerCount = 0;
 let playerSeat;
 let isLeaving = false;
+let isPlaying = false;
 
 
 window.onload = () => {
   if (!sessionStorage.getItem("gameCode")) {
-    window.location.assign("/Home.html");
+    // window.location.assign("/Home.html");
   }
 
   gameCode = sessionStorage.getItem("gameCode");
@@ -47,10 +49,12 @@ function loadRoomData() {
     success: function (result) {
       let room = result.payload;
 
+      playerCount = 0;
       for (let i = 0; i < room.playerNames.length; i++) {
         $(`#invite-icon-${i}`).addClass("hidden");
         $(`#player-name-${i}`).text(room.playerNames[i]);
         $(`.player`).eq(i).removeClass("vacant");
+        playerCount += 1;
         if (room.playerIds[i] == sessionStorage.getItem("idGuest")) {
           playerSeat = i;
         }
@@ -75,6 +79,18 @@ function loadRoomData() {
 
         removeDivElements();
         initBoard();
+      }
+
+      if (playerCount >= 4 || sessionStorage.getItem("isPlaying") == "true") {
+        $(".board-relative").find(".modal-overlay").remove();
+        setKeyboardListener();
+      } else {
+
+        $(".board-relative").append(`<div class="modal-overlay"><p>Waiting for other players...</p>
+          <p>Vote to start play?</p><button>Vote</button></div>`);
+
+        document.removeEventListener("keyup", keyupHandler);
+        document.removeEventListener("keyboard-cont", keyboardContHandler);
       }
 
       if (sessionStorage.getItem("checkpoint") && sessionStorage.getItem("colorCheckmark")) {
@@ -129,7 +145,7 @@ function setInviteListener() {
         <p id="friendScore">${friendList[i].score}</p>
 
         <button>Invite</button>
-    </div>`;
+        </div>`;
 
         $(".list-req").append(syntax);
       }
@@ -140,7 +156,7 @@ function setInviteListener() {
   });
 
   $(".player:not(.vacant)").off("click");
-  $(".player:not(.vacant)").css("cursor","default");
+  $(".player:not(.vacant)").css("cursor", "default");
 
   $(".vacant").on("click", function () {
     $(".friend-req-container").css('display', 'flex');
@@ -152,14 +168,12 @@ function setInviteListener() {
 }
 
 function removeDivElements() {
-  $("#game-board").empty();
+  $(".board-relative").empty();
   $("#game-result").empty();
   colorCheckmark.length = 0;
 }
 
 function initBoard() {
-  let board = document.getElementById("game-board");
-  let result = document.getElementById("game-result");
 
   for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
     let row = document.createElement("div");
@@ -171,7 +185,7 @@ function initBoard() {
       row.appendChild(box);
     }
 
-    board.appendChild(row);
+    $(".board-relative").append(row);
   }
 
   let row = document.createElement("div");
@@ -183,7 +197,7 @@ function initBoard() {
     row.appendChild(box);
     colorCheckmark.push("whitesmoke");
   }
-  result.appendChild(row);
+  $(".game-result").append(row);
 
 }
 
@@ -419,7 +433,7 @@ const animateCSS = (element, animation, prefix = "animate__") => {
   });
 }
 
-document.addEventListener("keyup", (e) => {
+const keyupHandler = (e) => {
   let pressedKey = String(e.key);
   if (guessesRemaining === 0 || document.activeElement === document.getElementById("message")) {
     return;
@@ -432,9 +446,9 @@ document.addEventListener("keyup", (e) => {
   } else {
     return;
   }
-});
+};
 
-document.getElementById("keyboard-cont").addEventListener("click", (e) => {
+const keyboardContHandler = (e) => {
   const target = e.target;
 
   if (!target.classList.contains("keyboard-button")) {
@@ -448,7 +462,13 @@ document.getElementById("keyboard-cont").addEventListener("click", (e) => {
   }
 
   document.dispatchEvent(new KeyboardEvent("keyup", { key: key }));
-});
+};
+
+function setKeyboardListener() {
+  document.addEventListener("keyup", keyupHandler);
+
+  document.getElementById("keyboard-cont").addEventListener("click", keyboardContHandler);
+}
 
 const messageInput = document.querySelector('#message');
 const messageArea = document.querySelector('#messageArea');
@@ -504,10 +524,10 @@ function onConnected() {
   stompClient.subscribe(`/room/${gameCode}/chatroom`, onMessageReceived);
   // stompClient.subscribe(`/room/${gameCode}/setting`, onSettingReceived);
   stompClient.subscribe(`/room/${gameCode}/answer`, onWordReceived);
+  stompClient.subscribe(`/room/${gameCode}/vote`, onWordReceived);
 
   // Tell your username to the server
   stompClient.send("/app/chat.register", {}, JSON.stringify({ sender: username, type: 'JOIN', gameCode: gameCode }))
-  // stompClient.send("/app/game.keyword", {}, JSON.stringify({ gameCode: gameCode, requestedLength: WORD_LENGTH }))
 
   connectingElement.classList.add('hidden');
 }
@@ -564,6 +584,7 @@ function onMessageReceived(payload) {
     message.content = message.sender + ' left!';
     toastr.error(`${message.sender} has leaved the room`);
     setInviteListener();
+    playerCount -= 1;
   } else {
     messageElement.classList.add('chat-message');
 
@@ -604,15 +625,15 @@ function leaveRoom() {
   window.location.assign("/Home.html");
 }
 
-$(".giveUp-btn").on('click', function() {
+$(".giveUp-btn").on('click', function () {
   $(".confirmation-container").css("display", "flex");
 });
 
-$("#game-title").on('click', function() {
+$("#game-title").on('click', function () {
   $(".confirmation-container").css("display", "flex");
 });
 
-$("#confirmation-play").on('click', function() {
+$("#confirmation-play").on('click', function () {
   $(".confirmation-container").hide();
 });
 
