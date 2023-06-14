@@ -13,10 +13,9 @@ let guessesRemaining;
 let rightGuessString;
 let nextLetter = 0;
 let playerCount = 0;
+let readyCount = 0
 let playerSeat;
 let isLeaving = false;
-let isPlaying = false;
-
 
 window.onload = () => {
   if (!sessionStorage.getItem("gameCode")) {
@@ -60,7 +59,11 @@ function loadRoomData() {
         }
       }
 
-      setInviteListener();
+      if (sessionStorage.getItem("idUser")) {
+        setInviteListener();
+      } else {
+        $(".player").css("cursor", "default");
+      }
 
       if (roomId != room.roomId || NUMBER_OF_GUESSES != room.guessesTry || rightGuessString != room.word.toLowerCase()) {
         if ((roomId != null && NUMBER_OF_GUESSES != null && rightGuessString != null) || sessionStorage.getItem("roomId") != room.roomId) {
@@ -81,13 +84,13 @@ function loadRoomData() {
         initBoard();
       }
 
-      if (playerCount >= 4 || sessionStorage.getItem("isPlaying") == "true") {
-        $(".board-relative").find(".modal-overlay").remove();
+      if (sessionStorage.getItem("isPlaying") == "true") {
+        $(".modal-overlay").hide();
         setKeyboardListener();
+      } else if (playerCount != 1 && playerCount >= 4) {
+        startGame();
       } else {
-
-        $(".board-relative").append(`<div class="modal-overlay"><p>Waiting for other players...</p>
-          <p>Vote to start play?</p><button>Vote</button></div>`);
+        $(".modal-overlay").css("display", "flex");
 
         document.removeEventListener("keyup", keyupHandler);
         document.removeEventListener("keyboard-cont", keyboardContHandler);
@@ -466,7 +469,6 @@ const keyboardContHandler = (e) => {
 
 function setKeyboardListener() {
   document.addEventListener("keyup", keyupHandler);
-
   document.getElementById("keyboard-cont").addEventListener("click", keyboardContHandler);
 }
 
@@ -524,10 +526,10 @@ function onConnected() {
   stompClient.subscribe(`/room/${gameCode}/chatroom`, onMessageReceived);
   // stompClient.subscribe(`/room/${gameCode}/setting`, onSettingReceived);
   stompClient.subscribe(`/room/${gameCode}/answer`, onWordReceived);
-  stompClient.subscribe(`/room/${gameCode}/vote`, onWordReceived);
+  stompClient.subscribe(`/room/${gameCode}/ready`, onReadyReceived);
 
   // Tell your username to the server
-  stompClient.send("/app/chat.register", {}, JSON.stringify({ sender: username, type: 'JOIN', gameCode: gameCode }))
+  stompClient.send("/app/chat.register", {}, JSON.stringify({ sender: username, type: 'JOIN', gameCode: gameCode }));
 
   connectingElement.classList.add('hidden');
 }
@@ -575,6 +577,7 @@ function onMessageReceived(payload) {
     messageElement.classList.add('event-message');
     message.content = message.sender + ' joined!';
     loadRoomData();
+    resetReady();
     toastr.success(`${message.sender} has joined the room`);
   } else if (message.type === 'LEAVE') {
     $(`#invite-icon-${message.content}`).removeClass("hidden"); // remove player from seat
@@ -583,7 +586,10 @@ function onMessageReceived(payload) {
     messageElement.classList.add('event-message');
     message.content = message.sender + ' left!';
     toastr.error(`${message.sender} has leaved the room`);
-    setInviteListener();
+    if (sessionStorage.getItem("idUser")) {
+      setInviteListener();
+    }
+    resetReady();
     playerCount -= 1;
   } else {
     messageElement.classList.add('chat-message');
@@ -611,9 +617,82 @@ function onMessageReceived(payload) {
   messageArea.scrollTop = messageArea.scrollHeight;
 }
 
-function onSettingReceived(payload) {
-  rightGuessString = payload.body;
-  console.log(rightGuessString);
+$("#vote-btn").on("click", function () {
+  $("#vote-btn").toggleClass('ready');
+
+  stompClient.send("/app/game.ready", {}, JSON.stringify({ sender: playerSeat, content: $("#vote-btn").text(), gameCode: gameCode }));
+
+  if ($("#vote-btn").hasClass("ready")) {
+    $("#vote-btn").text("Cancel");
+    $(".player-ready").eq(playerSeat).css("display", "block");
+
+    if (readyCount == (playerCount - 1)) {
+      $.ajax({
+        type: "PUT",
+        url: `${URL}:8080/Game/Data/${roomId}`,
+        data: JSON.stringify({ status: "Closed" }),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function () {
+
+        },
+        error: function (jqXHR) {
+          toastr.error("Something went wrong when closing the game");
+        }
+      });
+    }
+
+  } else {
+    $("#vote-btn").text("Ready");
+    $(".player-ready").eq(playerSeat).hide();
+  }
+
+});
+
+function resetReady() {
+  readyCount = 0;
+  $(".player-ready").hide();
+  $("#vote-btn").removeClass("ready");
+  $("#vote-btn").text("Ready");
+}
+
+function onReadyReceived(payload) {
+  let log = JSON.parse(payload.body);
+
+  if (log.content == "Ready") {
+    $(".player-ready").eq(log.sender).css("display", "block");
+    readyCount += 1;
+
+    if (readyCount == playerCount) {
+      sessionStorage.setItem("isPlaying", "true");
+      startGame();
+    }
+
+  } else {
+    $(".player-ready").eq(log.sender).hide();
+    readyCount -= 1;
+  }
+}
+
+function startGame() {
+  $(".modal-overlay").empty();
+  resetReady();
+  let container = $(".modal-overlay"); // Ganti dengan ID kontainer Anda
+  container.css("font-size", "24px")
+  let hitungan = 5;
+  var timer = setInterval(function () {
+    if (hitungan > 0) {
+      container.text("Game will start in " + hitungan);
+      hitungan -= 1;
+    } else {
+      clearInterval(timer);
+      container.text("Good luck!");
+      setTimeout(() => {
+        setKeyboardListener();
+        $(".modal-overlay").hide();
+      }, 1000)
+    }
+  }, 1000);
 }
 
 function leaveRoom() {
@@ -622,6 +701,7 @@ function leaveRoom() {
   sessionStorage.removeItem("roomId");
   sessionStorage.removeItem("checkpoint");
   sessionStorage.removeItem("colorCheckmark");
+  sessionStorage.removeItem("isPlaying");
   window.location.assign("/Home.html");
 }
 
