@@ -98,3 +98,7 @@ if (sessionStorage.getItem("hasLogin") == "true") {
 } else {
     setNavbarVisibility(false);
 }
+
+function hidepop() {
+    $(".popUp-bgs").hide();
+ }
