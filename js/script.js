@@ -87,7 +87,7 @@ function loadRoomData() {
       if (sessionStorage.getItem("isPlaying") == "true") {
         $(".modal-overlay").hide();
         setKeyboardListener();
-      } else if (playerCount != 1 && playerCount >= 4) {
+      } else if (playerCount >= 4) {
         startGame();
       } else {
         $(".modal-overlay").css("display", "flex");
@@ -105,16 +105,16 @@ function loadRoomData() {
           let row = document.getElementsByClassName("letter-row")[i];
           guessesRemaining--;
 
-          for (let j = 0; j < arrayCheckpoint[i][1].length; j++) {
+          for (let j = 0; j < arrayCheckpoint[i][2].length; j++) {
             let box = row.children[j];
-            box.textContent = arrayCheckpoint[i][0][j];
+            box.textContent = arrayCheckpoint[i][1][j];
             let delay = 0;
             setTimeout(() => {
               //flip box
-              box.style.backgroundColor = arrayCheckpoint[i][1][j];
+              box.style.backgroundColor = arrayCheckpoint[i][2][j];
               animateCSS(box, "flipInX");
               //shade box
-              shadeKeyBoard(box.textContent, arrayCheckpoint[i][1][j]);
+              shadeKeyBoard(box.textContent, arrayCheckpoint[i][2][j]);
             }, delay);
           }
         }
@@ -122,7 +122,10 @@ function loadRoomData() {
 
     },
     error: function (_jqXHR) {
-      console.log("Can't load player. Please re-join the room")
+      toastr.warning("System failed to load the room data. You will be directed back to home.");
+      setTimeout(() => {
+        window.location.assign("/Home.html");
+      }, 3000);
     }
 
   });
@@ -200,7 +203,7 @@ function initBoard() {
     row.appendChild(box);
     colorCheckmark.push("whitesmoke");
   }
-  $(".game-result").append(row);
+  $("#game-result").append(row);
 
 }
 
@@ -249,7 +252,7 @@ function checkGuess() {
     contentType: 'application/json',
     success: function (result) {
       if (result) {
-        stompClient.send("/app/game.answer", {}, JSON.stringify({ gameCode: gameCode, content: guessString }))
+        stompClient.send("/app/game.answer", {}, JSON.stringify({ gameCode: gameCode, content: guessString, guestId: sessionStorage.getItem("idGuest") }))
       } else {
         toastr.error("Word is not in list!");
       }
@@ -261,7 +264,8 @@ function checkGuess() {
 }
 
 function onWordReceived(payload) {
-  currentGuess = JSON.parse(payload.body).content;
+  let data = JSON.parse(payload.body);
+  currentGuess = data.content;
   let rowCheckpoint = NUMBER_OF_GUESSES - guessesRemaining;
   let row = document.getElementsByClassName("letter-row")[rowCheckpoint];
   let rightGuess = Array.from(rightGuessString);
@@ -287,7 +291,7 @@ function onWordReceived(payload) {
     }
   }
 
-  arrayCheckpoint.push([currentGuess, letterColor]);
+  arrayCheckpoint.push([data.guestId, currentGuess, letterColor]);
 
   for (let i = 0; i < WORD_LENGTH; i++) {
     let box = row.children[i];
@@ -332,32 +336,103 @@ function showGameResult() {
     }
   }
 
+  let lastGuesser = false;
+  let mostActive = findMostActivePlayer(arrayCheckpoint).includes(sessionStorage.getItem("idGuest")) ? true : false;
+
   if (correctCount === WORD_LENGTH) {
     scorePrize = scorePrize + guessesRemaining * 10;
     $("#result-desc").text(`You managed to guess the word in ${NUMBER_OF_GUESSES - guessesRemaining} try`);
     $("#result-title").text(`Point Gain`);
     $("#result-point").css(`color`, '#3CE24D');
     $("#result-point").text(`+${scorePrize}`);
+    lastGuesser = arrayCheckpoint[arrayCheckpoint.length - 1][0] == sessionStorage.getItem("idGuest") ? true : false;
   } else {
-    scorePrize = 0 - scorePrize / 2 + correctCount * 10;
+    scorePrize = 0 - scorePrize / 2 + correctCount * 5;
     $("#result-desc").text(`You managed to guess ${correctCount} letters`);
     $("#result-title").text(`Point Lose`);
     $("#result-point").css(`color`, 'crimson');
     $("#result-point").text(`${scorePrize}`);
   }
 
+  let bonus = 0;
+  if (lastGuesser && mostActive) {
+    bonus = 50;
+    $("#result-bonus").text("Bonus last guesser & most active");
+  } else if (lastGuesser) {
+    bonus = 30;
+    $("#result-bonus").text("Bonus last guesser");
+  } else if (mostActive) {
+    bonus = 20;
+    $("#result-bonus").text("Bonus most active");
+  }
+
+  let scoreNow = scorePrize;
+  scorePrize += bonus;
+
   setTimeout(() => {
 
     $(".result-container").css('display', 'flex');
+    $(".response-leave").removeClass('disabled');
+
+    if (bonus != 0) {
+      setTimeout(() => {
+        $("#result-bonus").removeClass("hidden");
+        let delay = 100;
+        let accelerationRate = 2; // The rate at which the interval delay accelerates
+        var timer = setInterval(function () {
+          if (bonus > 0) {
+            scoreNow += 1;
+            bonus -= 1;
+            delay -= accelerationRate; // Decrease the delay by the acceleration rate
+            if (correctCount === WORD_LENGTH) {
+              $("#result-point").text(`+${scoreNow}`);
+            } else {
+              $("#result-point").text(`${scoreNow}`);
+            }
+          } else {
+            clearInterval(timer);
+          }
+        }, delay);
+      }, 1000);
+    }
 
   }, (250 * (WORD_LENGTH + 3)));
+}
+
+function findMostActivePlayer(arrayCheckpoint) {
+  // Membuat objek penghitung
+  let counter = {};
+
+  // Menghitung kemunculan setiap angka
+  arrayCheckpoint.forEach((checkpoint) => {
+    if (counter[checkpoint[0]]) {
+      counter[checkpoint[0]]++;
+    } else {
+      counter[checkpoint[0]] = 1;
+    }
+  });
+
+  let mostFrequentPlayer = [];
+  let maxCount = 0;
+
+  // Mencari angka yang paling sering muncul
+  for (let id in counter) {
+    if (counter[id] > maxCount) {
+      mostFrequentPlayer = [id];
+      maxCount = counter[id];
+    } else if (counter[id] === maxCount) {
+      mostFrequentPlayer.push(id);
+    }
+  }
+
+  return mostFrequentPlayer;
 }
 
 function saveGameResult(status, scoreFinal) {
   $.ajax({
     type: "POST",
     url: `${URL}:8080/History`,
-    data: JSON.stringify({ gameId: gameCode, playerId: roomId }),
+    data: JSON.stringify({ gameId: roomId, playerId: sessionStorage.getItem('idGuest'), scoreGain: scoreFinal }),
     dataType: 'json',
     contentType: 'application/json',
     success: function (result) {
@@ -371,7 +446,7 @@ function saveGameResult(status, scoreFinal) {
   $.ajax({
     type: "PUT",
     url: `${URL}:8080/Game/Data/${roomId}`,
-    data: JSON.stringify({ win: status, scorePrize: scoreFinal }),
+    data: JSON.stringify({ win: status }),
     dataType: 'json',
     contentType: 'application/json',
     success: function (result) {
@@ -495,7 +570,7 @@ function onDisconnect() {
 
     },
     error: function (_jqXHR) {
-      console.log("Something went wrong when trying to leave the game");
+      toastr.warning("Something went wrong when trying to leave the game");
     }
   });
 
@@ -626,7 +701,7 @@ $("#vote-btn").on("click", function () {
     $("#vote-btn").text("Cancel");
     $(".player-ready").eq(playerSeat).css("display", "block");
 
-    if (readyCount == (playerCount - 1)) {
+    if (readyCount == (playerCount - 1) && playerCount != 1) {
       $.ajax({
         type: "PUT",
         url: `${URL}:8080/Game/Data/${roomId}`,
@@ -663,7 +738,7 @@ function onReadyReceived(payload) {
     $(".player-ready").eq(log.sender).css("display", "block");
     readyCount += 1;
 
-    if (readyCount == playerCount) {
+    if (readyCount == playerCount && playerCount != 1) {
       sessionStorage.setItem("isPlaying", "true");
       startGame();
     }

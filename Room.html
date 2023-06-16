@@ -111,7 +111,8 @@
                 <div id="game-board">
                     <div class="modal-overlay">
                         <p>Waiting for other players...</p>
-                        <p>Game will auto-start after everyone is ready</p>
+                        <p>Game will start if every players is ready</p>
+                        <p style="margin-top: -30px;">[Minimum 2 player required]</p>
                         <button id="vote-btn">Ready</button>
                     </div>
                     <div class="board-container">
@@ -235,7 +236,7 @@
             <div class="modal">
                 <h2>Game Result</h2>
                 <div class="result-info">
-                    <div>
+                    <div style="position: relative; margin-bottom: 20px;">
                         <p id="result-desc">You managed to guess # letters</p>
                         <div id="game-result">
                             <div class="letter-row">
@@ -246,13 +247,14 @@
                                 <div class="letter-box"></div>
                             </div>
                         </div>
+                        <p class="hidden" id="result-bonus">Bonus</p>
                     </div>
                     <div>
                         <p id="result-title">Point Lose</p>
                         <p id="result-point">-20</p>
                     </div>
                     <div class="result-response">
-                        <button class="response-leave">Leave</button>
+                        <button class="disabled response-leave">Leave</button>
                         <button class="disabled response-play">Play again</button>
                     </div>
                 </div>

@@ -696,6 +696,7 @@ button.primary:hover {
 .result-container {
   animation-name: animatetop;
   animation-duration: 0.7s;
+  transition: all 0.3s ease;
   z-index: 10;
   position: absolute;
   background-color: rgb(0, 0, 0, 0.3);
@@ -724,6 +725,37 @@ button.primary:hover {
 
 .result-info #result-point {
   font-size: 50px;
+}
+
+.result-info #result-bonus {
+  text-transform: capitalize;
+  text-align: center;
+  width: 100%;
+  font-size: 12px;
+  color: #3282B8;
+  position: absolute;
+  bottom: 0;
+}
+
+.result-info #result-bonus:not(.hidden) {
+  animation-name: showBonus;
+  animation-duration: 0.5s;
+  bottom: -35px;
+}
+
+@keyframes showBonus {
+  0% {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 .result-info .result-response {
@@ -886,7 +918,7 @@ button.primary:hover {
   }
 }
 
-@media screen and (min-width: 751px) and (max-width: 999px) {
+@media screen and (min-width: 751px) {
   .side-panel-container {
     width: 130px;
   }
