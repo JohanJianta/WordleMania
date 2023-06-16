@@ -19,7 +19,7 @@ let isLeaving = false;
 
 window.onload = () => {
   if (!sessionStorage.getItem("gameCode")) {
-    // window.location.assign("/Home.html");
+    window.location.assign("/Home.html");
   }
 
   gameCode = sessionStorage.getItem("gameCode");
@@ -35,7 +35,10 @@ window.onload = () => {
       connect();
     },
     error: function (jqXHR) {
-      toastr.error("Something went wrong when joining the game. Please try again.");
+      toastr.error("Something went wrong when joining the game. You will be directed back to home.");
+      setTimeout(() => {
+        window.location.assign("/Home.html");
+      }, 3000);
     }
   });
 }
