@@ -129,6 +129,7 @@ button span {
 }
 
 .player {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -144,6 +145,21 @@ button span {
   transition: all 0.3s ease-in-out;
   border: 1px solid black;
   box-shadow: 0 0 0 0 black;
+}
+
+.player .player-ready {
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 0 5px 5px 5px;
+  background-color: #3282B8;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 5px;
+}
+
+.player .player-ready p {
+  font-size: 14px;
 }
 
 .player:hover {
@@ -426,23 +442,22 @@ button.primary:hover {
 /* Game Board  */
 
 #game-board {
-  margin: 10px 0 40px 0;
+  margin: 10px 0 20px 0;
   display: flex;
   align-items: center;
   flex-direction: column;
+  position: relative;
 }
 
-#game-board .board-relative {
-  position: relative;
+#game-board .board-container {
   padding: 30px;
 }
 
 /* Efek blur */
-.board-relative .modal-overlay {
+.modal-overlay {
   position: absolute;
   padding: 15px;
   top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   font-size: 16px;
@@ -460,7 +475,7 @@ button.primary:hover {
 }
 
 .modal-overlay button {
-  margin-top: -20px;
+  margin-top: -10px;
   width: 50%;
   max-width: 100px;
   height: 35px;
@@ -468,10 +483,19 @@ button.primary:hover {
   border-radius: 5px;
   background-color: #3282B8;
   color: #27374D;
+  transition: all .3s ease;
 }
 
 .modal-overlay button:hover {
   background-color: #3282b8c5;
+}
+
+.modal-overlay button.ready {
+  background-color: crimson;
+}
+
+.modal-overlay button.ready:hover {
+  background-color: rgba(220, 20, 60, 0.7);
 }
 
 .letter-box {
@@ -672,6 +696,7 @@ button.primary:hover {
 .result-container {
   animation-name: animatetop;
   animation-duration: 0.7s;
+  transition: all 0.3s ease;
   z-index: 10;
   position: absolute;
   background-color: rgb(0, 0, 0, 0.3);
@@ -700,6 +725,37 @@ button.primary:hover {
 
 .result-info #result-point {
   font-size: 50px;
+}
+
+.result-info #result-bonus {
+  text-transform: capitalize;
+  text-align: center;
+  width: 100%;
+  font-size: 12px;
+  color: #3282B8;
+  position: absolute;
+  bottom: 0;
+}
+
+.result-info #result-bonus:not(.hidden) {
+  animation-name: showBonus;
+  animation-duration: 0.5s;
+  bottom: -35px;
+}
+
+@keyframes showBonus {
+  0% {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 .result-info .result-response {
@@ -802,7 +858,11 @@ button.primary:hover {
   }
 
   .player p {
-    font-size: 12px;
+    font-size: 16px;
+  }
+
+  .player .player-ready p {
+    font-size: 10px;
   }
 
   #friendScore {
@@ -868,16 +928,16 @@ button.primary:hover {
   }
 
   .keyboard-button {
-    min-width: 50px;
-    min-height: 50px;
+    min-width: 60px;
+    min-height: 60px;
     font-size: 1.5rem;
   }
 
   .letter-box {
     font-weight: 600;
     font-size: 3rem;
-    height: 3rem;
-    width: 3rem;
+    height: 4rem;
+    width: 4rem;
     margin: 4px;
   }
 
@@ -903,6 +963,10 @@ button.primary:hover {
     position: absolute;
     top: 0;
     left: calc(50vw - 250px);
+  }
+
+  .modal-overlay {
+    width: 35vw;
   }
 }
 

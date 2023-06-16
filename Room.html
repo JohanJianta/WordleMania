@@ -71,22 +71,34 @@
             <!-- Player View -->
             <div class="player-container">
                 <div class="player vacant">
+                    <div class="player-ready">
+                        <p>Ready</p>
+                    </div>
                     <img src="" alt="avatar" class="hidden">
                     <i id="invite-icon-0" class="fa-solid fa-user-plus" style="color: #000000;"></i>
                     <p id="player-name-0">Invite</p>
                 </div>
 
                 <div class="player vacant">
+                    <div class="player-ready">
+                        <p>Ready</p>
+                    </div>
                     <img src="" alt="avatar" class="hidden">
                     <i id="invite-icon-1" class="fa-solid fa-user-plus" style="color: #000000;"></i>
                     <p id="player-name-1">Invite</p>
                 </div>
                 <div class="player vacant">
+                    <div class="player-ready">
+                        <p>Ready</p>
+                    </div>
                     <img src="" alt="avatar" class="hidden">
                     <i id="invite-icon-2" class="fa-solid fa-user-plus" style="color: #000000;"></i>
                     <p id="player-name-2">Invite</p>
                 </div>
                 <div class="player vacant">
+                    <div class="player-ready">
+                        <p>Ready</p>
+                    </div>
                     <img src="" alt="avatar" class="hidden">
                     <i id="invite-icon-3" class="fa-solid fa-user-plus" style="color: #000000;"></i>
                     <p id="player-name-3">Invite</p>
@@ -97,12 +109,13 @@
             <div class="game-display">
 
                 <div id="game-board">
-                    <div class="board-relative">
-                        <div class="modal-overlay">
-                            <p>Waiting for other players...</p>
-                            <p style="margin-top: 40px;">Vote to start play?</p>
-                            <button id="vote-btn">Vote</button>
-                        </div>
+                    <div class="modal-overlay">
+                        <p>Waiting for other players...</p>
+                        <p>Game will start if every players is ready</p>
+                        <p style="margin-top: -30px;">[Minimum 2 player required]</p>
+                        <button id="vote-btn">Ready</button>
+                    </div>
+                    <div class="board-container">
                         <div class="letter-row">
                             <div class="letter-box"></div>
                             <div class="letter-box"></div>
@@ -223,7 +236,7 @@
             <div class="modal">
                 <h2>Game Result</h2>
                 <div class="result-info">
-                    <div>
+                    <div style="position: relative; margin-bottom: 20px;">
                         <p id="result-desc">You managed to guess # letters</p>
                         <div id="game-result">
                             <div class="letter-row">
@@ -234,13 +247,14 @@
                                 <div class="letter-box"></div>
                             </div>
                         </div>
+                        <p class="hidden" id="result-bonus">Bonus</p>
                     </div>
                     <div>
                         <p id="result-title">Point Lose</p>
                         <p id="result-point">-20</p>
                     </div>
                     <div class="result-response">
-                        <button class="response-leave">Leave</button>
+                        <button class="disabled response-leave">Leave</button>
                         <button class="disabled response-play">Play again</button>
                     </div>
                 </div>
@@ -256,7 +270,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>

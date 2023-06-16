@@ -101,4 +101,4 @@ if (sessionStorage.getItem("hasLogin") == "true") {
 
 function hidepop() {
     $(".popUp-bgs").hide();
- }
+}

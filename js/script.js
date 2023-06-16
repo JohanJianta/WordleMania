@@ -13,10 +13,9 @@ let guessesRemaining;
 let rightGuessString;
 let nextLetter = 0;
 let playerCount = 0;
+let readyCount = 0
 let playerSeat;
 let isLeaving = false;
-let isPlaying = false;
-
 
 window.onload = () => {
   if (!sessionStorage.getItem("gameCode")) {
@@ -60,7 +59,11 @@ function loadRoomData() {
         }
       }
 
-      setInviteListener();
+      if (sessionStorage.getItem("idUser")) {
+        setInviteListener();
+      } else {
+        $(".player").css("cursor", "default");
+      }
 
       if (roomId != room.roomId || NUMBER_OF_GUESSES != room.guessesTry || rightGuessString != room.word.toLowerCase()) {
         if ((roomId != null && NUMBER_OF_GUESSES != null && rightGuessString != null) || sessionStorage.getItem("roomId") != room.roomId) {
@@ -81,13 +84,13 @@ function loadRoomData() {
         initBoard();
       }
 
-      if (playerCount >= 4 || sessionStorage.getItem("isPlaying") == "true") {
-        $(".board-relative").find(".modal-overlay").remove();
+      if (sessionStorage.getItem("isPlaying") == "true") {
+        $(".modal-overlay").hide();
         setKeyboardListener();
+      } else if (playerCount >= 4) {
+        startGame();
       } else {
-
-        $(".board-relative").append(`<div class="modal-overlay"><p>Waiting for other players...</p>
-          <p>Vote to start play?</p><button>Vote</button></div>`);
+        $(".modal-overlay").css("display", "flex");
 
         document.removeEventListener("keyup", keyupHandler);
         document.removeEventListener("keyboard-cont", keyboardContHandler);
@@ -102,16 +105,16 @@ function loadRoomData() {
           let row = document.getElementsByClassName("letter-row")[i];
           guessesRemaining--;
 
-          for (let j = 0; j < arrayCheckpoint[i][1].length; j++) {
+          for (let j = 0; j < arrayCheckpoint[i][2].length; j++) {
             let box = row.children[j];
-            box.textContent = arrayCheckpoint[i][0][j];
+            box.textContent = arrayCheckpoint[i][1][j];
             let delay = 0;
             setTimeout(() => {
               //flip box
-              box.style.backgroundColor = arrayCheckpoint[i][1][j];
+              box.style.backgroundColor = arrayCheckpoint[i][2][j];
               animateCSS(box, "flipInX");
               //shade box
-              shadeKeyBoard(box.textContent, arrayCheckpoint[i][1][j]);
+              shadeKeyBoard(box.textContent, arrayCheckpoint[i][2][j]);
             }, delay);
           }
         }
@@ -119,7 +122,10 @@ function loadRoomData() {
 
     },
     error: function (_jqXHR) {
-      console.log("Can't load player. Please re-join the room")
+      toastr.warning("System failed to load the room data. You will be directed back to home.");
+      setTimeout(() => {
+        window.location.assign("/Home.html");
+      }, 3000);
     }
 
   });
@@ -197,7 +203,7 @@ function initBoard() {
     row.appendChild(box);
     colorCheckmark.push("whitesmoke");
   }
-  $(".game-result").append(row);
+  $("#game-result").append(row);
 
 }
 
@@ -246,7 +252,7 @@ function checkGuess() {
     contentType: 'application/json',
     success: function (result) {
       if (result) {
-        stompClient.send("/app/game.answer", {}, JSON.stringify({ gameCode: gameCode, content: guessString }))
+        stompClient.send("/app/game.answer", {}, JSON.stringify({ gameCode: gameCode, content: guessString, guestId: sessionStorage.getItem("idGuest") }))
       } else {
         toastr.error("Word is not in list!");
       }
@@ -258,7 +264,8 @@ function checkGuess() {
 }
 
 function onWordReceived(payload) {
-  currentGuess = JSON.parse(payload.body).content;
+  let data = JSON.parse(payload.body);
+  currentGuess = data.content;
   let rowCheckpoint = NUMBER_OF_GUESSES - guessesRemaining;
   let row = document.getElementsByClassName("letter-row")[rowCheckpoint];
   let rightGuess = Array.from(rightGuessString);
@@ -284,7 +291,7 @@ function onWordReceived(payload) {
     }
   }
 
-  arrayCheckpoint.push([currentGuess, letterColor]);
+  arrayCheckpoint.push([data.guestId, currentGuess, letterColor]);
 
   for (let i = 0; i < WORD_LENGTH; i++) {
     let box = row.children[i];
@@ -329,32 +336,103 @@ function showGameResult() {
     }
   }
 
+  let lastGuesser = false;
+  let mostActive = findMostActivePlayer(arrayCheckpoint).includes(sessionStorage.getItem("idGuest")) ? true : false;
+
   if (correctCount === WORD_LENGTH) {
     scorePrize = scorePrize + guessesRemaining * 10;
     $("#result-desc").text(`You managed to guess the word in ${NUMBER_OF_GUESSES - guessesRemaining} try`);
     $("#result-title").text(`Point Gain`);
     $("#result-point").css(`color`, '#3CE24D');
     $("#result-point").text(`+${scorePrize}`);
+    lastGuesser = arrayCheckpoint[arrayCheckpoint.length - 1][0] == sessionStorage.getItem("idGuest") ? true : false;
   } else {
-    scorePrize = 0 - scorePrize / 2 + correctCount * 10;
+    scorePrize = 0 - scorePrize / 2 + correctCount * 5;
     $("#result-desc").text(`You managed to guess ${correctCount} letters`);
     $("#result-title").text(`Point Lose`);
     $("#result-point").css(`color`, 'crimson');
     $("#result-point").text(`${scorePrize}`);
   }
 
+  let bonus = 0;
+  if (lastGuesser && mostActive) {
+    bonus = 50;
+    $("#result-bonus").text("Bonus last guesser & most active");
+  } else if (lastGuesser) {
+    bonus = 30;
+    $("#result-bonus").text("Bonus last guesser");
+  } else if (mostActive) {
+    bonus = 20;
+    $("#result-bonus").text("Bonus most active");
+  }
+
+  let scoreNow = scorePrize;
+  scorePrize += bonus;
+
   setTimeout(() => {
 
     $(".result-container").css('display', 'flex');
+    $(".response-leave").removeClass('disabled');
+
+    if (bonus != 0) {
+      setTimeout(() => {
+        $("#result-bonus").removeClass("hidden");
+        let delay = 100;
+        let accelerationRate = 2; // The rate at which the interval delay accelerates
+        var timer = setInterval(function () {
+          if (bonus > 0) {
+            scoreNow += 1;
+            bonus -= 1;
+            delay -= accelerationRate; // Decrease the delay by the acceleration rate
+            if (correctCount === WORD_LENGTH) {
+              $("#result-point").text(`+${scoreNow}`);
+            } else {
+              $("#result-point").text(`${scoreNow}`);
+            }
+          } else {
+            clearInterval(timer);
+          }
+        }, delay);
+      }, 1000);
+    }
 
   }, (250 * (WORD_LENGTH + 3)));
+}
+
+function findMostActivePlayer(arrayCheckpoint) {
+  // Membuat objek penghitung
+  let counter = {};
+
+  // Menghitung kemunculan setiap angka
+  arrayCheckpoint.forEach((checkpoint) => {
+    if (counter[checkpoint[0]]) {
+      counter[checkpoint[0]]++;
+    } else {
+      counter[checkpoint[0]] = 1;
+    }
+  });
+
+  let mostFrequentPlayer = [];
+  let maxCount = 0;
+
+  // Mencari angka yang paling sering muncul
+  for (let id in counter) {
+    if (counter[id] > maxCount) {
+      mostFrequentPlayer = [id];
+      maxCount = counter[id];
+    } else if (counter[id] === maxCount) {
+      mostFrequentPlayer.push(id);
+    }
+  }
+
+  return mostFrequentPlayer;
 }
 
 function saveGameResult(status, scoreFinal) {
   $.ajax({
     type: "POST",
     url: `${URL}:8080/History`,
-    data: JSON.stringify({ gameId: gameCode, playerId: roomId }),
+    data: JSON.stringify({ gameId: roomId, playerId: sessionStorage.getItem('idGuest'), scoreGain: scoreFinal }),
     dataType: 'json',
     contentType: 'application/json',
     success: function (result) {
@@ -368,7 +446,7 @@ function saveGameResult(status, scoreFinal) {
   $.ajax({
     type: "PUT",
     url: `${URL}:8080/Game/Data/${roomId}`,
-    data: JSON.stringify({ win: status, scorePrize: scoreFinal }),
+    data: JSON.stringify({ win: status }),
     dataType: 'json',
     contentType: 'application/json',
     success: function (result) {
@@ -466,7 +544,6 @@ const keyboardContHandler = (e) => {
 
 function setKeyboardListener() {
   document.addEventListener("keyup", keyupHandler);
-
   document.getElementById("keyboard-cont").addEventListener("click", keyboardContHandler);
 }
 
@@ -493,7 +570,7 @@ function onDisconnect() {
 
     },
     error: function (_jqXHR) {
-      console.log("Something went wrong when trying to leave the game");
+      toastr.warning("Something went wrong when trying to leave the game");
     }
   });
 
@@ -524,10 +601,10 @@ function onConnected() {
   stompClient.subscribe(`/room/${gameCode}/chatroom`, onMessageReceived);
   // stompClient.subscribe(`/room/${gameCode}/setting`, onSettingReceived);
   stompClient.subscribe(`/room/${gameCode}/answer`, onWordReceived);
-  stompClient.subscribe(`/room/${gameCode}/vote`, onWordReceived);
+  stompClient.subscribe(`/room/${gameCode}/ready`, onReadyReceived);
 
   // Tell your username to the server
-  stompClient.send("/app/chat.register", {}, JSON.stringify({ sender: username, type: 'JOIN', gameCode: gameCode }))
+  stompClient.send("/app/chat.register", {}, JSON.stringify({ sender: username, type: 'JOIN', gameCode: gameCode }));
 
   connectingElement.classList.add('hidden');
 }
@@ -575,6 +652,7 @@ function onMessageReceived(payload) {
     messageElement.classList.add('event-message');
     message.content = message.sender + ' joined!';
     loadRoomData();
+    resetReady();
     toastr.success(`${message.sender} has joined the room`);
   } else if (message.type === 'LEAVE') {
     $(`#invite-icon-${message.content}`).removeClass("hidden"); // remove player from seat
@@ -583,7 +661,10 @@ function onMessageReceived(payload) {
     messageElement.classList.add('event-message');
     message.content = message.sender + ' left!';
     toastr.error(`${message.sender} has leaved the room`);
-    setInviteListener();
+    if (sessionStorage.getItem("idUser")) {
+      setInviteListener();
+    }
+    resetReady();
     playerCount -= 1;
   } else {
     messageElement.classList.add('chat-message');
@@ -611,9 +692,82 @@ function onMessageReceived(payload) {
   messageArea.scrollTop = messageArea.scrollHeight;
 }
 
-function onSettingReceived(payload) {
-  rightGuessString = payload.body;
-  console.log(rightGuessString);
+$("#vote-btn").on("click", function () {
+  $("#vote-btn").toggleClass('ready');
+
+  stompClient.send("/app/game.ready", {}, JSON.stringify({ sender: playerSeat, content: $("#vote-btn").text(), gameCode: gameCode }));
+
+  if ($("#vote-btn").hasClass("ready")) {
+    $("#vote-btn").text("Cancel");
+    $(".player-ready").eq(playerSeat).css("display", "block");
+
+    if (readyCount == (playerCount - 1) && playerCount != 1) {
+      $.ajax({
+        type: "PUT",
+        url: `${URL}:8080/Game/Data/${roomId}`,
+        data: JSON.stringify({ status: "Closed" }),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function () {
+
+        },
+        error: function (jqXHR) {
+          toastr.error("Something went wrong when closing the game");
+        }
+      });
+    }
+
+  } else {
+    $("#vote-btn").text("Ready");
+    $(".player-ready").eq(playerSeat).hide();
+  }
+
+});
+
+function resetReady() {
+  readyCount = 0;
+  $(".player-ready").hide();
+  $("#vote-btn").removeClass("ready");
+  $("#vote-btn").text("Ready");
+}
+
+function onReadyReceived(payload) {
+  let log = JSON.parse(payload.body);
+
+  if (log.content == "Ready") {
+    $(".player-ready").eq(log.sender).css("display", "block");
+    readyCount += 1;
+
+    if (readyCount == playerCount && playerCount != 1) {
+      sessionStorage.setItem("isPlaying", "true");
+      startGame();
+    }
+
+  } else {
+    $(".player-ready").eq(log.sender).hide();
+    readyCount -= 1;
+  }
+}
+
+function startGame() {
+  $(".modal-overlay").empty();
+  resetReady();
+  let container = $(".modal-overlay"); // Ganti dengan ID kontainer Anda
+  container.css("font-size", "24px")
+  let hitungan = 5;
+  var timer = setInterval(function () {
+    if (hitungan > 0) {
+      container.text("Game will start in " + hitungan);
+      hitungan -= 1;
+    } else {
+      clearInterval(timer);
+      container.text("Good luck!");
+      setTimeout(() => {
+        setKeyboardListener();
+        $(".modal-overlay").hide();
+      }, 1000)
+    }
+  }, 1000);
 }
 
 function leaveRoom() {
@@ -622,6 +776,7 @@ function leaveRoom() {
   sessionStorage.removeItem("roomId");
   sessionStorage.removeItem("checkpoint");
   sessionStorage.removeItem("colorCheckmark");
+  sessionStorage.removeItem("isPlaying");
   window.location.assign("/Home.html");
 }
 

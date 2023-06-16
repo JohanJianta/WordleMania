@@ -194,7 +194,7 @@ function showPlayerData(status) {
         $("#player-id").show();
         $("#player-score").show();
         $("#player-rank").show();
-        $("#player-id").text(`Id : ${sessionStorage.getItem("idGuest")}`);
+        $("#player-id").text(`Id : ${sessionStorage.getItem("idUser")}`);
         $("#player-score").text(`Score : ${sessionStorage.getItem("score")}`);
         $("#player-rank").text(`Rank n/a`);
         // $("#player-rank").text(`Rank #${sessionStorage.getItem("rank")}`);
