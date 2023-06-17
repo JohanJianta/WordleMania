@@ -172,26 +172,29 @@ function getOnlineFriend() {
     success: function (result) {
       $(".list-req").empty();
       let friendList = result.payload;
-      let syntax;
+
       for (let i = 0; i < friendList.length; i++) {
         if (friendList[i].status === "Offline") {
           continue;
         }
 
-        syntax = `<div class="orang" data-idFriend="${friendList[i].userId}">
-        <div class="avatar-req"></div>
-
-        <b>
-            <p id=friendName>${friendList[i].name}</p>
-        </b>
-
-        <p id="friendScore">${friendList[i].score}</p>
-
-        <button class="invite ${friendList[i].status === "Playing" ? "disabled" : ""}">Invite</button>
-        </div>`;
+        let syntax = $('<div>', {
+          'class': 'orang',
+          'data-idFriend': friendList[i].userId
+        }).append(
+          $('<div>', { 'class': 'avatar-req' }),
+          $('<b>').append(
+            $('<p>', { id: 'friendName' }).text(friendList[i].name)
+          ),
+          $('<p>', { id: 'friendScore' }).text(friendList[i].score),
+          $('<button>', {
+            'class': `invite${friendList[i].status === "Playing" ? ' disabled' : ''}`
+          }).text('Invite')
+        );
 
         $(".list-req").append(syntax);
       }
+
 
       $(".invite").on("click", function (e) {
         let friendId = $(e.target).closest(".orang").attr("data-idFriend");
@@ -693,7 +696,7 @@ function onMessageReceived(payload) {
     loadRoomData();
     resetReady();
     toastr.success(`${message.sender} has joined the room`);
-    
+
   } else if (message.type === 'LEAVE') {
     $(`#invite-icon-${message.content}`).removeClass("hidden"); // remove player from seat
     $(`#player-name-${message.content}`).text("Invite");
@@ -706,7 +709,7 @@ function onMessageReceived(payload) {
     }
     resetReady();
     playerCount -= 1;
-    
+
   } else {
     messageElement.classList.add('chat-message');
 
@@ -745,11 +748,11 @@ $("#vote-btn").on("click", function () {
     if (readyCount == (playerCount - 1) && playerCount != 1) {
       $.ajax({
         type: "PUT",
-        url: `${URL}:8080/Game/Data/${roomId}`,
-        data: JSON.stringify({ status: "Closed" }),
+        url: `${URL}:8080/Game/${gameCode}`,
+        data: "Closed",
         dataType: 'json',
         contentType: 'application/json',
-        success: function () {
+        success: function (result) {
 
         },
         error: function (jqXHR) {

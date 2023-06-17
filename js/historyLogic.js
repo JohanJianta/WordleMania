@@ -1,6 +1,6 @@
 'use strict';
 
-var idPlayer;
+let idPlayer;
 
 window.onload = () => {
     if (sessionStorage.getItem('hasLogin') == "true") {

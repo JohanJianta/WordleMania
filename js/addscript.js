@@ -1,11 +1,26 @@
 'use strict';
 
 var idPlayer;
+const topPlayers = [];
 
 window.onload = () => {
     if (sessionStorage.getItem('hasLogin') == "true") {
         idPlayer = sessionStorage.getItem('idUser');
         $('#myId').text(`My ID : ${idPlayer}`);
+
+        $.ajax({
+            type: "GET",
+            url: `${URL}:8080/Player/Leaderboard`,
+            dataType: 'json',
+            success: function (result) {
+                for (let i = 0; i < result.payload.length; i++) {
+                    topPlayers.push(result.payload[i].userId);
+                }
+            },
+            error: function (jqXHR) {
+                console.log("System can'failed to load the top players.")
+            }
+        });
     } else {
         toastr.warning('This section only available for registered player. Please try to register or login first.');
         window.location.assign("/Home.html");
@@ -80,7 +95,7 @@ function searchFriendId(friendId) {
                         class: 'rank'
                     }).append(
                         $('<p>', {
-                            text: 'Rank: n/a'
+                            text: `Rank ${topPlayers.includes(data.userId) ? `#${topPlayers.indexOf(data.userId) + 1}` : "n/a"}`
                         })
                     ),
                     $('<button>', {

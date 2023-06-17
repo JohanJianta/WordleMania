@@ -1,6 +1,8 @@
 'use strict';
 
-window.onload = function () {
+const topPlayers = [];
+
+window.onload = async function () {
     if (!sessionStorage.getItem("idGuest") && !sessionStorage.getItem("username")) {
         var currentDate = new Date();
         var year = currentDate.getFullYear();
@@ -27,6 +29,8 @@ window.onload = function () {
         });
     }
 
+    await getLeaderboard();
+
     if (sessionStorage.getItem("hasLogin") == "true") {
         $.ajax({
             type: "GET",
@@ -45,13 +49,9 @@ window.onload = function () {
                 toastr.warning("Something went wrong when loading player data. Consider to refresh the page")
             }
         });
-        // setNavbarVisibility(true);
     } else {
         setLoginState(false);
-        // setNavbarVisibility(false);
     }
-
-    getLeaderboard();
 }
 
 function setLoginState(state) {
@@ -59,7 +59,7 @@ function setLoginState(state) {
         $(".judulfriend").css("display", "block");
         $(".info-friend").hide();
         $(".friend-container").css("display", "flex");
-        
+
     } else {
         $(".judulfriend").hide();
         $(".info-friend").css("display", "flex");
@@ -197,8 +197,7 @@ function showPlayerData(status) {
         $("#player-rank").show();
         $("#player-id").text(`Id : ${sessionStorage.getItem("idUser")}`);
         $("#player-score").text(`Score : ${sessionStorage.getItem("score")}`);
-        $("#player-rank").text(`Rank n/a`);
-        // $("#player-rank").text(`Rank #${sessionStorage.getItem("rank")}`);
+        $("#player-rank").text(`Rank ${topPlayers.includes(parseInt(sessionStorage.getItem("idUser"), 10)) ? `#${topPlayers.indexOf(parseInt(sessionStorage.getItem("idUser"), 10)) + 1}` : "n/a"}`);
         $("#player-level").text(`Level ${parseInt(sessionStorage.getItem("totalPlay") / 5 + sessionStorage.getItem("totalWin") / 2).toFixed(0)}`);
     } else {
         $("#player-id").hide();
@@ -225,35 +224,34 @@ function showFriendList(status) {
             success: function (result) {
                 // $(".friend-container").empty();
                 let friendList = result.payload;
-                let syntax;
+
                 for (let i = 0; i < friendList.length; i++) {
-                    syntax = `<div class="friendlist" data-friendId="${friendList[i].userId}">
-                    <div class="bagianatas-friend">
-                        <div class="profilefriend">
-                            <img src="/picture/avatar/Avatar10.svg" width="45px">
-                        </div>
-                        <div class="levelfriend">
-                            <p class="friend-level">Level ${parseInt(friendList[i].totalPlay / 5 + friendList[i].totalWin / 2).toFixed(0)}</p>
-                        </div>
-                    </div>
-                    <div class="bagiantengah-friend">
-                        <p class="friend-name">${friendList[i].name}</p>
-                        <p class="friend-score">Score : ${friendList[i].score}</p>
-                        <p class="friend-rank">Rank n/a</p>
-                    </div>
-                    <div class="bagianbawah-friend">
-                        <button class="addplayer${friendList[i].status === "Playing" ? " playing" : (friendList[i].status === "Offline" ? " offline" : "")}">
-                            <div class="sign"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                    id="add-account">
-                                    <path
-                                        d="M21,10.5H20v-1a1,1,0,0,0-2,0v1H17a1,1,0,0,0,0,2h1v1a1,1,0,0,0,2,0v-1h1a1,1,0,0,0,0-2Zm-7.7,1.72A4.92,4.92,0,0,0,15,8.5a5,5,0,0,0-10,0,4.92,4.92,0,0,0,1.7,3.72A8,8,0,0,0,2,19.5a1,1,0,0,0,2,0,6,6,0,0,1,12,0,1,1,0,0,0,2,0A8,8,0,0,0,13.3,12.22ZM10,11.5a3,3,0,1,1,3-3A3,3,0,0,1,10,11.5Z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="textadd">${friendList[i].status === "Playing" ? "Playing" : (friendList[i].status === "Offline" ? "Offline" : "Invite")}</div>
-                        </button>
-                    </div>
-                    </div>`;
+                    let syntax = $('<div>', {
+                        'class': 'friendlist',
+                        'data-friendId': friendList[i].userId
+                    }).append(
+                        $('<div>', { 'class': 'bagianatas-friend' }).append(
+                            $('<div>', { 'class': 'profilefriend' }).append(
+                                $('<img>', { src: '/picture/avatar/Avatar10.svg', width: '45px' })
+                            ),
+                            $('<div>', { 'class': 'levelfriend' }).append(
+                                $('<p>', { 'class': 'friend-level' }).text(`Level ${parseInt(friendList[i].totalPlay / 5 + friendList[i].totalWin / 2).toFixed(0)}`)
+                            )
+                        ),
+                        $('<div>', { 'class': 'bagiantengah-friend' }).append(
+                            $('<p>', { 'class': 'friend-name' }).text(friendList[i].name),
+                            $('<p>', { 'class': 'friend-score' }).text(`Score : ${friendList[i].score}`),
+                            $('<p>', { 'class': 'friend-rank' }).text(`Rank ${topPlayers.includes(friendList[i].userId) ? `#${topPlayers.indexOf(friendList[i].userId) + 1}` : "n/a"}`)
+                        ),
+                        $('<div>', { 'class': 'bagianbawah-friend' }).append(
+                            $('<button>', {
+                                'class': `addplayer${friendList[i].status === "Playing" ? " playing" : (friendList[i].status === "Offline" ? " offline" : "")}`
+                            }).append(
+                                $('<div>', { 'class': 'sign' }).html('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="add-account"><path d="M21,10.5H20v-1a1,1,0,0,0-2,0v1H17a1,1,0,0,0,0,2h1v1a1,1,0,0,0,2,0v-1h1a1,1,0,0,0,0-2Zm-7.7,1.72A4.92,4.92,0,0,0,15,8.5a5,5,0,0,0-10,0,4.92,4.92,0,0,0,1.7,3.72A8,8,0,0,0,2,19.5a1,1,0,0,0,2,0,6,6,0,0,1,12,0,1,1,0,0,0,2,0A8,8,0,0,0,13.3,12.22ZM10,11.5a3,3,0,1,1,3-3A3,3,0,0,1,10,11.5Z"></path></svg>'),
+                                $('<div>', { 'class': 'textadd' }).text(friendList[i].status === "Playing" ? "Playing" : (friendList[i].status === "Offline" ? "Offline" : "Invite"))
+                            )
+                        )
+                    );
 
                     $(".friend-container").append(syntax);
                 }
@@ -291,20 +289,26 @@ function showFriendList(status) {
     }
 }
 
-function getLeaderboard() {
-    $.ajax({
-        type: "GET",
-        url: `${URL}:8080/Player/Leaderboard`,
-        dataType: 'json',
-        success: function (result) {
-            for (let i = 0; i < result.payload.length; i++) {
-                $(`#leaderboard-name-${i + 1}`).text(result.payload[i].name);
-                $(`#leaderboard-score-${i + 1}`).text(result.payload[i].score);
+async function getLeaderboard() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            url: `${URL}:8080/Player/Leaderboard`,
+            dataType: 'json',
+            success: function (result) {
+                for (let i = 0; i < result.payload.length; i++) {
+                    if (i < 3) {
+                        $(`#leaderboard-name-${i + 1}`).text(result.payload[i].name);
+                        $(`#leaderboard-score-${i + 1}`).text(result.payload[i].score);
+                    }
+                    topPlayers.push(result.payload[i].userId);
+                }
+                resolve(); // Resolve the promise when the AJAX request is successful
+            },
+            error: function (jqXHR) {
+                reject(new Error("Failed to fetch leaderboard")); // Reject the promise if there's an error
             }
-        },
-        error: function (jqXHR) {
-            toastr.warning("System can't load the leaderboard. Consider to refresh the page")
-        }
+        });
     });
 }
 
