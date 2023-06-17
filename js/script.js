@@ -3,6 +3,8 @@
 var NUMBER_OF_GUESSES;
 var WORD_LENGTH;
 
+const roomSubscriptions = [];
+
 let currentGuess = [];
 let colorCheckmark = [];
 let arrayCheckpoint = [];
@@ -39,6 +41,20 @@ window.onload = () => {
       setTimeout(() => {
         window.location.assign("/Home.html");
       }, 3000);
+    }
+  });
+
+  $.ajax({
+    type: "PUT",
+    url: `${URL}:8080/Player/${sessionStorage.getItem("idUser")}`,
+    data: JSON.stringify({ status: "Playing" }),
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function (result) {
+
+    },
+    error: function (jqXHR) {
+      console.log(`Error when updating player status: ${JSON.parse(jqXHR.responseText).messages}`);
     }
   });
 }
@@ -135,6 +151,20 @@ function loadRoomData() {
 }
 
 function setInviteListener() {
+  $(".player:not(.vacant)").off("click");
+  $(".player:not(.vacant)").css("cursor", "default");
+
+  $(".vacant").on("click", function () {
+    getOnlineFriend();
+    $(".friend-req-container").css('display', 'flex');
+  });
+
+  $("#close-req").on("click", function () {
+    $(".friend-req-container").hide();
+  });
+}
+
+function getOnlineFriend() {
   $.ajax({
     type: "GET",
     url: `${URL}:8080/Friends/${sessionStorage.getItem("idUser")}`,
@@ -144,7 +174,11 @@ function setInviteListener() {
       let friendList = result.payload;
       let syntax;
       for (let i = 0; i < friendList.length; i++) {
-        syntax = `<div class="orang" data-idFriend="${friendList[i].id}">
+        if (friendList[i].status === "Offline") {
+          continue;
+        }
+
+        syntax = `<div class="orang" data-idFriend="${friendList[i].userId}">
         <div class="avatar-req"></div>
 
         <b>
@@ -153,26 +187,21 @@ function setInviteListener() {
 
         <p id="friendScore">${friendList[i].score}</p>
 
-        <button>Invite</button>
+        <button class="invite ${friendList[i].status === "Playing" ? "disabled" : ""}">Invite</button>
         </div>`;
 
         $(".list-req").append(syntax);
       }
+
+      $(".invite").on("click", function (e) {
+        let friendId = $(e.target).closest(".orang").attr("data-idFriend");
+        console.log(friendId)
+        userClient.send("/app/invite", {}, JSON.stringify({ sender: sessionStorage.getItem("username"), content: roomId, guestId: friendId }));
+      });
     },
     error: function (jqXHR) {
       toastr.warning("System can't load the friend list. Consider to refresh the page")
     }
-  });
-
-  $(".player:not(.vacant)").off("click");
-  $(".player:not(.vacant)").css("cursor", "default");
-
-  $(".vacant").on("click", function () {
-    $(".friend-req-container").css('display', 'flex');
-  });
-
-  $("#close-req").on("click", function () {
-    $(".friend-req-container").hide();
   });
 }
 
@@ -255,7 +284,7 @@ function checkGuess() {
     contentType: 'application/json',
     success: function (result) {
       if (result) {
-        stompClient.send("/app/game.answer", {}, JSON.stringify({ gameCode: gameCode, content: guessString, guestId: sessionStorage.getItem("idGuest") }))
+        roomClient.send("/app/game.answer", {}, JSON.stringify({ gameCode: gameCode, content: guessString, guestId: sessionStorage.getItem("idGuest") }))
       } else {
         toastr.error("Word is not in list!");
       }
@@ -554,7 +583,7 @@ const messageInput = document.querySelector('#message');
 const messageArea = document.querySelector('#messageArea');
 const connectingElement = document.querySelector('.connecting');
 
-var stompClient = null;
+var roomClient = null;
 var username = null;
 
 const colors = [
@@ -577,11 +606,15 @@ function onDisconnect() {
     }
   });
 
+  if (roomClient) {
+    roomClient.send("/app/chat.send", {}, JSON.stringify({ sender: username, content: playerSeat, type: 'LEAVE', gameCode: gameCode }));
+    roomSubscriptions.forEach((subscriptionId) => {
+      roomClient.unsubscribe(subscriptionId);
+    });
+    roomClient.disconnect();
+  }
+
   if (!isLeaving) {
-    if (stompClient) {
-      stompClient.send("/app/chat.send", {}, JSON.stringify({ sender: username, content: playerSeat, type: 'LEAVE', gameCode: gameCode }));
-      stompClient.disconnect();
-    }
     sessionStorage.setItem("checkpoint", JSON.stringify(arrayCheckpoint));
     sessionStorage.setItem("colorCheckmark", JSON.stringify(colorCheckmark));
   }
@@ -591,23 +624,27 @@ function connect() {
   username = sessionStorage.getItem('username');
 
   if (username && gameCode) {
-    var socket = new SockJS(`${URL}:8080/play`);
-    stompClient = Stomp.over(socket);
+    let socket = new SockJS(`${URL}:8080/play`);
+    roomClient = Stomp.over(socket);
 
-    stompClient.connect({}, onConnected, onError);
+    roomClient.connect({}, onConnected, onError);
     window.addEventListener('beforeunload', onDisconnect);
   }
 }
 
 function onConnected() {
-  // Subscribe to the Public Topic
-  stompClient.subscribe(`/room/${gameCode}/chatroom`, onMessageReceived);
-  // stompClient.subscribe(`/room/${gameCode}/setting`, onSettingReceived);
-  stompClient.subscribe(`/room/${gameCode}/answer`, onWordReceived);
-  stompClient.subscribe(`/room/${gameCode}/ready`, onReadyReceived);
+  // Subscribe to the Room Topic
+  const chatroom = roomClient.subscribe(`/room/${gameCode}/chatroom`, onMessageReceived);
+  roomSubscriptions.push(chatroom.id);
 
-  // Tell your username to the server
-  stompClient.send("/app/chat.register", {}, JSON.stringify({ sender: username, type: 'JOIN', gameCode: gameCode }));
+  const answer = roomClient.subscribe(`/room/${gameCode}/answer`, onWordReceived);
+  roomSubscriptions.push(answer.id);
+
+  const ready = roomClient.subscribe(`/room/${gameCode}/ready`, onReadyReceived);
+  roomSubscriptions.push(ready.id);
+
+  //  Notification when player joins the room
+  roomClient.send("/app/chat.register", {}, JSON.stringify({ sender: username, type: 'JOIN', gameCode: gameCode }));
 
   connectingElement.classList.add('hidden');
 }
@@ -619,7 +656,7 @@ function onError(_error) {
 
 function sendChat(event) {
   var messageContent = messageInput.value.trim();
-  if (messageContent && stompClient) {
+  if (messageContent && roomClient) {
     var chatMessage = {
       sender: username,
       content: messageContent,
@@ -627,7 +664,7 @@ function sendChat(event) {
       gameCode: gameCode
     };
 
-    stompClient.send("/app/chat.send", {}, JSON.stringify(chatMessage));
+    roomClient.send("/app/chat.send", {}, JSON.stringify(chatMessage));
     messageInput.value = '';
   }
   event.preventDefault();
@@ -657,6 +694,7 @@ function onMessageReceived(payload) {
     loadRoomData();
     resetReady();
     toastr.success(`${message.sender} has joined the room`);
+    
   } else if (message.type === 'LEAVE') {
     $(`#invite-icon-${message.content}`).removeClass("hidden"); // remove player from seat
     $(`#player-name-${message.content}`).text("Invite");
@@ -669,6 +707,7 @@ function onMessageReceived(payload) {
     }
     resetReady();
     playerCount -= 1;
+    
   } else {
     messageElement.classList.add('chat-message');
 
@@ -698,7 +737,7 @@ function onMessageReceived(payload) {
 $("#vote-btn").on("click", function () {
   $("#vote-btn").toggleClass('ready');
 
-  stompClient.send("/app/game.ready", {}, JSON.stringify({ sender: playerSeat, content: $("#vote-btn").text(), gameCode: gameCode }));
+  roomClient.send("/app/game.ready", {}, JSON.stringify({ sender: playerSeat, content: $("#vote-btn").text(), gameCode: gameCode }));
 
   if ($("#vote-btn").hasClass("ready")) {
     $("#vote-btn").text("Cancel");

@@ -32,11 +32,10 @@ function sendFriendRequest(DOM) {
         dataType: 'json',
         contentType: 'application/json',
         success: function (result) {
-            toastr.info(result.messages[0]);
+            toastr.success(result.messages[0]);
             // parent.remove();
         },
         error: function (jqXHR) {
-            console.log(jqXHR.responseText);
             toastr.info(JSON.parse(jqXHR.responseText).messages)
         }
     });

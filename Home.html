@@ -137,63 +137,63 @@
 
         <hr>
 
-       
-            <div class="popUp-bgs">
-                <div class="popUp-container-rules" id="rule">
-    
-                    <button class="close-btn alignEnd" onclick="hidepop()">X</button>
-                    <h2>Rules</h2>
-                    <p class="patas">Guess the Wordle in 6 tries.</p>
-    
-                    <ul>
-                        <li>Each guess must be a valid 5-letter word.</li>
-                        <li>The color of the tiles will change to show how close your guess was to the word.</li>
-                    </ul>
-    
-                    <p><b>Examples</b></p>
-    
-                    <div id="boards">
-                        <div class="letter-box" style="background-color: #538d4e;">W</div>
-                        <div class="letter-box">E</div>
-                        <div class="letter-box">A</div>
-                        <div class="letter-box">R</div>
-                        <div class="letter-box">Y</div>
-    
-                    </div>
-    
-                    <p><b>W</b> is in the word and in the correct spot.</p>
-    
-                    <div id="boards">
-                        <div class="letter-box">P</div>
-                        <div class="letter-box" style="background-color: #b59f3b;">I</div>
-                        <div class="letter-box">L</div>
-                        <div class="letter-box">L</div>
-                        <div class="letter-box">S</div>
-    
-                    </div>
-    
-                    <p><b>I</b> is in the word but in the wrong spot.</p>
-    
-                    <div id="boards">
-                        <div class="letter-box">V</div>
-                        <div class="letter-box">A</div>
-                        <div class="letter-box">G</div>
-                        <div class="letter-box" style="background-color: #59595b;">U</div>
-                        <div class="letter-box">E</div>
-    
-                    </div>
-    
-                    <p><b>U</b> is not in the word in any spot</p>
-    
-                    <!-- <div style="text-align:center">
+
+        <div class="popUp-bgs hidden">
+            <div class="popUp-container-rules" id="rule">
+
+                <button class="close-btn alignEnd" onclick="hidepop()">X</button>
+                <h2>Rules</h2>
+                <p class="patas">Guess the Wordle in 6 tries.</p>
+
+                <ul>
+                    <li>Each guess must be a valid 5-letter word.</li>
+                    <li>The color of the tiles will change to show how close your guess was to the word.</li>
+                </ul>
+
+                <p><b>Examples</b></p>
+
+                <div id="boards">
+                    <div class="letter-box" style="background-color: #538d4e;">W</div>
+                    <div class="letter-box">E</div>
+                    <div class="letter-box">A</div>
+                    <div class="letter-box">R</div>
+                    <div class="letter-box">Y</div>
+
+                </div>
+
+                <p><b>W</b> is in the word and in the correct spot.</p>
+
+                <div id="boards">
+                    <div class="letter-box">P</div>
+                    <div class="letter-box" style="background-color: #b59f3b;">I</div>
+                    <div class="letter-box">L</div>
+                    <div class="letter-box">L</div>
+                    <div class="letter-box">S</div>
+
+                </div>
+
+                <p><b>I</b> is in the word but in the wrong spot.</p>
+
+                <div id="boards">
+                    <div class="letter-box">V</div>
+                    <div class="letter-box">A</div>
+                    <div class="letter-box">G</div>
+                    <div class="letter-box" style="background-color: #59595b;">U</div>
+                    <div class="letter-box">E</div>
+
+                </div>
+
+                <p><b>U</b> is not in the word in any spot</p>
+
+                <!-- <div style="text-align:center">
                         <span class="dot" onclick="currentSlide(1)"></span>
                         <span class="dot" onclick="currentSlide(2)"></span>
                       </div> -->
-                    
-                </div>
+
             </div>
-        
-       
+        </div>
+
+
 
         <!-- Tampilan Utama -->
         <div class="colombagi">
@@ -291,9 +291,14 @@
                 </div>
             </div>
         </div>
+
+        <div class="invitation-container">
+        </div>
     </div>
 
     <!-- Navbar JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"
         integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

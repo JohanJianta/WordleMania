@@ -45,10 +45,10 @@ window.onload = function () {
                 toastr.warning("Something went wrong when loading player data. Consider to refresh the page")
             }
         });
-        setNavbarVisibility(true);
+        // setNavbarVisibility(true);
     } else {
         setLoginState(false);
-        setNavbarVisibility(false);
+        // setNavbarVisibility(false);
     }
 
     getLeaderboard();
@@ -59,6 +59,7 @@ function setLoginState(state) {
         $(".judulfriend").css("display", "block");
         $(".info-friend").hide();
         $(".friend-container").css("display", "flex");
+        
     } else {
         $(".judulfriend").hide();
         $(".info-friend").css("display", "flex");

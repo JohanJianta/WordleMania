@@ -679,6 +679,12 @@ button.primary:hover {
   color: #a970ff;
 }
 
+.orang button.disabled {
+  color: #82828b;
+  border: 2px solid rgb(77, 78, 92);
+  pointer-events: none;
+}
+
 .list-req .orang .avatar-req {
   position: relative;
   width: 25px;
