@@ -27,7 +27,6 @@ body {
     display: none;
 }
 
-
 .popUp-bgs {
     /* display: none; */
     display: flex;
@@ -64,9 +63,9 @@ body {
 
 }
 
-.popUp-container-rules::-webkit-scrollbar{
+.popUp-container-rules::-webkit-scrollbar {
     display: none;
-  }
+}
 
 @keyframes animatetop {
     0% {
@@ -701,6 +700,16 @@ body {
     background-color: #245791;
 }
 
+.addplayer.offline {
+    background-color: #82828b;
+    cursor: default;
+}
+
+.addplayer.playing {
+    background-color: #b59f3b;
+    cursor: default;
+}
+
 .sign {
     width: 100%;
     transition-duration: .3s;
@@ -735,10 +744,28 @@ body {
     background-color: #245791;
 }
 
+.addplayer.playing:hover {
+    background-color: #b59f3b;
+    justify-content: center;
+}
+
+.addplayer.offline:hover {
+    background-color: #82828b;
+    justify-content: center;
+}
+
 .addplayer:hover .sign {
     width: 30%;
     transition-duration: .3s;
     padding-left: 10px;
+}
+
+.addplayer.playing:hover .sign {
+    display: none;
+}
+
+.addplayer.offline:hover .sign {
+    display: none;
 }
 
 .addplayer:hover .textadd {
@@ -746,6 +773,16 @@ body {
     width: 70%;
     transition-duration: .3s;
     padding-right: 10px;
+}
+
+.addplayer.playing:hover .textadd {
+    position: relative;
+    padding: 0;
+}
+
+.addplayer.offline:hover .textadd {
+    position: relative;
+    padding: 0;
 }
 
 .addplayer:active {

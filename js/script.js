@@ -195,7 +195,6 @@ function getOnlineFriend() {
 
       $(".invite").on("click", function (e) {
         let friendId = $(e.target).closest(".orang").attr("data-idFriend");
-        console.log(friendId)
         userClient.send("/app/invite", {}, JSON.stringify({ sender: sessionStorage.getItem("username"), content: roomId, guestId: friendId }));
       });
     },

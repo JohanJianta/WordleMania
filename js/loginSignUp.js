@@ -242,7 +242,7 @@ function showFriendList(status) {
                         <p class="friend-rank">Rank n/a</p>
                     </div>
                     <div class="bagianbawah-friend">
-                        <button class="addplayer">
+                        <button class="addplayer${friendList[i].status === "Playing" ? " playing" : (friendList[i].status === "Offline" ? " offline" : "")}">
                             <div class="sign"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                     id="add-account">
                                     <path
@@ -250,13 +250,33 @@ function showFriendList(status) {
                                     </path>
                                 </svg>
                             </div>
-                            <div class="textadd">Invite</div>
+                            <div class="textadd">${friendList[i].status === "Playing" ? "Playing" : (friendList[i].status === "Offline" ? "Offline" : "Invite")}</div>
                         </button>
                     </div>
-                </div>`;
+                    </div>`;
 
                     $(".friend-container").append(syntax);
                 }
+
+                $('.addplayer:not(.playing):not(.offline)').on('click', function (e) {
+                    let friendId = $(e.target).closest(".friendlist").attr("data-friendId");
+                    $.ajax({
+                        type: "POST",
+                        url: `${URL}:8080/Game`,
+                        data: "Public",
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (result) {
+                            sessionStorage.setItem("gameCode", result.payload);
+                            userClient.send("/app/invite", {}, JSON.stringify({ sender: sessionStorage.getItem("username"), content: result.payload, guestId: friendId }));
+                            window.location.assign(`/Room.html`);
+                        },
+                        error: function (jqXHR) {
+                            toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
+                        }
+                    });
+                })
+
             },
             error: function (jqXHR) {
                 toastr.warning("System can't load the friend list. Consider to refresh the page")
@@ -294,22 +314,8 @@ function searchRandomRoom() {
         url: `${URL}:8080/Game`,
         dataType: 'json',
         success: function (result) {
-
-            // $.ajax({
-            //     type: "POST",
-            //     url: `${URL}:8080/Game/Player`,
-            //     data: JSON.stringify({ gameId: result.payload, playerId: sessionStorage.getItem("idGuest") }),
-            //     dataType: 'json',
-            //     contentType: 'application/json',
-            //     success: function () {
             sessionStorage.setItem("gameCode", result.payload);
             window.location.assign(`/Room.html`);
-            //     },
-            //     error: function (jqXHR) {
-            //         toastr.error("Something went wrong when joining the game. Please try again.");
-            //     }
-            // });
-
         },
         error: function (jqXHR) {
             toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
@@ -326,22 +332,8 @@ function createRoom() {
             dataType: 'json',
             contentType: 'application/json',
             success: function (result) {
-
-                // $.ajax({
-                //     type: "POST",
-                //     url: `${URL}:8080/Game/Player`,
-                //     data: JSON.stringify({ gameId: result.payload, playerId: sessionStorage.getItem("idGuest") }),
-                //     dataType: 'json',
-                //     contentType: 'application/json',
-                //     success: function () {
                 sessionStorage.setItem("gameCode", result.payload);
                 window.location.assign(`/Room.html`);
-                //     },
-                //     error: function (jqXHR) {
-                //         toastr.error("Something went wrong when joining the game. Please try again.");
-                //     }
-                // });
-
             },
             error: function (jqXHR) {
                 toastr.error(JSON.parse(jqXHR.responseText).messages[0]);
