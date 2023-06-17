@@ -78,12 +78,6 @@ function loadRoomData() {
         }
       }
 
-      if (sessionStorage.getItem("idUser")) {
-        setInviteListener();
-      } else {
-        $(".player").css("cursor", "default");
-      }
-
       if (roomId != room.roomId || NUMBER_OF_GUESSES != room.guessesTry || rightGuessString != room.word.toLowerCase()) {
         if ((roomId != null && NUMBER_OF_GUESSES != null && rightGuessString != null) || sessionStorage.getItem("roomId") != room.roomId) {
           sessionStorage.removeItem("checkpoint");
@@ -106,9 +100,11 @@ function loadRoomData() {
       if (sessionStorage.getItem("isPlaying") == "true") {
         $(".modal-overlay").hide();
         setKeyboardListener();
+        setInviteListener();
       } else if (playerCount >= 4) {
         startGame();
       } else {
+        setInviteListener();
         $(".modal-overlay").css("display", "flex");
 
         document.removeEventListener("keyup", keyupHandler);
@@ -151,17 +147,24 @@ function loadRoomData() {
 }
 
 function setInviteListener() {
-  $(".player:not(.vacant)").off("click");
-  $(".player:not(.vacant)").css("cursor", "default");
+  $(".player").off("click");
 
-  $(".vacant").on("click", function () {
-    getOnlineFriend();
-    $(".friend-req-container").css('display', 'flex');
-  });
+  if (sessionStorage.getItem("idUser") && sessionStorage.getItem("isPlaying") != "true") {
+    $(".player:not(.vacant)").css("cursor", "default");
+    $(".vacant").css("cursor", "pointer");
 
-  $("#close-req").on("click", function () {
-    $(".friend-req-container").hide();
-  });
+    $(".vacant").on("click", function () {
+      getOnlineFriend();
+      $(".friend-req-container").css('display', 'flex');
+    });
+
+    $("#close-req").on("click", function () {
+      $(".friend-req-container").hide();
+    });
+  } else {
+    $(".player").css("cursor", "default");
+  }
+
 }
 
 function getOnlineFriend() {
@@ -585,8 +588,8 @@ const messageInput = document.querySelector('#message');
 const messageArea = document.querySelector('#messageArea');
 const connectingElement = document.querySelector('.connecting');
 
-var roomClient = null;
-var username = null;
+let roomClient = null;
+let username = null;
 
 const colors = [
   '#2196F3', '#32c787', '#00BCD4', '#ff5652',
@@ -704,9 +707,7 @@ function onMessageReceived(payload) {
     messageElement.classList.add('event-message');
     message.content = message.sender + ' left!';
     toastr.error(`${message.sender} has leaved the room`);
-    if (sessionStorage.getItem("idUser")) {
-      setInviteListener();
-    }
+    setInviteListener();
     resetReady();
     playerCount -= 1;
 
@@ -783,7 +784,6 @@ function onReadyReceived(payload) {
     readyCount += 1;
 
     if (readyCount == playerCount && playerCount != 1) {
-      sessionStorage.setItem("isPlaying", "true");
       startGame();
     }
 
@@ -794,7 +794,9 @@ function onReadyReceived(payload) {
 }
 
 function startGame() {
+  sessionStorage.setItem("isPlaying", "true");
   $(".modal-overlay").empty();
+  setInviteListener();
   resetReady();
   let container = $(".modal-overlay"); // Ganti dengan ID kontainer Anda
   container.css("font-size", "24px")
