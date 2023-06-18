@@ -249,7 +249,8 @@ function shadeKeyBoard(letter, color) {
     if (elem.textContent === letter) {
       let oldColor = elem.style.backgroundColor;
 
-      if (oldColor === "rgb(60, 226, 77)" || color === "whitesmoke" || (color === "#e2a714" && oldColor === "rgb(226, 167, 20)")) {
+      // rgb(60, 226, 77) = green || rgb(226, 167, 20) & #e2a714 = yellow gold || rgba(245, 245, 245, 0.500) & #f5f5f580 = gray
+      if (oldColor === "rgb(60, 226, 77)" || (color === "#e2a714" && oldColor === "rgb(226, 167, 20)") || (color === "#f5f5f580" && oldColor === "rgb(226, 167, 20)" || oldColor === "rgba(245, 245, 245, 0.500)")) {
         return;
       }
 
@@ -324,7 +325,7 @@ function onWordReceived(payload) {
     if (rightGuess.includes(currentGuess[i])) {
       letterColor[i] = "#e2a714"; // yellow gold color
     } else {
-      letterColor[i] = "whitesmoke";
+      letterColor[i] = "#f5f5f580"; // gray color
     }
   }
 
