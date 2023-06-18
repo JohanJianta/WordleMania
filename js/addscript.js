@@ -1,26 +1,18 @@
 'use strict';
 
+let regex = /[a-zA-Z!@#$%^&*(),.?":{}|<>]/;
+
 var idPlayer;
 const topPlayers = [];
 
-window.onload = () => {
+window.onload = async () => {
     if (sessionStorage.getItem('hasLogin') == "true") {
         idPlayer = sessionStorage.getItem('idUser');
         $('#myId').text(`My ID : ${idPlayer}`);
 
-        $.ajax({
-            type: "GET",
-            url: `${URL}:8080/Player/Leaderboard`,
-            dataType: 'json',
-            success: function (result) {
-                for (let i = 0; i < result.payload.length; i++) {
-                    topPlayers.push(result.payload[i].userId);
-                }
-            },
-            error: function (jqXHR) {
-                console.log("System can'failed to load the top players.")
-            }
-        });
+        await getTopPlayers();
+
+        getRandomUser();
     } else {
         toastr.warning('This section only available for registered player. Please try to register or login first.');
         window.location.assign("/Home.html");
@@ -119,6 +111,88 @@ function searchFriendId(friendId) {
     }
 }
 
+function getRandomUser() {
+    $.ajax({
+        type: "GET",
+        url: `${URL}:8080/Player`,
+        dataType: 'json',
+        success: function (result) {
+            $(".friend-display").empty();
+            var data = result.payload;
+
+            for (let i = 0; i < data.length; i++) {
+                var syntax = $('<div>', {
+                    class: 'friend-container',
+                    'data-idFriend': data[i].userId
+                }).append(
+                    $('<div>', {
+                        class: 'avatar'
+                    }),
+                    $('<b>').append(
+                        $('<p>', {
+                            class: 'friend-name',
+                            text: data[i].name
+                        })
+                    ),
+                    $('<div>', {
+                        class: 'level'
+                    }).append(
+                        $('<p>', {
+                            text: 'Level ' + parseInt((data[i].totalPlay / 5 + data[i].totalWin / 2).toFixed(0))
+                        })
+                    ),
+                    $('<div>', {
+                        class: 'score'
+                    }).append(
+                        $('<p>', {
+                            text: data[i].score
+                        })
+                    ),
+                    $('<div>', {
+                        class: 'rank'
+                    }).append(
+                        $('<p>', {
+                            text: `Rank ${topPlayers.includes(data[i].userId) ? `#${topPlayers.indexOf(data[i].userId) + 1}` : "n/a"}`
+                        })
+                    ),
+                    $('<button>', {
+                        class: 'add',
+                        text: 'Add Friend'
+                    }));
+
+                $('.friend-display').append(syntax);
+            }
+
+            $('.add').on('click', function () {
+                sendFriendRequest(this);
+            });
+
+        },
+        error: function (jqXHR) {
+            console.log("Failed to get random players");
+        }
+    });
+}
+
+function getTopPlayers() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            url: `${URL}:8080/Player/Leaderboard`,
+            dataType: 'json',
+            success: function (result) {
+                for (let i = 0; i < result.payload.length; i++) {
+                    topPlayers.push(result.payload[i].userId);
+                }
+                resolve(); // Resolve the promise when the AJAX request is successful
+            },
+            error: function (jqXHR) {
+                reject(new Error("Failed to fetch top players")); // Reject the promise if there's an error
+            }
+        });
+    });
+}
+
 function getFriendRequests() {
     $.ajax({
         type: "GET",
@@ -205,7 +279,14 @@ $('.btn-response').on('click', function () {
 
 $('.search_friend_btn').on('click', function () {
     var inputValue = $('.input-search').val().trim();
-    searchFriendId(inputValue);
+
+    if (inputValue.length == 0) return getRandomUser();
+
+    if (!regex.test(inputValue)) {
+        searchFriendId(inputValue);
+    } else {
+        toastr.error("Id must only contain number")
+    }
 });
 
 $('#btn-req').on('click', openForm);

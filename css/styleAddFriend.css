@@ -154,6 +154,10 @@ body {
     margin-bottom: 20px;
 }
 
+.friend-container .friend-name {
+    width: 120px;
+}
+
 .friend-container .avatar {
     position: relative;
     width: 5%;
@@ -186,10 +190,13 @@ body {
 }
 
 .friend-container .score {
+    width: 50px;
     font-size: 15px;
+    text-align: center;
 }
 
 .friend-container .rank {
+    width: 80px;
     font-size: 15px;
 }
 
@@ -378,7 +385,7 @@ body {
     }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 600px) {
     .friend-container .level {
         display: none;
     }

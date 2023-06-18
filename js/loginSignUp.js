@@ -57,8 +57,8 @@ window.onload = async function () {
 function setLoginState(state) {
     if (state) {
         $(".judulfriend").css("display", "block");
-        $(".info-friend").hide();
         $(".friend-container").css("display", "flex");
+        showFriendList();
 
     } else {
         $(".judulfriend").hide();
@@ -66,7 +66,6 @@ function setLoginState(state) {
         $(".friend-container").hide();
     }
     showPlayerData(state);
-    showFriendList(state);
 }
 
 function login() {
@@ -210,20 +209,17 @@ function showPlayerData(status) {
 
 }
 
-function showFriendList(status) {
-    if (status) {
-        $("#friends-unavailable").remove();
-        $("#friend-list-container").removeClass("hidden");
-        $("#friend-list-container").addClass("friend-list-container");
-        $("#friend-title").removeClass("hidden");
-        $("#friend-title").addClass("friend-title");
-        $.ajax({
-            type: "GET",
-            url: `${URL}:8080/Friends/${sessionStorage.getItem("idUser")}`,
-            dataType: 'json',
-            success: function (result) {
-                // $(".friend-container").empty();
-                let friendList = result.payload;
+function showFriendList() {
+    $.ajax({
+        type: "GET",
+        url: `${URL}:8080/Friends/${sessionStorage.getItem("idUser")}`,
+        dataType: 'json',
+        success: function (result) {
+            // $(".friend-container").empty();
+            let friendList = result.payload;
+
+            if (friendList.length > 0) {
+                $(".info-friend").hide();
 
                 for (let i = 0; i < friendList.length; i++) {
                     let syntax = $('<div>', {
@@ -274,19 +270,15 @@ function showFriendList(status) {
                         }
                     });
                 })
-
-            },
-            error: function (jqXHR) {
-                toastr.warning("System can't load the friend list. Consider to refresh the page")
+            } else {
+                $(".info-friend").text("Your Friend List Will Show Up Here");
             }
-        });
-    } else {
-        $("#friend-list-container").removeClass("friend-list-container");
-        $("#friend-list-container").addClass("hidden");
-        $("#friend-title").removeClass("friend-title");
-        $("#friend-title").addClass("hidden");
-        $(".friend-section").append("<p id='friends-unavailable'>This Feature Only Accessible After Login</p>");
-    }
+
+        },
+        error: function (jqXHR) {
+            toastr.warning("System can't load the friend list. Consider to refresh the page")
+        }
+    });
 }
 
 async function getLeaderboard() {
