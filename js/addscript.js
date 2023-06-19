@@ -289,6 +289,14 @@ $('.search_friend_btn').on('click', function () {
     }
 });
 
+$('.input-search').on("keypress", function (event) {
+    // If the user presses the "Enter" key on the keyboard
+    if (event.key === "Enter") {
+        // Trigger the button element with a click
+        $(".search_friend_btn").trigger("click");
+    }
+});
+
 $('#btn-req').on('click', openForm);
 $('#img-req').on('click', openForm);
 $('#close-req').on('click', closeForm);
