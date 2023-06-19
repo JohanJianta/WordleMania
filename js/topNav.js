@@ -9,6 +9,7 @@ let socket;
 let userId;
 let userClient;
 
+// connect ke stomp biar bisa invite teman ke room dan terima invite
 function stompOnline() {
     userId = sessionStorage.getItem("idUser");
 
@@ -22,7 +23,7 @@ function stompOnline() {
 }
 
 function onOnline() {
-    // Subscribe to the Room Topic
+    // Subscribe ke request
     const invitation = userClient.subscribe(`/room/${userId}/request`, onInvitationReceived);
     userSubscriptions.push(invitation.id);
 }
@@ -54,15 +55,17 @@ function onInvitationReceived(payload) {
         })
     }
 
-    // pengecekan ulang invitation
+    // pengecekan ulang invitation (failproof)
     if ($('.invitation-container').children().length >= 4) {
         $('.invitation-container').children().last().remove();
     }
 
+    // tolak invite
     $('.invitation-reject').on('click', function (e) {
         $(e.target).closest(".modal-invitation").remove();
     })
 
+    // terima invite
     $('.invitation-accept').on('click', function (e) {
         let roomId = $(e.target).closest(".modal-invitation").attr("data-gameCode");
         $(e.target).closest(".modal-invitation").remove();
@@ -70,6 +73,7 @@ function onInvitationReceived(payload) {
     })
 }
 
+// tampilan burger (khusus hp)
 function burgerContent() {
     document.getElementById("myDropDown").classList.toggle("show");
     document.getElementsByClassName("burger-menu")[0].classList.toggle("active");
@@ -82,10 +86,12 @@ function burgerContent() {
     })
 }
 
+// ke home
 function toHome() {
     window.location.assign("/Home.html");
 }
 
+// ke history
 function toHistory() {
     if (sessionStorage.getItem("hasLogin") == "true") {
         window.location.assign("/History.html");
@@ -94,6 +100,7 @@ function toHistory() {
     }
 }
 
+// ke find friend
 function toSearchFriend() {
     if (sessionStorage.getItem("hasLogin") == "true") {
         window.location.assign("/AddFriend.html");
@@ -102,7 +109,7 @@ function toSearchFriend() {
     }
 }
 
-// Fungsi di Room.html
+// Tampilkan chat (di Room.html)
 function showChat() {
     document.getElementById("chat-panel").classList.toggle('active');
     document.getElementById("side-panel-toggle").classList.toggle('move');
@@ -115,7 +122,8 @@ function showChat() {
     });
 }
 
-function checkRoom(roomId) {
+// masuk ke room
+function joinRoom(roomId) {
     $.ajax({
         type: "GET",
         url: `${URL}:8080/Game/${roomId}`,
@@ -132,9 +140,10 @@ function checkRoom(roomId) {
     });
 }
 
-function searchRoomById(roomId) {
+// cek kode room apakah valid
+function checkRoomCode(roomId) {
     if (!regex.test(roomId.trim())) {
-        checkRoom(roomId);
+        joinRoom(roomId);
     } else {
         toastr.error("Roomcode must only contain number");
     }
@@ -144,7 +153,7 @@ $('.search__btn').on('click', function () {
     var roomId = $('.input').val().trim();
     if (roomId != '') {
         $('.input').val('');
-        searchRoomById(roomId);
+        checkRoomCode(roomId);
     } else {
         toastr.error("Please input the room id")
     }
@@ -158,10 +167,12 @@ $('.input').on("keypress", function (event) {
     }
 });
 
+// tutup tampilan rules
 function hidepop() {
     $(".popUp-bgs").hide();
 }
 
+// pake window biar bisa dipake secara global (kekx)
 window.setNavbarVisibility = function (status) {
     if (status) {
         $(".nav-button-container-2").removeClass("hidden");

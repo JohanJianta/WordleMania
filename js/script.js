@@ -146,6 +146,7 @@ function loadRoomData() {
   });
 }
 
+// atur invite player
 function setInviteListener() {
   $(".player").off("click");
 
@@ -167,6 +168,7 @@ function setInviteListener() {
 
 }
 
+// tampilkan daftar teman yang online
 function getOnlineFriend() {
   $.ajax({
     type: "GET",
@@ -210,12 +212,14 @@ function getOnlineFriend() {
   });
 }
 
+// reset papan permainan
 function removeDivElements() {
   $(".board-relative").empty();
   $("#game-result").empty();
   colorCheckmark.length = 0;
 }
 
+// buat papan permainan
 function initBoard() {
 
   for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
@@ -244,32 +248,7 @@ function initBoard() {
 
 }
 
-function shadeKeyBoard(letter, color) {
-  for (const elem of document.getElementsByClassName("keyboard-button")) {
-    if (elem.textContent === letter) {
-      let oldColor = elem.style.backgroundColor;
-
-      // rgb(60, 226, 77) = green || rgb(226, 167, 20) & #e2a714 = yellow gold || rgba(245, 245, 245, 0.500) & #f5f5f580 = gray
-      if (oldColor === "rgb(60, 226, 77)" || (color === "#e2a714" && oldColor === "rgb(226, 167, 20)") || (color === "#f5f5f580" && oldColor === "rgb(226, 167, 20)" || oldColor === "rgba(245, 245, 245, 0.500)")) {
-        return;
-      }
-
-      elem.style.backgroundColor = color;
-      break;
-    }
-  }
-}
-
-function deleteLetter() {
-  let row = document.getElementsByClassName("letter-row")[NUMBER_OF_GUESSES - guessesRemaining];
-  let box = row.children[nextLetter - 1];
-  box.textContent = "";
-  box.style.backgroundColor = "transparent";
-  box.classList.remove("filled-box");
-  currentGuess.pop();
-  nextLetter -= 1;
-}
-
+// check word apakah valid
 function checkGuess() {
   let guessString = "";
 
@@ -301,6 +280,7 @@ function checkGuess() {
   });
 }
 
+// tampilkan word di papan
 function onWordReceived(payload) {
   let data = JSON.parse(payload.body);
   currentGuess = data.content;
@@ -364,6 +344,7 @@ function onWordReceived(payload) {
   }
 }
 
+// tampilkan hasil akhir permainan
 function showGameResult() {
   let letterBoxes = $("#game-result").find(".letter-box");
   let correctCount = 0;
@@ -437,6 +418,7 @@ function showGameResult() {
   }, (250 * (WORD_LENGTH + 3)));
 }
 
+// fungsi cari player paling aktif menjawab
 function findMostActivePlayer(arrayCheckpoint) {
   // Membuat objek penghitung
   let counter = {};
@@ -466,7 +448,9 @@ function findMostActivePlayer(arrayCheckpoint) {
   return mostFrequentPlayer;
 }
 
+// simpan hasil permainan masing-masing pemain
 function saveGameResult(status, scoreFinal) {
+  // simpan ke history
   $.ajax({
     type: "POST",
     url: `${URL}:8080/History`,
@@ -481,6 +465,7 @@ function saveGameResult(status, scoreFinal) {
     }
   });
 
+  // update data room jadi menang atau kalah
   $.ajax({
     type: "PUT",
     url: `${URL}:8080/Game/Data/${roomId}`,
@@ -495,6 +480,7 @@ function saveGameResult(status, scoreFinal) {
     }
   });
 
+  // update data akun player jika tersedia
   if (sessionStorage.getItem("idUser")) {
     $.ajax({
       type: "PUT",
@@ -512,6 +498,7 @@ function saveGameResult(status, scoreFinal) {
   }
 }
 
+// tampilkan huruf di papan
 function insertLetter(pressedKey) {
   if (nextLetter === WORD_LENGTH) {
     return;
@@ -528,6 +515,35 @@ function insertLetter(pressedKey) {
   nextLetter += 1;
 }
 
+// hapus huruf dari papan
+function deleteLetter() {
+  let row = document.getElementsByClassName("letter-row")[NUMBER_OF_GUESSES - guessesRemaining];
+  let box = row.children[nextLetter - 1];
+  box.textContent = "";
+  box.style.backgroundColor = "transparent";
+  box.classList.remove("filled-box");
+  currentGuess.pop();
+  nextLetter -= 1;
+}
+
+// ubah warna keyboard sesuai checkpoint
+function shadeKeyBoard(letter, color) {
+  for (const elem of document.getElementsByClassName("keyboard-button")) {
+    if (elem.textContent === letter) {
+      let oldColor = elem.style.backgroundColor;
+
+      // rgb(60, 226, 77) = green || rgb(226, 167, 20) & #e2a714 = yellow gold || rgba(245, 245, 245, 0.500) & #f5f5f580 = gray
+      if (oldColor === "rgb(60, 226, 77)" || (color === "#e2a714" && oldColor === "rgb(226, 167, 20)") || (color === "#f5f5f580" && oldColor === "rgb(226, 167, 20)" || oldColor === "rgba(245, 245, 245, 0.500)")) {
+        return;
+      }
+
+      elem.style.backgroundColor = color;
+      break;
+    }
+  }
+}
+
+// animasikan huruf yang tampil
 const animateCSS = (element, animation, prefix = "animate__") => {
   // We create a Promise and return it
   new Promise((resolve, _reject) => {
@@ -549,6 +565,7 @@ const animateCSS = (element, animation, prefix = "animate__") => {
   });
 }
 
+// memilah keyboard yang ditekan
 const keyupHandler = (e) => {
   let pressedKey = String(e.key);
   if (guessesRemaining === 0 || document.activeElement === document.getElementById("message")) {
@@ -564,6 +581,7 @@ const keyupHandler = (e) => {
   }
 };
 
+// papan keyboard listener
 const keyboardContHandler = (e) => {
   const target = e.target;
 
@@ -577,14 +595,17 @@ const keyboardContHandler = (e) => {
     key = "Backspace";
   }
 
+  // trigger keyboard listener sesuai huruf yang ditekan
   document.dispatchEvent(new KeyboardEvent("keyup", { key: key }));
 };
 
+// atur keyboard listener
 function setKeyboardListener() {
   document.addEventListener("keyup", keyupHandler);
   document.getElementById("keyboard-cont").addEventListener("click", keyboardContHandler);
 }
 
+// variable untuk chatroom
 const messageInput = document.querySelector('#message');
 const messageArea = document.querySelector('#messageArea');
 const connectingElement = document.querySelector('.connecting');
@@ -592,11 +613,13 @@ const connectingElement = document.querySelector('.connecting');
 let roomClient = null;
 let username = null;
 
+// warna avatar player di chatroom
 const colors = [
   '#2196F3', '#32c787', '#00BCD4', '#ff5652',
   '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
 
+// apabila disconnect dari stomp
 function onDisconnect() {
   $.ajax({
     type: "PUT",
@@ -626,6 +649,7 @@ function onDisconnect() {
   }
 }
 
+// connect ke stomp
 function connect() {
   username = sessionStorage.getItem('username');
 
@@ -638,8 +662,9 @@ function connect() {
   }
 }
 
+// apabila connect ke stomp
 function onConnected() {
-  // Subscribe to the Room Topic
+  // subscribe ke Room Topic
   const chatroom = roomClient.subscribe(`/room/${gameCode}/chatroom`, onMessageReceived);
   roomSubscriptions.push(chatroom.id);
 
@@ -649,17 +674,19 @@ function onConnected() {
   const ready = roomClient.subscribe(`/room/${gameCode}/ready`, onReadyReceived);
   roomSubscriptions.push(ready.id);
 
-  //  Notification when player joins the room
+  // notifkasi ketika player masuk ke room
   roomClient.send("/app/chat.register", {}, JSON.stringify({ sender: username, type: 'JOIN', gameCode: gameCode }));
 
   connectingElement.classList.add('hidden');
 }
 
+// apabila stomp error
 function onError(_error) {
   connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
   connectingElement.style.color = 'red';
 }
 
+// kirim pesan ke chatroom
 function sendChat(event) {
   var messageContent = messageInput.value.trim();
   if (messageContent && roomClient) {
@@ -678,6 +705,7 @@ function sendChat(event) {
 
 $("#messageForm").submit(sendChat);
 
+// ambil warna avatar secara random
 function getAvatarColor(messageSender) {
   var hash = 0;
   for (var i = 0; i < messageSender.length; i++) {
@@ -689,6 +717,7 @@ function getAvatarColor(messageSender) {
   return colors[index];
 }
 
+// apabila pesan masuk
 function onMessageReceived(payload) {
   var message = JSON.parse(payload.body);
 
@@ -702,7 +731,7 @@ function onMessageReceived(payload) {
     toastr.success(`${message.sender} has joined the room`);
 
   } else if (message.type === 'LEAVE') {
-    $(`#invite-icon-${message.content}`).removeClass("hidden"); // remove player from seat
+    $(`#invite-icon-${message.content}`).removeClass("hidden"); // hapus player dari tampilan
     $(`#player-name-${message.content}`).text("Invite");
     $(`.player`).eq(message.content).addClass("vacant");
     messageElement.classList.add('event-message');
@@ -738,6 +767,7 @@ function onMessageReceived(payload) {
   messageArea.scrollTop = messageArea.scrollHeight;
 }
 
+// apabila tombol ready ditekan
 $("#vote-btn").on("click", function () {
   $("#vote-btn").toggleClass('ready');
 
@@ -770,6 +800,7 @@ $("#vote-btn").on("click", function () {
 
 });
 
+// reset status ready seluruh player
 function resetReady() {
   readyCount = 0;
   $(".player-ready").hide();
@@ -777,6 +808,7 @@ function resetReady() {
   $("#vote-btn").text("Ready");
 }
 
+// apabila player lain ready
 function onReadyReceived(payload) {
   let log = JSON.parse(payload.body);
 
@@ -794,6 +826,7 @@ function onReadyReceived(payload) {
   }
 }
 
+// mulai permainan
 function startGame() {
   sessionStorage.setItem("isPlaying", "true");
   $(".modal-overlay").empty();
@@ -817,6 +850,7 @@ function startGame() {
   }, 1000);
 }
 
+// apabila keluar dari room
 function leaveRoom() {
   isLeaving = true;
   sessionStorage.removeItem("gameCode");

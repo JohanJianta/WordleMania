@@ -19,15 +19,18 @@ window.onload = async () => {
     }
 }
 
+// tampilkan popup friend request
 function openForm() {
     $(".friend-req-container").css('display', 'flex');
     getFriendRequests();
 }
 
+// tutup popup friend request
 function closeForm() {
     $(".friend-req-container").hide();
 }
 
+// kirim permintaan pertemanan
 function sendFriendRequest(DOM) {
     var parent = $(DOM).closest('.friend-container');
     var idFriend = parent.attr('data-idFriend');
@@ -48,6 +51,7 @@ function sendFriendRequest(DOM) {
     });
 }
 
+// cari player berdasarkan id
 function searchFriendId(friendId) {
     if (idPlayer != null) {
         $.ajax({
@@ -111,6 +115,7 @@ function searchFriendId(friendId) {
     }
 }
 
+// ambil player secara random
 function getRandomUser() {
     $.ajax({
         type: "GET",
@@ -174,6 +179,7 @@ function getRandomUser() {
     });
 }
 
+// ambil data topplayer (untuk rank)
 function getTopPlayers() {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -193,6 +199,7 @@ function getTopPlayers() {
     });
 }
 
+// ambil permintaan pertemanan
 function getFriendRequests() {
     $.ajax({
         type: "GET",
@@ -250,6 +257,7 @@ function getFriendRequests() {
     });
 }
 
+// kirim respons permintaan pertemanan
 function sendResponse(DOM) {
     var id = $(DOM).attr('id');
     var parent = $(DOM).closest('.orang');
