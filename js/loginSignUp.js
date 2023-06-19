@@ -12,7 +12,7 @@ window.onload = async function () {
         var minute = currentDate.getMinutes();
         var second = currentDate.getSeconds();
         sessionStorage.setItem("hasLogin", "false");
-        sessionStorage.setItem("username", ("Guest" + (year + month + day + hour + minute + second)));
+        sessionStorage.setItem("username", ("Guest" + (year + month + day + hour + minute + second)));  // set name guest berdasarkan tanggal masuk
         $.ajax({
             type: "POST",
             url: `${URL}:8080/Player/Guest`,

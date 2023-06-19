@@ -69,7 +69,7 @@ function onInvitationReceived(payload) {
     $('.invitation-accept').on('click', function (e) {
         let roomId = $(e.target).closest(".modal-invitation").attr("data-gameCode");
         $(e.target).closest(".modal-invitation").remove();
-        checkRoom(roomId);
+        joinRoom(roomId);
     })
 }
 
